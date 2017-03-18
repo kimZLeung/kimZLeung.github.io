@@ -1,0 +1,893 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="JS 模块化," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/upload.jpg?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="二者都是异步模块定义（Asynchronuous Module Definition）的一个实现
+CMD和AMD的区别：CMD相当于按需加载，定义一个模块的时候不需要立即制定依赖模块，在需要的时候require就可以了，比较方便；而AMD则相反，定义模块的时候需要制定依赖模块，并以形参的方式引入factory中。
+
+//AMD方式定义模块
+ define([&amp;apos;dep1&amp;apos;,&amp;a">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JS模块化前世今生">
+<meta property="og:url" content="http://kimzZ.com/2017/03/19/JS模块化前世今生/index.html">
+<meta property="og:site_name" content="kimZLeung">
+<meta property="og:description" content="二者都是异步模块定义（Asynchronuous Module Definition）的一个实现
+CMD和AMD的区别：CMD相当于按需加载，定义一个模块的时候不需要立即制定依赖模块，在需要的时候require就可以了，比较方便；而AMD则相反，定义模块的时候需要制定依赖模块，并以形参的方式引入factory中。
+
+//AMD方式定义模块
+ define([&amp;apos;dep1&amp;apos;,&amp;a">
+<meta property="og:updated_time" content="2017-03-18T13:58:54.917Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JS模块化前世今生">
+<meta name="twitter:description" content="二者都是异步模块定义（Asynchronuous Module Definition）的一个实现
+CMD和AMD的区别：CMD相当于按需加载，定义一个模块的时候不需要立即制定依赖模块，在需要的时候require就可以了，比较方便；而AMD则相反，定义模块的时候需要制定依赖模块，并以形参的方式引入factory中。
+
+//AMD方式定义模块
+ define([&amp;apos;dep1&amp;apos;,&amp;a">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://kimzZ.com/2017/03/19/JS模块化前世今生/"/>
+
+
+
+
+
+  <title> JS模块化前世今生 | kimZLeung </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">kimZLeung</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">kimz's Bolg</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://kimzZ.com/2017/03/19/JS模块化前世今生/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="kimZ">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/upload.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="kimZLeung">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                JS模块化前世今生
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-19T05:57:40+08:00">
+                2017-03-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <ul>
+<li>二者都是异步模块定义（Asynchronuous Module Definition）的一个实现</li>
+<li>CMD和AMD的区别：CMD相当于按需加载，定义一个模块的时候不需要立即制定依赖模块，在需要的时候require就可以了，比较方便；而AMD则相反，定义模块的时候需要制定依赖模块，并以形参的方式引入factory中。</li>
+</ul>
+<pre><code>//AMD方式定义模块
+ define([&apos;dep1&apos;,&apos;dep2&apos;],function(dep1,dep2){
+      //内部只能使用制定的模块
+       return function(){};
+ });
+ //CMD
+ define(function(require,exports,module){
+    //此处如果需要某XX模块，可以引入
+    var xx=require(&apos;XX&apos;);
+ });
+</code></pre><hr>
+<h2 id="AMD-–-gt-RequireJS"><a href="#AMD-–-gt-RequireJS" class="headerlink" title="AMD –&gt; RequireJS"></a>AMD –&gt; RequireJS</h2><ul>
+<li>RequireJS优势：<blockquote>
+<p>声明不同js文件之间的依赖<br>可以按需、并行、延时载入js库<br>可以让我们的代码以模块化的方式组织</p>
+</blockquote>
+</li>
+<li>通过define([‘ModuleA’, ‘ModuleB’], function(A, B){ //xx代码； return(//抛出对象) })             实现AMD小模块</li>
+<li>主模块通过require([‘xxx’, ‘ooo’], function(x, o){<pre><code>//xx代码
+</code></pre>});<br>来引入依赖模块，并实现主模块(主模块是入口文件，相当于主函数)</li>
+<li>模块的加载<blockquote>
+<p>利用require.config();来进行路径配置可写在主模块(main.js)的头部</p>
+</blockquote>
+</li>
+</ul>
+<pre><code>//hello.js(这个js并非AMD格式的js)
+function hello() {
+    alert(&apos;Hello World&apos;);
+}
+
+//main.js
+require.config({
+    //默认基路径
+    baseUrl: &apos;js/lib&apos;,
+
+    //分别给每一个指定路径
+    path: {
+        &apos;jquery&apos;: &apos;jquery.min&apos;,
+        &apos;underscore&apos;: &apos;underscore.min&apos;,
+        &apos;backbone&apos;: &apos;backbone.min&apos;
+    },
+
+    //加载非AMD的模块
+    shim: {
+        &apos;underscore&apos;: {
+            exports: &apos;_&apos;
+        },
+        &apos;backbone&apos;: {
+            exports: &apos;Backbone&apos;
+        },
+        //使用init去同时暴露两个全局变量,因为并没有用AMD的方式去暴露对象变量
+        &apos;hello&apos;: {
+            init: function() {
+                return {
+                    hello: hello,
+                    hello2: hello2
+                }
+            }
+        }
+    }
+    //exports 可以把某个非requirejs方式的代码中的某一个全局变量暴露出去，当作该模块以引用。
+});
+</code></pre><hr>
+<h3 id="模块也可命名"><a href="#模块也可命名" class="headerlink" title="模块也可命名"></a>模块也可命名</h3><blockquote>
+<p>在依赖数组前加一个字符串可命名这个模块</p>
+</blockquote>
+<pre><code>define(&apos;myName&apos;, [&apos;mA&apos;, &apos;mB&apos;], function(a, b){
+    //xxoo
+});
+</code></pre><hr>
+<h2 id="require插件"><a href="#require插件" class="headerlink" title="require插件~"></a>require插件~</h2><hr>
+<h2 id="无主和有主的模块"><a href="#无主和有主的模块" class="headerlink" title="无主和有主的模块"></a>无主和有主的模块</h2><pre><code>requirejs.config({
+  baseUrl: &apos;/public/js&apos;,
+  paths: {
+    myjquery: &apos;lib/jquery/jquery&apos;
+  }
+});
+
+requirejs([&apos;myjquery&apos;], function(jq) {
+  alert(jq);                //Error：jq is undefined！
+});
+</code></pre><blockquote>
+<p>这是因为jq中定义了</p>
+</blockquote>
+<pre><code>define(&apos;jquery&apos;, [], function() { ... });
+</code></pre><p>这也是前面提到了的命名模块。当在require.config去试图用不同的名字去引用它的时候就不行</p>
+<blockquote>
+<p>不命名的模块也就是无主的模块，大部分模块都是无主的</p>
+</blockquote>
+<h3 id="那为什么有些模块需要命名——变成有主模块？"><a href="#那为什么有些模块需要命名——变成有主模块？" class="headerlink" title="那为什么有些模块需要命名——变成有主模块？"></a>那为什么有些模块需要命名——变成有主模块？</h3><blockquote>
+<p>其实命名模块都是那些js库~<br>有一个说法是出于性能的考虑，因为这些js库都会经常被其他库依赖。如果为无主其他库会起到不同的模块名，导致多次载入这种库</p>
+<h3 id="而把它们声明为有主的，那么所有的模块只能使用同一个名字引用它们，这样系统就只会载入它们一次。"><a href="#而把它们声明为有主的，那么所有的模块只能使用同一个名字引用它们，这样系统就只会载入它们一次。" class="headerlink" title="而把它们声明为有主的，那么所有的模块只能使用同一个名字引用它们，这样系统就只会载入它们一次。"></a>而把它们声明为有主的，那么所有的模块只能使用同一个名字引用它们，这样系统就只会载入它们一次。</h3></blockquote>
+<hr>
+<blockquote>
+<p>ES6的import和Node的CommonJS不同<br>CommonJS模块输出的是一个值的拷贝，而ES6模块输出的是值的引用。</p>
+</blockquote>
+<ul>
+<li><p>CommonJS模块输出的是被输出值的拷贝，也就是说，一旦输出一个值，模块内部的变化就影响不到这个值</p>
+<pre><code>// lib.js
+var counter = 3;
+function incCounter() {
+  counter++;
+}
+module.exports = {
+  counter: counter,
+  incCounter: incCounter,
+};             
+//上面这个lib.js Export出来了counter值。下面我们看看main.js中的操作
+
+// main.js
+var mod = require(&apos;./lib&apos;);
+
+console.log(mod.counter);  // 3
+mod.incCounter();
+console.log(mod.counter); // 3
+//从中可以看出我们调用了require进来的方法对counter进行了自加的操作，却并没有改变他的值
+</code></pre></li>
+</ul>
+<blockquote>
+<p>因为CommonJS的模块输出是被输出值的拷贝。所以它模块内部的变化完全不会对这个输出的值造成影响<br>除非写成一个函数，才能得到内部变动后的值。比如</p>
+</blockquote>
+<pre><code>// lib.js
+var counter = 3;
+function incCounter() {
+  counter++;
+}
+module.exports = {
+  get counter() {
+    return counter
+  },
+  incCounter: incCounter,
+};
+</code></pre><blockquote>
+<p>这样才能通过函数去获得模块内部所变化的值</p>
+</blockquote>
+<hr>
+<h2 id="然而！ES6的Module实现了模块引用"><a href="#然而！ES6的Module实现了模块引用" class="headerlink" title="然而！ES6的Module实现了模块引用"></a>然而！ES6的Module实现了模块引用</h2><blockquote>
+<p>什么鬼。。。也就是说<br>它遇到模块加载命令import时，不会去执行模块，而是只生成一个动态的只读引用。等到真的需要用到时，再到模块里面去取值。原始值变了，import输入的值也会跟着变。因此，ES6模块是动态引用，并且不会缓存值，模块里面的变量绑定其所在的模块。<br>还是这个例子</p>
+</blockquote>
+<pre><code>// lib.js
+export var counter = 3;
+export function incCounter() {
+  counter++;
+}
+//export 两个东西出去了~
+
+//main.js
+import {counter, incCounter} from &apos;./lib&apos;;
+console.log(counter);
+incCounter();
+console.log(counter);
+</code></pre><blockquote>
+<p>因为ES6比较吊…所以第一次是3，第二次是4<br>因为import会生成一个动态的只读引用，它所引用的变量是活的！活的…所以可以变化。<br>这也是ES6的import优于commonJS的require的原因吧。</p>
+</blockquote>
+<hr>
+<h2 id="ES6-gt-Module"><a href="#ES6-gt-Module" class="headerlink" title="ES6 -&gt; Module"></a>ES6 -&gt; Module</h2><ul>
+<li>在ES6之前，社区制定了一些模块加载方案，最主要的有后端Node的CommonJS和前端的AMD。<br>但是又了ES6之后~ES6新实现的模块化可以取代现有的CommonJS和AMD。</li>
+</ul>
+<blockquote>
+<p>ES6的模块化<br>CommonJS会加载整个模块然后生成一个对象(运行时加载)，比如</p>
+</blockquote>
+<pre><code>// CommonJS模块
+let { stat, exists, readFile } = require(&apos;fs&apos;);
+
+// 等同于
+let _fs = require(&apos;fs&apos;);
+let stat = _fs.stat, exists = _fs.exists, readfile = _fs.readfile;
+</code></pre><p>ES6的模块化不是对象，而是通过export命令显式指定输出的代码，输入时也采用静态命令的形式。</p>
+<pre><code>// ES6模块
+import { stat, exists, readFile } from &apos;fs&apos;;
+</code></pre><p>这样载入模块只会载入这三个方法，称为”编译时加载”…加载时，效率要比CommonJS模块的加载方式高。</p>
+<hr>
+<h2 id="exports"><a href="#exports" class="headerlink" title="exports"></a>exports</h2><blockquote>
+<p>exports可以用as关键字重命名抛出去的接口</p>
+<p>export命令规定的是对外的接口</p>
+</blockquote>
+<pre><code>// 报错
+export 1;
+
+// 报错
+var m = 1;
+export m;
+
+//正确的写法
+// 写法一
+export var m = 1;
+
+// 写法二
+var m = 1;
+export {m};
+
+// 写法三
+var n = 1;
+export {n as m};
+</code></pre><ul>
+<li>它们的实质是，在接口名与模块内部变量之间，建立了一一对应的关系</li>
+</ul>
+<hr>
+<h2 id="import"><a href="#import" class="headerlink" title="import"></a>import</h2><blockquote>
+<p>import也可以使用as关键字来</p>
+<p>并且import具有提升效果</p>
+<p>如果在一个模块之中，先输入后输出同一个模块，import语句可以与export语句写在一起。但是并不建议用这种写法</p>
+<p>整体加载:除了指定加载某个输出值，还可以使用整体加载，即用星号（*）指定一个对象，所有输出值都加载在这个对象上面。</p>
+</blockquote>
+<hr>
+<h2 id="默认输出-gt-export-default"><a href="#默认输出-gt-export-default" class="headerlink" title="默认输出 -&gt; export default"></a>默认输出 -&gt; export default</h2><pre><code>// import-default.js
+import customName from &apos;./export-default&apos;;
+customName(); // &apos;foo&apos;
+</code></pre><blockquote>
+<p>上面代码的import命令，可以用任意名称指向export-default.js输出的方法，这时就不需要知道原模块输出的函数名。需要注意的是，这时import命令后面，不使用大括号。因为加载的是默认export的方法<br>export default命令用在非匿名函数前，也是可以的。</p>
+</blockquote>
+<ul>
+<li>正是因为export default命令其实只是输出一个叫做default的变量，所以它后面不能跟变量声明语句。</li>
+<li>！！！！一个模块只能有一个默认输出，因此export deault命令只能使用一次。所以，import命令后面才不用加大括号，因为只可能对应一个方法。</li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/JS-模块化/" rel="tag"># JS 模块化</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/19/Redux-Middleware/" rel="next" title="Redux-Middleware">
+                <i class="fa fa-chevron-left"></i> Redux-Middleware
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/upload.jpg"
+               alt="kimZ" />
+          <p class="site-author-name" itemprop="name">kimZ</p>
+           
+              <p class="site-description motion-element" itemprop="description">Share what we play</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#AMD-–-gt-RequireJS"><span class="nav-number">1.</span> <span class="nav-text">AMD –> RequireJS</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#模块也可命名"><span class="nav-number">1.1.</span> <span class="nav-text">模块也可命名</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#require插件"><span class="nav-number">2.</span> <span class="nav-text">require插件~</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#无主和有主的模块"><span class="nav-number">3.</span> <span class="nav-text">无主和有主的模块</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#那为什么有些模块需要命名——变成有主模块？"><span class="nav-number">3.1.</span> <span class="nav-text">那为什么有些模块需要命名——变成有主模块？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#而把它们声明为有主的，那么所有的模块只能使用同一个名字引用它们，这样系统就只会载入它们一次。"><span class="nav-number">3.2.</span> <span class="nav-text">而把它们声明为有主的，那么所有的模块只能使用同一个名字引用它们，这样系统就只会载入它们一次。</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#然而！ES6的Module实现了模块引用"><span class="nav-number">4.</span> <span class="nav-text">然而！ES6的Module实现了模块引用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ES6-gt-Module"><span class="nav-number">5.</span> <span class="nav-text">ES6 -> Module</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#exports"><span class="nav-number">6.</span> <span class="nav-text">exports</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#import"><span class="nav-number">7.</span> <span class="nav-text">import</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#默认输出-gt-export-default"><span class="nav-number">8.</span> <span class="nav-text">默认输出 -> export default</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kimZ</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

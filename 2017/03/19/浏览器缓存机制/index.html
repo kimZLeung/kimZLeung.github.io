@@ -1,0 +1,712 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="浏览器缓存," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/upload.jpg?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="200 from cache
+这个是真的是从浏览器缓存拿过来的，Cache-Control的设定了max-age还没过期（Cache-Controll还有很多可选字段），或者Expires限期没过之类的。其实实际上是并没有发请求的。200 from cache是一个伪请求。
+
+
+对于Cache-Control我们可以在html里加上meta标签来给请求报头加上Cache-Control字段
+
+30">
+<meta property="og:type" content="article">
+<meta property="og:title" content="浏览器缓存机制">
+<meta property="og:url" content="http://kimzZ.com/2017/03/19/浏览器缓存机制/index.html">
+<meta property="og:site_name" content="kimZLeung">
+<meta property="og:description" content="200 from cache
+这个是真的是从浏览器缓存拿过来的，Cache-Control的设定了max-age还没过期（Cache-Controll还有很多可选字段），或者Expires限期没过之类的。其实实际上是并没有发请求的。200 from cache是一个伪请求。
+
+
+对于Cache-Control我们可以在html里加上meta标签来给请求报头加上Cache-Control字段
+
+30">
+<meta property="og:updated_time" content="2017-03-18T13:50:32.951Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="浏览器缓存机制">
+<meta name="twitter:description" content="200 from cache
+这个是真的是从浏览器缓存拿过来的，Cache-Control的设定了max-age还没过期（Cache-Controll还有很多可选字段），或者Expires限期没过之类的。其实实际上是并没有发请求的。200 from cache是一个伪请求。
+
+
+对于Cache-Control我们可以在html里加上meta标签来给请求报头加上Cache-Control字段
+
+30">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://kimzZ.com/2017/03/19/浏览器缓存机制/"/>
+
+
+
+
+
+  <title> 浏览器缓存机制 | kimZLeung </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">kimZLeung</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">kimz's Bolg</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://kimzZ.com/2017/03/19/浏览器缓存机制/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="kimZ">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/upload.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="kimZLeung">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                浏览器缓存机制
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-19T05:50:08+08:00">
+                2017-03-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="200-from-cache"><a href="#200-from-cache" class="headerlink" title="200 from cache"></a>200 from cache</h2><blockquote>
+<p>这个是真的是从浏览器缓存拿过来的，Cache-Control的设定了max-age还没过期（Cache-Controll还有很多可选字段），或者Expires限期没过之类的。<br>其实实际上是并没有发请求的。200 from cache是一个伪请求。</p>
+</blockquote>
+<ul>
+<li>对于Cache-Control我们可以在html里加上meta标签来给请求报头加上Cache-Control字段</li>
+</ul>
+<h2 id="304-not-modify"><a href="#304-not-modify" class="headerlink" title="304 not modify"></a>304 not modify</h2><blockquote>
+<p>当Cache-Control或者Expires的限定日期过去之后，浏览器就自然会发请求过去。问题是，当浏览器发送请求之后，服务器可以发现“你请求的这个文件没更新过，你之前就已经缓存它了。”对的，的确有这个功能。</p>
+<p>这就涉及到if-Modified-Since和if-Unmodified-Since这两个头部。浏览器通常使用if-Modified-Since这个头部来发送一个Last Modified值（上一次修改时间）给服务器。服务器确认并没有修改过之后会返回304 not modified状态码。如果没有匹配上的话，返回412（Precondition Failed）状态码，那就从返回新的源文件给浏览器</p>
+</blockquote>
+<ul>
+<li>讲真，如果有个傻×在服务器那边的源文件上多打几个回车。last Modified自然改变了（但是基本内容是不变的）。那么如果是这样的话，又能靠什么来判断这个文件是否有决定性的改变呢</li>
+</ul>
+<blockquote>
+<p>Etag是服务器端的一个在实体上的头部字段，服务器会通过某种算法（md5之类）把资源相应给客户端时会在其头部加上一个Etag的标识符。然后客户端会保存这个标识符，下一次发回去请求时一起发。主要功能是帮助判断在服务器端的资源到底有没有被修改。<br>客户端是通过if-None-Match这个请求头来发送这个资源的Etag标识。</p>
+</blockquote>
+<hr>
+<h2 id="设置的很大的max-age的静态资源"><a href="#设置的很大的max-age的静态资源" class="headerlink" title="设置的很大的max-age的静态资源"></a>设置的很大的max-age的静态资源</h2><blockquote>
+<p>如果需要频繁更新。可能浏览器会因为max-age没到期所以一直在用浏览器缓存的版本。</p>
+</blockquote>
+<ul>
+<li>解决方法： 可以在文件的url后面加类似Etag之类的标识。当资源更新的时候同时更新标识</li>
+</ul>
+<hr>
+<h2 id="Tips"><a href="#Tips" class="headerlink" title="Tips"></a>Tips</h2><blockquote>
+<p>大多数浏览器F5刷新时都会自行加上“Cache-Control:max-age=0”的请求字段，如果选中url地址栏再回车则不会被强加。</p>
+</blockquote>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/浏览器缓存/" rel="tag"># 浏览器缓存</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/19/Gulp入门/" rel="next" title="Gulp入门">
+                <i class="fa fa-chevron-left"></i> Gulp入门
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/03/19/React-Redux/" rel="prev" title="React-Redux">
+                React-Redux <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/upload.jpg"
+               alt="kimZ" />
+          <p class="site-author-name" itemprop="name">kimZ</p>
+           
+              <p class="site-description motion-element" itemprop="description">Share what we play</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#200-from-cache"><span class="nav-number">1.</span> <span class="nav-text">200 from cache</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#304-not-modify"><span class="nav-number">2.</span> <span class="nav-text">304 not modify</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设置的很大的max-age的静态资源"><span class="nav-number">3.</span> <span class="nav-text">设置的很大的max-age的静态资源</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Tips"><span class="nav-number">4.</span> <span class="nav-text">Tips</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kimZ</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

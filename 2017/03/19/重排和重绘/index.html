@@ -1,0 +1,741 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="网页性能," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/upload.jpg?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="网页的生成过程
+首先会把HTML的代码转码为DOM
+然后CSS的代码转换成CSSOM
+结合两个Object Model，生成渲染树（Reander Tree）
+生成布局。
+将布局渲染在屏幕上
+
+
+其中第四步和第五步比较耗时，在网页跑起来的时候，对网页内元素的样式进行改变会导致网页不断重新渲染。
+
+
+修改DOM
+修改CSS，样式
+用户触发的事件（比如页面滚动、输入框键入文字、改变窗口大小等等）">
+<meta property="og:type" content="article">
+<meta property="og:title" content="重排和重绘">
+<meta property="og:url" content="http://kimzZ.com/2017/03/19/重排和重绘/index.html">
+<meta property="og:site_name" content="kimZLeung">
+<meta property="og:description" content="网页的生成过程
+首先会把HTML的代码转码为DOM
+然后CSS的代码转换成CSSOM
+结合两个Object Model，生成渲染树（Reander Tree）
+生成布局。
+将布局渲染在屏幕上
+
+
+其中第四步和第五步比较耗时，在网页跑起来的时候，对网页内元素的样式进行改变会导致网页不断重新渲染。
+
+
+修改DOM
+修改CSS，样式
+用户触发的事件（比如页面滚动、输入框键入文字、改变窗口大小等等）">
+<meta property="og:updated_time" content="2017-03-18T13:46:28.351Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="重排和重绘">
+<meta name="twitter:description" content="网页的生成过程
+首先会把HTML的代码转码为DOM
+然后CSS的代码转换成CSSOM
+结合两个Object Model，生成渲染树（Reander Tree）
+生成布局。
+将布局渲染在屏幕上
+
+
+其中第四步和第五步比较耗时，在网页跑起来的时候，对网页内元素的样式进行改变会导致网页不断重新渲染。
+
+
+修改DOM
+修改CSS，样式
+用户触发的事件（比如页面滚动、输入框键入文字、改变窗口大小等等）">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://kimzZ.com/2017/03/19/重排和重绘/"/>
+
+
+
+
+
+  <title> 重排和重绘 | kimZLeung </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">kimZLeung</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">kimz's Bolg</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://kimzZ.com/2017/03/19/重排和重绘/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="kimZ">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/upload.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="kimZLeung">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                重排和重绘
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-19T05:45:57+08:00">
+                2017-03-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="网页的生成过程"><a href="#网页的生成过程" class="headerlink" title="网页的生成过程"></a>网页的生成过程</h2><ol>
+<li>首先会把HTML的代码转码为DOM</li>
+<li>然后CSS的代码转换成CSSOM</li>
+<li>结合两个Object Model，生成渲染树（Reander Tree）</li>
+<li>生成布局。</li>
+<li>将布局渲染在屏幕上</li>
+</ol>
+<blockquote>
+<p>其中第四步和第五步比较耗时，在网页跑起来的时候，对网页内元素的样式进行改变会导致网页不断重新渲染。</p>
+</blockquote>
+<ul>
+<li>修改DOM</li>
+<li>修改CSS，样式</li>
+<li>用户触发的事件（比如页面滚动、输入框键入文字、改变窗口大小等等）</li>
+</ul>
+<blockquote>
+<p>重新渲染需要执行第四步和第五步，从第四步开始执行叫重排（reflow），直接执行第五步叫重绘（repaint）重绘不一定需要重排，但是重排之后一定会执行重绘。</p>
+</blockquote>
+<h2 id="重排和重绘"><a href="#重排和重绘" class="headerlink" title="重排和重绘"></a>重排和重绘</h2><p><strong>重排和重绘会不断执行它们非常耗费资源提高性能的关键之一的降低“重排”和“重绘”的频率和成本。尽量少触发这两个</strong></p>
+<blockquote>
+<p>其实浏览器会自动把多次修改的样式集合起来排成一个队列，只进行一次重排和重绘，但是如果修改了样式之后马上对样式进行读取。浏览器就不得不立即进行重排，然后再修改样式的话，就会触发两次重排和重绘。对性能的耗损十分严重。</p>
+</blockquote>
+<ul>
+<li>table元素的重排和重绘成本是div元素的3倍（估计）。</li>
+</ul>
+<h2 id="如何降低重排重绘成本"><a href="#如何降低重排重绘成本" class="headerlink" title="如何降低重排重绘成本"></a>如何降低重排重绘成本</h2><ol>
+<li>多个读写DOM操作放一起</li>
+<li>缓存已经得到的重排结果</li>
+<li>通过class改变样式</li>
+<li>使用离线DOM，而不直接操作真实的DOM书。比如可以用文档碎片 Document Fragment对象</li>
+<li>将要剧烈重排的元素先设成display：none，操作完再show出来</li>
+<li>position为absolute和fixed的元素因为脱离了普通文档流，对DOM树的影响较小。</li>
+<li>使用 window.requestAnimationFrame()、window.requestIdleCallback() </li>
+</ol>
+<p>参考：<a href="http://www.ruanyifeng.com/blog/2015/09/web-page-performance-in-depth.html" target="_blank" rel="external">网页性能管理 - 阮一峰</a><br><a href="http://www.aliued.cn/2012/11/12/%E6%B5%8F%E8%A7%88%E5%99%A8%E7%9A%84%E9%87%8D%E7%BB%98repaints%E4%B8%8E%E9%87%8D%E6%8E%92reflows.html" target="_blank" rel="external">浏览器的重绘与重排</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/网页性能/" rel="tag"># 网页性能</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/19/从零开始Hexo-Theme的思考/" rel="next" title="从零开始Hexo Theme的思考">
+                <i class="fa fa-chevron-left"></i> 从零开始Hexo Theme的思考
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/03/19/Node-steam/" rel="prev" title="Node steam">
+                Node steam <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/upload.jpg"
+               alt="kimZ" />
+          <p class="site-author-name" itemprop="name">kimZ</p>
+           
+              <p class="site-description motion-element" itemprop="description">Share what we play</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#网页的生成过程"><span class="nav-number">1.</span> <span class="nav-text">网页的生成过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#重排和重绘"><span class="nav-number">2.</span> <span class="nav-text">重排和重绘</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何降低重排重绘成本"><span class="nav-number">3.</span> <span class="nav-text">如何降低重排重绘成本</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kimZ</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

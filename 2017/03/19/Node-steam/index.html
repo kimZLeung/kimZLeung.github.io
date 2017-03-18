@@ -1,0 +1,714 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="node," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/upload.jpg?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="Node-Stream
+Node里面有四种stream .是Readable，Writable，Duplex，Transform。所有的流都继承了EventEmitter，所以都可以使用简单的事件机制。
+
+
+Readable：可读流，可以通过监听data事件来启动流动模式，也可以用pipe来启动流动模式，可以用stream.resume()来启动流动模式（这个可以只监听end事件）。什么都不做的时">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Node steam">
+<meta property="og:url" content="http://kimzZ.com/2017/03/19/Node-steam/index.html">
+<meta property="og:site_name" content="kimZLeung">
+<meta property="og:description" content="Node-Stream
+Node里面有四种stream .是Readable，Writable，Duplex，Transform。所有的流都继承了EventEmitter，所以都可以使用简单的事件机制。
+
+
+Readable：可读流，可以通过监听data事件来启动流动模式，也可以用pipe来启动流动模式，可以用stream.resume()来启动流动模式（这个可以只监听end事件）。什么都不做的时">
+<meta property="og:updated_time" content="2017-03-18T13:47:57.579Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Node steam">
+<meta name="twitter:description" content="Node-Stream
+Node里面有四种stream .是Readable，Writable，Duplex，Transform。所有的流都继承了EventEmitter，所以都可以使用简单的事件机制。
+
+
+Readable：可读流，可以通过监听data事件来启动流动模式，也可以用pipe来启动流动模式，可以用stream.resume()来启动流动模式（这个可以只监听end事件）。什么都不做的时">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://kimzZ.com/2017/03/19/Node-steam/"/>
+
+
+
+
+
+  <title> Node steam | kimZLeung </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">kimZLeung</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">kimz's Bolg</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://kimzZ.com/2017/03/19/Node-steam/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="kimZ">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/upload.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="kimZLeung">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Node steam
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-19T05:47:31+08:00">
+                2017-03-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Node-Stream"><a href="#Node-Stream" class="headerlink" title="Node-Stream"></a>Node-Stream</h2><blockquote>
+<p><code>Node</code>里面有四种<code>stream</code> .是<code>Readable</code>，<code>Writable</code>，<code>Duplex</code>，<code>Transform</code>。所有的流都继承了EventEmitter，所以都可以使用简单的事件机制。</p>
+</blockquote>
+<ul>
+<li>Readable：可读流，可以通过监听<code>data</code>事件来启动流动模式，也可以用<code>pipe</code>来启动流动模式，可以用<code>stream.resume()</code>来启动流动模式（这个可以只监听end事件）。什么都不做的时候是暂停模式（默认），暂停模式下可以用<code>read</code>方法来读取数据…就是用三种方式来驱动可读流。</li>
+<li>Writeable：可写流，用于接受一个可读流的写入。可以用<code>readStream.pipe(WriteStream)</code>用<code>pipe</code>来接通两个流的信息，也可以通过调用<code>WriteStream.write(data, encoding, callback)</code>来写数据</li>
+<li>Transform：转换流。相当于一个中转站<code>readStream.pipe(transformStream).pipe(writeStream)</code></li>
+<li>Duplex：同时可读可写，可以使可读流，也可以是可写流。<code>Duplex.pipe(transformStream).pipe(Duplex)</code><blockquote>
+<p>以上的<code>Stream</code>监听<code>data</code>事件来启动，或者用<code>pipe</code>接起来自动启动，都会调用内部的<code>_read</code>或者<code>_write</code>方法，内部的方法会emit<code>data</code>事件，触发监听<code>data</code>事件时传进去的函数。<br>需要注意的是通过监听<code>data</code>事件启动流动模式的方式并不是不好，只是无法控制读取速度。<code>pipe</code>与监听<code>data</code>事件的不同之处就是，如果使用<code>pipe</code>连接一个可读流和可写流的时候，只有在文件<code>stream</code>链末端的消费者需要数据时才会进行读取</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="一个简单的继承Transform流的流"><a href="#一个简单的继承Transform流的流" class="headerlink" title="一个简单的继承Transform流的流"></a>一个简单的继承<code>Transform</code>流的流</h2><pre><code>var Transform = require(&apos;stream&apos;).Transform;
+util.inherits(TestStream, Transform);
+
+function TestStream(options) {
+  Transform.call(this, options);
+}
+
+TestStream.prototype._transform = function(chunk, encoding, cb) {
+  this.push(chunk+&apos;|&apos;);
+  cb();     // 相当于emit data事件
+};
+
+TestStream.prototype._flush = function(cb) {
+  cb(&apos;end&apos;);    // // 相当于emit end事件
+};
+</code></pre><hr>
+<h2 id="通过readable读取数据的过程"><a href="#通过readable读取数据的过程" class="headerlink" title="通过readable读取数据的过程"></a>通过readable读取数据的过程</h2><blockquote>
+<p>这个过程十分复杂<br>在拼接好<code>readable</code>管道之后，当消耗方开始读取数据时，会调用<code>read()</code>方法，关键就在于<code>read</code>方法走的过程：<br>首先<code>read</code>方法会去看<code>doRead</code>状态量，来确定缓存中的数据是否足够多，如果足够多就不会调用<code>_read</code>来向数据源请求，直接从缓存中读取数据或以<code>data</code>事件输出。如果调用了<code>_read</code>方法，就会从底层拿到数据，然后通过<code>push</code>方法放进流（然后判断缓存区是否为空来判断是否以<code>data</code>事件立即输出或储存在缓存中）…</p>
+<p><strong><code>readable</code>事件</strong>是在调用完<code>_read</code>后，如果<code>push</code>是以异步方式调用的话，就会有一个<code>readable</code>事件，标识什么时候<code>push</code>进来缓冲区的，然后通过监听这个事件可以立即使用<code>push</code>进来的数据。首次监听readable事件时，还会触发一次read(0)的调用，从而引起_read和push方法的调用，从而启动循环</p>
+<p><strong>流动模式中</strong>：<code>flow</code>中每次<code>read()</code>都可能触发<code>push()</code>的调用，而<code>push()</code>中又可能触发<code>flow()</code>或<code>read()</code>的调用，这样就形成了数据生生不息的流动。</p>
+</blockquote>
+<h2 id="pipe的背压机制"><a href="#pipe的背压机制" class="headerlink" title="pipe的背压机制"></a>pipe的背压机制</h2><p><strong>pipe</strong>的背压机制是指消耗源的<code>drain()</code>事件触发后才再重新启动数据源的<code>resume()</code>，也就是所谓的消耗源需要时再从数据源请求。</p>
+<h3 id="参考："><a href="#参考：" class="headerlink" title="参考："></a>参考：</h3><p><a href="http://purplebamboo.github.io/2014/11/30/gulp-analyze/" target="_blank" rel="external">node-stream流-gulp实战</a><br><a href="https://segmentfault.com/a/1190000000357044" target="_blank" rel="external">node-stream介绍</a><br><a href="http://fe.meituan.com/stream-internals.html" target="_blank" rel="external">stream进阶篇</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/node/" rel="tag"># node</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/19/重排和重绘/" rel="next" title="重排和重绘">
+                <i class="fa fa-chevron-left"></i> 重排和重绘
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/03/19/Gulp入门/" rel="prev" title="Gulp入门">
+                Gulp入门 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/upload.jpg"
+               alt="kimZ" />
+          <p class="site-author-name" itemprop="name">kimZ</p>
+           
+              <p class="site-description motion-element" itemprop="description">Share what we play</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Node-Stream"><span class="nav-number">1.</span> <span class="nav-text">Node-Stream</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一个简单的继承Transform流的流"><span class="nav-number">2.</span> <span class="nav-text">一个简单的继承Transform流的流</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#通过readable读取数据的过程"><span class="nav-number">3.</span> <span class="nav-text">通过readable读取数据的过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pipe的背压机制"><span class="nav-number">4.</span> <span class="nav-text">pipe的背压机制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#参考："><span class="nav-number">4.1.</span> <span class="nav-text">参考：</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kimZ</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

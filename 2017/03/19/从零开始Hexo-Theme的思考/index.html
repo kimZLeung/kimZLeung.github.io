@@ -1,0 +1,733 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="HexoTheme Ejs," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/upload.jpg?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="Start
+讲真一开始我以为写hexo主题贼简单。就很弱鸡。但是开始看Hexo的Workflow之后就发现事情开始比较厉害了
+
+
+说一说Hexo的Workflow
+hexo的主题的话，它会读取你init出来的文件夹里根目录的_config.yml里面的theme属性。采取你theme文件夹下的对应名字的文件夹的主题。
+
+主题本身也是文件夹
+里面也有_config.yml文件用来配置这个hexo的主">
+<meta property="og:type" content="article">
+<meta property="og:title" content="从零开始Hexo Theme的思考">
+<meta property="og:url" content="http://kimzZ.com/2017/03/19/从零开始Hexo-Theme的思考/index.html">
+<meta property="og:site_name" content="kimZLeung">
+<meta property="og:description" content="Start
+讲真一开始我以为写hexo主题贼简单。就很弱鸡。但是开始看Hexo的Workflow之后就发现事情开始比较厉害了
+
+
+说一说Hexo的Workflow
+hexo的主题的话，它会读取你init出来的文件夹里根目录的_config.yml里面的theme属性。采取你theme文件夹下的对应名字的文件夹的主题。
+
+主题本身也是文件夹
+里面也有_config.yml文件用来配置这个hexo的主">
+<meta property="og:updated_time" content="2017-03-18T13:40:53.894Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="从零开始Hexo Theme的思考">
+<meta name="twitter:description" content="Start
+讲真一开始我以为写hexo主题贼简单。就很弱鸡。但是开始看Hexo的Workflow之后就发现事情开始比较厉害了
+
+
+说一说Hexo的Workflow
+hexo的主题的话，它会读取你init出来的文件夹里根目录的_config.yml里面的theme属性。采取你theme文件夹下的对应名字的文件夹的主题。
+
+主题本身也是文件夹
+里面也有_config.yml文件用来配置这个hexo的主">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://kimzZ.com/2017/03/19/从零开始Hexo-Theme的思考/"/>
+
+
+
+
+
+  <title> 从零开始Hexo Theme的思考 | kimZLeung </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">kimZLeung</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">kimz's Bolg</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://kimzZ.com/2017/03/19/从零开始Hexo-Theme的思考/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="kimZ">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/upload.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="kimZLeung">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                从零开始Hexo Theme的思考
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-19T05:37:03+08:00">
+                2017-03-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Start"><a href="#Start" class="headerlink" title="Start"></a>Start</h2><blockquote>
+<p>讲真一开始我以为写hexo主题贼简单。就很弱鸡。但是开始看Hexo的Workflow之后就发现事情开始比较厉害了</p>
+</blockquote>
+<hr>
+<h2 id="说一说Hexo的Workflow"><a href="#说一说Hexo的Workflow" class="headerlink" title="说一说Hexo的Workflow"></a>说一说Hexo的Workflow</h2><blockquote>
+<p>hexo的主题的话，它会读取你init出来的文件夹里根目录的<code>_config.yml</code>里面的<code>theme</code>属性。采取你<code>theme</code>文件夹下的对应名字的文件夹的主题。</p>
+</blockquote>
+<h3 id="主题本身也是文件夹"><a href="#主题本身也是文件夹" class="headerlink" title="主题本身也是文件夹"></a>主题本身也是文件夹</h3><blockquote>
+<p>里面也有<code>_config.yml</code>文件用来配置这个hexo的主题.<br>我们使用浏览器去访问hexo搭起来的博客网页时，Hexo首先会去读取<code>layout.ejs</code>（如果模板引擎是<code>EJS</code>）<br>然后<code>layout.ejs</code>里面的body变量会根据我们访问的URL去对应替换这个文件里面的body的变量哦<br>比如我们访问的是<code>/</code>这个根路由，body就代表了<code>index.ejs</code>如果我们访问<code>/post</code>body就是<code>post.ejs</code>可以直接<code>&lt;%- body %&gt;</code>引入这个模板文件 </p>
+</blockquote>
+<h3 id="Hexo本身有提供一些好用的变量"><a href="#Hexo本身有提供一些好用的变量" class="headerlink" title="Hexo本身有提供一些好用的变量"></a>Hexo本身有提供一些好用的变量</h3><blockquote>
+<p>比如<code>page.posts</code>代表所有文章</p>
+</blockquote>
+<h3 id="使用Hexo-Helper"><a href="#使用Hexo-Helper" class="headerlink" title="使用Hexo Helper"></a>使用Hexo Helper</h3><pre><code>hexo.extend.helper.register(name, function(){
+    // TODO
+});
+
+// 注册Hexo的Helper
+</code></pre><blockquote>
+<p>Helper可以让我们在模板中快速插入内容，官方有提供比如<code>paginator</code> and so on</p>
+</blockquote>
+<hr>
+<h2 id="EJS"><a href="#EJS" class="headerlink" title="EJS"></a>EJS</h2><blockquote>
+<p>EJS是一个模板引擎。可以允许我们在<code>HTML</code>里面写<code>JS的逻辑</code></p>
+</blockquote>
+<ul>
+<li><code>&lt;%</code>这个开头的话会执行里面的JS代码，但是不会渲染到HTML里面</li>
+<li><code>&lt;%=</code>这个会执行里面的代码并且会把返回输出到HTML里面,并且被escape转义编码</li>
+<li><code>&lt;%-</code>这个和上面那个基本一样但输出的值不会被escape转码</li>
+<li><code>&lt;%#</code>这个是…注释</li>
+<li><code>&lt;%%</code>输出字面的‘&lt;%’</li>
+<li><code>&lt;%&gt;</code>普通的结束标签。一般都要<code>&lt;% %&gt;</code>这样包着</li>
+<li><code>-%&gt;</code>移除随后的换行符</li>
+</ul>
+<h2 id="嵌套"><a href="#嵌套" class="headerlink" title="嵌套"></a>嵌套</h2><pre><code>&lt;%- include(&apos;./header&apos;, {title: title}) -%&gt;   // 第二个参数是传进去的变量，在另一个模块可以直接用。
+&lt;h1&gt;
+  Title
+&lt;/h1&gt;
+</code></pre><h2 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h2><pre><code>var templates = ejs.compile(str, options);
+templates(data);
+
+// also can do this
+ejs.render(str, data, options)
+
+// 都是渲染HTML的字符串而已
+</code></pre><hr>
+<h3 id="感谢远成大大的博客给我很大启发"><a href="#感谢远成大大的博客给我很大启发" class="headerlink" title="感谢远成大大的博客给我很大启发"></a>感谢远成大大的<a href="http://lyyourc.com/2016/01/27/Write-a-Hexo-Theme-From-Strach/" target="_blank" rel="external">博客</a>给我很大启发</h3>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/HexoTheme-Ejs/" rel="tag"># HexoTheme Ejs</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/03/19/重排和重绘/" rel="prev" title="重排和重绘">
+                重排和重绘 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/upload.jpg"
+               alt="kimZ" />
+          <p class="site-author-name" itemprop="name">kimZ</p>
+           
+              <p class="site-description motion-element" itemprop="description">Share what we play</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Start"><span class="nav-number">1.</span> <span class="nav-text">Start</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#说一说Hexo的Workflow"><span class="nav-number">2.</span> <span class="nav-text">说一说Hexo的Workflow</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#主题本身也是文件夹"><span class="nav-number">2.1.</span> <span class="nav-text">主题本身也是文件夹</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hexo本身有提供一些好用的变量"><span class="nav-number">2.2.</span> <span class="nav-text">Hexo本身有提供一些好用的变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用Hexo-Helper"><span class="nav-number">2.3.</span> <span class="nav-text">使用Hexo Helper</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#EJS"><span class="nav-number">3.</span> <span class="nav-text">EJS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#嵌套"><span class="nav-number">4.</span> <span class="nav-text">嵌套</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#用法"><span class="nav-number">5.</span> <span class="nav-text">用法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#感谢远成大大的博客给我很大启发"><span class="nav-number">5.1.</span> <span class="nav-text">感谢远成大大的博客给我很大启发</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kimZ</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>
