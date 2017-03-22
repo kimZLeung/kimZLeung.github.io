@@ -71,7 +71,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="网页性能," />
+  <meta name="keywords" content="异步机制," />
 
 
 
@@ -87,58 +87,28 @@
 
 
 
-<meta name="description" content="网页的生成过程
+<meta name="description" content="macrotask-queue和microtask-queue
 
-首先会把HTML的代码转码为DOM
-然后CSS的代码转换成CSSOM
-结合两个Object Model，生成渲染树（Reander Tree）
-生成布局。
-将布局渲染在屏幕上
+JS异步的话，我能想到有回调函数，Promise，Generator，async...差不多
 
-
-其中第四步和第五步比较耗时，在网页跑起来的时候，对网页内元素的样式进行改变会导致网页不断重新渲染。
-
-
-修改DOM
-修改CSS，样式
-用户触发的事件（比如页面滚动、输入框键入文字、改变窗口大小等等）">
+12345678910111213141516171819setTimeout(function()&amp;#123;	console.log(4)&amp;#125;,0); new Promise(function(resolve)&amp;#123;	c">
 <meta property="og:type" content="article">
-<meta property="og:title" content="重排和重绘">
-<meta property="og:url" content="http://kimzZ.com/2017/03/19/重排和重绘/index.html">
+<meta property="og:title" content="macrotask-queue和microtask-queue">
+<meta property="og:url" content="http://kimzZ.com/2017/03/23/macrotask-queue和microtask-queue/index.html">
 <meta property="og:site_name" content="kimZLeung">
-<meta property="og:description" content="网页的生成过程
+<meta property="og:description" content="macrotask-queue和microtask-queue
 
-首先会把HTML的代码转码为DOM
-然后CSS的代码转换成CSSOM
-结合两个Object Model，生成渲染树（Reander Tree）
-生成布局。
-将布局渲染在屏幕上
+JS异步的话，我能想到有回调函数，Promise，Generator，async...差不多
 
-
-其中第四步和第五步比较耗时，在网页跑起来的时候，对网页内元素的样式进行改变会导致网页不断重新渲染。
-
-
-修改DOM
-修改CSS，样式
-用户触发的事件（比如页面滚动、输入框键入文字、改变窗口大小等等）">
-<meta property="og:updated_time" content="2017-03-18T13:46:28.351Z">
+12345678910111213141516171819setTimeout(function()&amp;#123;	console.log(4)&amp;#125;,0); new Promise(function(resolve)&amp;#123;	c">
+<meta property="og:updated_time" content="2017-03-22T12:31:46.115Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="重排和重绘">
-<meta name="twitter:description" content="网页的生成过程
+<meta name="twitter:title" content="macrotask-queue和microtask-queue">
+<meta name="twitter:description" content="macrotask-queue和microtask-queue
 
-首先会把HTML的代码转码为DOM
-然后CSS的代码转换成CSSOM
-结合两个Object Model，生成渲染树（Reander Tree）
-生成布局。
-将布局渲染在屏幕上
+JS异步的话，我能想到有回调函数，Promise，Generator，async...差不多
 
-
-其中第四步和第五步比较耗时，在网页跑起来的时候，对网页内元素的样式进行改变会导致网页不断重新渲染。
-
-
-修改DOM
-修改CSS，样式
-用户触发的事件（比如页面滚动、输入框键入文字、改变窗口大小等等）">
+12345678910111213141516171819setTimeout(function()&amp;#123;	console.log(4)&amp;#125;,0); new Promise(function(resolve)&amp;#123;	c">
 
 
 
@@ -166,13 +136,13 @@
 
 
 
-  <link rel="canonical" href="http://kimzZ.com/2017/03/19/重排和重绘/"/>
+  <link rel="canonical" href="http://kimzZ.com/2017/03/23/macrotask-queue和microtask-queue/"/>
 
 
 
 
 
-  <title> 重排和重绘 | kimZLeung </title>
+  <title> macrotask-queue和microtask-queue | kimZLeung </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -281,7 +251,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://kimzZ.com/2017/03/19/重排和重绘/">
+    <link itemprop="mainEntityOfPage" href="http://kimzZ.com/2017/03/23/macrotask-queue和microtask-queue/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="kimZ">
@@ -302,7 +272,7 @@
             
             
               
-                重排和重绘
+                macrotask-queue和microtask-queue
               
             
           </h1>
@@ -317,8 +287,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-19T05:45:57+08:00">
-                2017-03-18
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-23T04:15:43+08:00">
+                2017-03-22
               </time>
             
 
@@ -353,45 +323,25 @@
       
 
       
-        <h2>网页的生成过程</h2>
-<ol>
-<li>首先会把HTML的代码转码为DOM</li>
-<li>然后CSS的代码转换成CSSOM</li>
-<li>结合两个Object Model，生成渲染树（Reander Tree）</li>
-<li>生成布局。</li>
-<li>将布局渲染在屏幕上</li>
-</ol>
+        <h2>macrotask-queue和microtask-queue</h2>
 <blockquote>
-<p>其中第四步和第五步比较耗时，在网页跑起来的时候，对网页内元素的样式进行改变会导致网页不断重新渲染。</p>
+<p>JS异步的话，我能想到有<code>回调函数</code>，<code>Promise</code>，<code>Generator</code>，<code>async</code>...差不多</p>
 </blockquote>
-<ul>
-<li>修改DOM</li>
-<li>修改CSS，样式</li>
-<li>用户触发的事件（比如页面滚动、输入框键入文字、改变窗口大小等等）</li>
-</ul>
+<p><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">setTimeout(function()&#123;</div><div class="line">	console.log(4)</div><div class="line">&#125;,0); </div><div class="line"></div><div class="line">new Promise(function(resolve)&#123;</div><div class="line">	console.log(1) </div><div class="line">	for( var i=0 ; i&lt;10000 ; i++ )&#123; </div><div class="line">		i==9999 &amp;&amp; resolve() </div><div class="line">	&#125; </div><div class="line">	console.log(2) </div><div class="line">&#125;).then(function()&#123;</div><div class="line">	console.log(5) </div><div class="line">&#125;)</div><div class="line"></div><div class="line">console.log(3);</div><div class="line"></div><div class="line">/*</div><div class="line"> * 那如果这样写会打印什么呢？</div><div class="line"> */</div></pre></td></tr></table></figure></p>
+<h4>结果是<code>1, 2, 3, 5, 4</code></h4>
+<p>这就涉及到<code>JS</code>的两个队列，就是<code>macrotask-queue</code>（宏任务队列）和<code>microtask-queue</code>（微任务队列）</p>
+<hr>
+<h2>What?</h2>
+<p>其实这个宏任务队列就是，我们常说的任务队列，什么<code>setTimeout</code>和<code>setInterval</code>都是定时器过了之后塞里面去的。听得比较多。而微任务队列其实是<code>Promise.then</code>放进去的一个新队列，这两个队列在JS中有一定的执行顺序。</p>
 <blockquote>
-<p>重新渲染需要执行第四步和第五步，从第四步开始执行叫重排（reflow），直接执行第五步叫重绘（repaint）重绘不一定需要重排，但是重排之后一定会执行重绘。</p>
+<p>当我们跑起来异步任务的时候：JS 引擎会将所有任务按照类别分到这两个队列中，首先在 <code>macrotask</code> 的队列（这个队列也被叫做 task queue）中取出第一个任务，执行完毕后取出 <code>microtask</code> 队列中的所有任务顺序执行；之后再取 <code>macrotask</code> 任务，周而复始，直至两个队列的任务都取完。</p>
 </blockquote>
-<h2>重排和重绘</h2>
-<p><strong>重排和重绘会不断执行它们非常耗费资源提高性能的关键之一的降低“重排”和“重绘”的频率和成本。尽量少触发这两个</strong></p>
+<p>下面列出两个队列的分类：
+<code>macrotask</code>：script（整体代码）, setTimeout, setInterval, setImmediate, I/O, UI rendering
+<code>microtask</code>：process.nextTick, Promises（这里指浏览器实现的原生 Promise）, Object.observe, MutationObserver</p>
 <blockquote>
-<p>其实浏览器会自动把多次修改的样式集合起来排成一个队列，只进行一次重排和重绘，但是如果修改了样式之后马上对样式进行读取。浏览器就不得不立即进行重排，然后再修改样式的话，就会触发两次重排和重绘。对性能的耗损十分严重。</p>
+<p>所以说<code>Promise.then</code>玩游戏不用排队...</p>
 </blockquote>
-<ul>
-<li>table元素的重排和重绘成本是div元素的3倍（估计）。</li>
-</ul>
-<h2>如何降低重排重绘成本</h2>
-<ol>
-<li>多个读写DOM操作放一起</li>
-<li>缓存已经得到的重排结果</li>
-<li>通过class改变样式</li>
-<li>使用离线DOM，而不直接操作真实的DOM书。比如可以用文档碎片 Document Fragment对象</li>
-<li>将要剧烈重排的元素先设成display：none，操作完再show出来</li>
-<li>position为absolute和fixed的元素因为脱离了普通文档流，对DOM树的影响较小。</li>
-<li>使用 window.requestAnimationFrame()、window.requestIdleCallback()</li>
-</ol>
-<p>参考：<a href="http://www.ruanyifeng.com/blog/2015/09/web-page-performance-in-depth.html" target="_blank" rel="external">网页性能管理 - 阮一峰</a>
-<a href="http://www.aliued.cn/2012/11/12/%E6%B5%8F%E8%A7%88%E5%99%A8%E7%9A%84%E9%87%8D%E7%BB%98repaints%E4%B8%8E%E9%87%8D%E6%8E%92reflows.html" target="_blank" rel="external">浏览器的重绘与重排</a></p>
 
       
     </div>
@@ -421,7 +371,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/网页性能/" rel="tag"># 网页性能</a>
+            <a href="/tags/异步机制/" rel="tag"># 异步机制</a>
           
         </div>
       
@@ -434,8 +384,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/03/19/从零开始Hexo-Theme的思考/" rel="next" title="从零开始Hexo Theme的思考">
-                <i class="fa fa-chevron-left"></i> 从零开始Hexo Theme的思考
+              <a href="/2017/03/22/关于Vuex的疑惑/" rel="next" title="Vuex的疑惑">
+                <i class="fa fa-chevron-left"></i> Vuex的疑惑
               </a>
             
           </div>
@@ -443,10 +393,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/03/19/Node-steam/" rel="prev" title="Node steam">
-                Node steam <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -566,7 +512,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">网页的生成过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">重排和重绘</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">如何降低重排重绘成本</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">macrotask-queue和microtask-queue</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">1.0.1.</span> <span class="nav-text">结果是1, 2, 3, 5, 4</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">What?</span></a></li></ol></div>
             
 
           </div>

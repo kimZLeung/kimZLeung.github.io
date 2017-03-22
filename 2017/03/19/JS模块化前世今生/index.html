@@ -90,8 +90,8 @@
 <meta name="description" content="二者都是异步模块定义（Asynchronuous Module Definition）的一个实现
 CMD和AMD的区别：CMD相当于按需加载，定义一个模块的时候不需要立即制定依赖模块，在需要的时候require就可以了，比较方便；而AMD则相反，定义模块的时候需要制定依赖模块，并以形参的方式引入factory中。
 
-//AMD方式定义模块
- define([&amp;apos;dep1&amp;apos;,&amp;a">
+       //AMD方式定义模块
+        define([&apos;dep1">
 <meta property="og:type" content="article">
 <meta property="og:title" content="JS模块化前世今生">
 <meta property="og:url" content="http://kimzZ.com/2017/03/19/JS模块化前世今生/index.html">
@@ -99,16 +99,16 @@ CMD和AMD的区别：CMD相当于按需加载，定义一个模块的时候不�
 <meta property="og:description" content="二者都是异步模块定义（Asynchronuous Module Definition）的一个实现
 CMD和AMD的区别：CMD相当于按需加载，定义一个模块的时候不需要立即制定依赖模块，在需要的时候require就可以了，比较方便；而AMD则相反，定义模块的时候需要制定依赖模块，并以形参的方式引入factory中。
 
-//AMD方式定义模块
- define([&amp;apos;dep1&amp;apos;,&amp;a">
+       //AMD方式定义模块
+        define([&apos;dep1">
 <meta property="og:updated_time" content="2017-03-18T13:58:54.917Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JS模块化前世今生">
 <meta name="twitter:description" content="二者都是异步模块定义（Asynchronuous Module Definition）的一个实现
 CMD和AMD的区别：CMD相当于按需加载，定义一个模块的时候不需要立即制定依赖模块，在需要的时候require就可以了，比较方便；而AMD则相反，定义模块的时候需要制定依赖模块，并以形参的方式引入factory中。
 
-//AMD方式定义模块
- define([&amp;apos;dep1&amp;apos;,&amp;a">
+       //AMD方式定义模块
+        define([&apos;dep1">
 
 
 
@@ -327,215 +327,263 @@ CMD和AMD的区别：CMD相当于按需加载，定义一个模块的时候不�
 <li>二者都是异步模块定义（Asynchronuous Module Definition）的一个实现</li>
 <li>CMD和AMD的区别：CMD相当于按需加载，定义一个模块的时候不需要立即制定依赖模块，在需要的时候require就可以了，比较方便；而AMD则相反，定义模块的时候需要制定依赖模块，并以形参的方式引入factory中。</li>
 </ul>
-<pre><code>//AMD方式定义模块
- define([&apos;dep1&apos;,&apos;dep2&apos;],function(dep1,dep2){
-      //内部只能使用制定的模块
-       return function(){};
- });
- //CMD
- define(function(require,exports,module){
-    //此处如果需要某XX模块，可以引入
-    var xx=require(&apos;XX&apos;);
- });
-</code></pre><hr>
-<h2 id="AMD-–-gt-RequireJS"><a href="#AMD-–-gt-RequireJS" class="headerlink" title="AMD –&gt; RequireJS"></a>AMD –&gt; RequireJS</h2><ul>
-<li>RequireJS优势：<blockquote>
-<p>声明不同js文件之间的依赖<br>可以按需、并行、延时载入js库<br>可以让我们的代码以模块化的方式组织</p>
+<pre><code>       //AMD方式定义模块
+        define(['dep1','dep2'],function(dep1,dep2){
+             //内部只能使用制定的模块
+              return function(){};
+        });
+        //CMD
+        define(function(require,exports,module){
+           //此处如果需要某XX模块，可以引入
+           var xx=require('XX');
+        });
+</code></pre>
+<hr>
+<h2>AMD --&gt; RequireJS</h2>
+<ul>
+<li>RequireJS优势：</li>
+</ul>
+<blockquote>
+<p>声明不同js文件之间的依赖
+可以按需、并行、延时载入js库
+可以让我们的代码以模块化的方式组织</p>
 </blockquote>
-</li>
-<li>通过define([‘ModuleA’, ‘ModuleB’], function(A, B){ //xx代码； return(//抛出对象) })             实现AMD小模块</li>
-<li>主模块通过require([‘xxx’, ‘ooo’], function(x, o){<pre><code>//xx代码
-</code></pre>});<br>来引入依赖模块，并实现主模块(主模块是入口文件，相当于主函数)</li>
-<li>模块的加载<blockquote>
+<ul>
+<li>通过define(['ModuleA', 'ModuleB'], function(A, B){ //xx代码； return(//抛出对象) })             实现AMD小模块</li>
+<li>主模块通过require(['xxx', 'ooo'], function(x, o){
+//xx代码
+});
+来引入依赖模块，并实现主模块(主模块是入口文件，相当于主函数)</li>
+<li>模块的加载</li>
+</ul>
+<blockquote>
 <p>利用require.config();来进行路径配置可写在主模块(main.js)的头部</p>
 </blockquote>
-</li>
-</ul>
-<pre><code>//hello.js(这个js并非AMD格式的js)
-function hello() {
-    alert(&apos;Hello World&apos;);
-}
-
-//main.js
-require.config({
-    //默认基路径
-    baseUrl: &apos;js/lib&apos;,
-
-    //分别给每一个指定路径
-    path: {
-        &apos;jquery&apos;: &apos;jquery.min&apos;,
-        &apos;underscore&apos;: &apos;underscore.min&apos;,
-        &apos;backbone&apos;: &apos;backbone.min&apos;
-    },
-
-    //加载非AMD的模块
-    shim: {
-        &apos;underscore&apos;: {
-            exports: &apos;_&apos;
+<pre><code>    //hello.js(这个js并非AMD格式的js)
+    function hello() {
+        alert('Hello World');
+    }
+    
+    //main.js
+    require.config({
+        //默认基路径
+        baseUrl: 'js/lib',
+        
+        //分别给每一个指定路径
+        path: {
+            'jquery': 'jquery.min',
+            'underscore': 'underscore.min',
+            'backbone': 'backbone.min'
         },
-        &apos;backbone&apos;: {
-            exports: &apos;Backbone&apos;
-        },
-        //使用init去同时暴露两个全局变量,因为并没有用AMD的方式去暴露对象变量
-        &apos;hello&apos;: {
-            init: function() {
-                return {
-                    hello: hello,
-                    hello2: hello2
+        
+        //加载非AMD的模块
+        shim: {
+            'underscore': {
+                exports: '_'
+            },
+            'backbone': {
+                exports: 'Backbone'
+            },
+            //使用init去同时暴露两个全局变量,因为并没有用AMD的方式去暴露对象变量
+            'hello': {
+                init: function() {
+                    return {
+                        hello: hello,
+                        hello2: hello2
+                    }
                 }
             }
         }
-    }
-    //exports 可以把某个非requirejs方式的代码中的某一个全局变量暴露出去，当作该模块以引用。
-});
-</code></pre><hr>
-<h3 id="模块也可命名"><a href="#模块也可命名" class="headerlink" title="模块也可命名"></a>模块也可命名</h3><blockquote>
+        //exports 可以把某个非requirejs方式的代码中的某一个全局变量暴露出去，当作该模块以引用。
+    });
+</code></pre>
+<hr>
+<h3>模块也可命名</h3>
+<blockquote>
 <p>在依赖数组前加一个字符串可命名这个模块</p>
 </blockquote>
-<pre><code>define(&apos;myName&apos;, [&apos;mA&apos;, &apos;mB&apos;], function(a, b){
+<pre><code>define('myName', ['mA', 'mB'], function(a, b){
     //xxoo
 });
-</code></pre><hr>
-<h2 id="require插件"><a href="#require插件" class="headerlink" title="require插件~"></a>require插件~</h2><hr>
-<h2 id="无主和有主的模块"><a href="#无主和有主的模块" class="headerlink" title="无主和有主的模块"></a>无主和有主的模块</h2><pre><code>requirejs.config({
-  baseUrl: &apos;/public/js&apos;,
+</code></pre>
+<hr>
+<h2>require插件~</h2>
+<hr>
+<h2>无主和有主的模块</h2>
+<pre><code>requirejs.config({
+  baseUrl: '/public/js',
   paths: {
-    myjquery: &apos;lib/jquery/jquery&apos;
+    myjquery: 'lib/jquery/jquery'
   }
 });
 
-requirejs([&apos;myjquery&apos;], function(jq) {
+requirejs(['myjquery'], function(jq) {
   alert(jq);                //Error：jq is undefined！
 });
-</code></pre><blockquote>
+</code></pre>
+<blockquote>
 <p>这是因为jq中定义了</p>
 </blockquote>
-<pre><code>define(&apos;jquery&apos;, [], function() { ... });
-</code></pre><p>这也是前面提到了的命名模块。当在require.config去试图用不同的名字去引用它的时候就不行</p>
+<pre><code>    define('jquery', [], function() { ... });
+</code></pre>
+<p>这也是前面提到了的命名模块。当在require.config去试图用不同的名字去引用它的时候就不行</p>
 <blockquote>
 <p>不命名的模块也就是无主的模块，大部分模块都是无主的</p>
 </blockquote>
-<h3 id="那为什么有些模块需要命名——变成有主模块？"><a href="#那为什么有些模块需要命名——变成有主模块？" class="headerlink" title="那为什么有些模块需要命名——变成有主模块？"></a>那为什么有些模块需要命名——变成有主模块？</h3><blockquote>
-<p>其实命名模块都是那些js库~<br>有一个说法是出于性能的考虑，因为这些js库都会经常被其他库依赖。如果为无主其他库会起到不同的模块名，导致多次载入这种库</p>
-<h3 id="而把它们声明为有主的，那么所有的模块只能使用同一个名字引用它们，这样系统就只会载入它们一次。"><a href="#而把它们声明为有主的，那么所有的模块只能使用同一个名字引用它们，这样系统就只会载入它们一次。" class="headerlink" title="而把它们声明为有主的，那么所有的模块只能使用同一个名字引用它们，这样系统就只会载入它们一次。"></a>而把它们声明为有主的，那么所有的模块只能使用同一个名字引用它们，这样系统就只会载入它们一次。</h3></blockquote>
+<h3>那为什么有些模块需要命名——变成有主模块？</h3>
+<blockquote>
+<p>其实命名模块都是那些js库~
+有一个说法是出于性能的考虑，因为这些js库都会经常被其他库依赖。如果为无主其他库会起到不同的模块名，导致多次载入这种库</p>
+<h3>而把它们声明为有主的，那么所有的模块只能使用同一个名字引用它们，这样系统就只会载入它们一次。</h3>
+</blockquote>
 <hr>
 <blockquote>
-<p>ES6的import和Node的CommonJS不同<br>CommonJS模块输出的是一个值的拷贝，而ES6模块输出的是值的引用。</p>
+<p>ES6的import和Node的CommonJS不同
+CommonJS模块输出的是一个值的拷贝，而ES6模块输出的是值的引用。</p>
 </blockquote>
 <ul>
-<li><p>CommonJS模块输出的是被输出值的拷贝，也就是说，一旦输出一个值，模块内部的变化就影响不到这个值</p>
-<pre><code>// lib.js
-var counter = 3;
-function incCounter() {
-  counter++;
-}
-module.exports = {
-  counter: counter,
-  incCounter: incCounter,
-};             
-//上面这个lib.js Export出来了counter值。下面我们看看main.js中的操作
-
-// main.js
-var mod = require(&apos;./lib&apos;);
-
-console.log(mod.counter);  // 3
-mod.incCounter();
-console.log(mod.counter); // 3
-//从中可以看出我们调用了require进来的方法对counter进行了自加的操作，却并没有改变他的值
-</code></pre></li>
+<li>
+<p>CommonJS模块输出的是被输出值的拷贝，也就是说，一旦输出一个值，模块内部的变化就影响不到这个值</p>
+<pre><code>  // lib.js
+  var counter = 3;
+  function incCounter() {
+    counter++;
+  }
+  module.exports = {
+    counter: counter,
+    incCounter: incCounter,
+  };             
+  //上面这个lib.js Export出来了counter值。下面我们看看main.js中的操作
+  
+  // main.js
+  var mod = require('./lib');
+  
+  console.log(mod.counter);  // 3
+  mod.incCounter();
+  console.log(mod.counter); // 3
+  //从中可以看出我们调用了require进来的方法对counter进行了自加的操作，却并没有改变他的值
+</code></pre>
+</li>
 </ul>
 <blockquote>
-<p>因为CommonJS的模块输出是被输出值的拷贝。所以它模块内部的变化完全不会对这个输出的值造成影响<br>除非写成一个函数，才能得到内部变动后的值。比如</p>
+<p>因为CommonJS的模块输出是被输出值的拷贝。所以它模块内部的变化完全不会对这个输出的值造成影响
+除非写成一个函数，才能得到内部变动后的值。比如</p>
 </blockquote>
-<pre><code>// lib.js
-var counter = 3;
-function incCounter() {
-  counter++;
-}
-module.exports = {
-  get counter() {
-    return counter
-  },
-  incCounter: incCounter,
-};
-</code></pre><blockquote>
+<pre><code>    // lib.js
+    var counter = 3;
+    function incCounter() {
+      counter++;
+    }
+    module.exports = {
+      get counter() {
+        return counter
+      },
+      incCounter: incCounter,
+    };
+</code></pre>
+<blockquote>
 <p>这样才能通过函数去获得模块内部所变化的值</p>
 </blockquote>
 <hr>
-<h2 id="然而！ES6的Module实现了模块引用"><a href="#然而！ES6的Module实现了模块引用" class="headerlink" title="然而！ES6的Module实现了模块引用"></a>然而！ES6的Module实现了模块引用</h2><blockquote>
-<p>什么鬼。。。也就是说<br>它遇到模块加载命令import时，不会去执行模块，而是只生成一个动态的只读引用。等到真的需要用到时，再到模块里面去取值。原始值变了，import输入的值也会跟着变。因此，ES6模块是动态引用，并且不会缓存值，模块里面的变量绑定其所在的模块。<br>还是这个例子</p>
+<h2>然而！ES6的Module实现了模块引用</h2>
+<blockquote>
+<p>什么鬼。。。也就是说
+它遇到模块加载命令import时，不会去执行模块，而是只生成一个动态的只读引用。等到真的需要用到时，再到模块里面去取值。原始值变了，import输入的值也会跟着变。因此，ES6模块是动态引用，并且不会缓存值，模块里面的变量绑定其所在的模块。
+还是这个例子</p>
 </blockquote>
-<pre><code>// lib.js
-export var counter = 3;
-export function incCounter() {
-  counter++;
-}
-//export 两个东西出去了~
-
-//main.js
-import {counter, incCounter} from &apos;./lib&apos;;
-console.log(counter);
-incCounter();
-console.log(counter);
-</code></pre><blockquote>
-<p>因为ES6比较吊…所以第一次是3，第二次是4<br>因为import会生成一个动态的只读引用，它所引用的变量是活的！活的…所以可以变化。<br>这也是ES6的import优于commonJS的require的原因吧。</p>
+<pre><code>    // lib.js
+    export var counter = 3;
+    export function incCounter() {
+      counter++;
+    }
+    //export 两个东西出去了~
+    
+    //main.js
+    import {counter, incCounter} from './lib';
+    console.log(counter);
+    incCounter();
+    console.log(counter);
+</code></pre>
+<blockquote>
+<p>因为ES6比较吊...所以第一次是3，第二次是4
+因为import会生成一个动态的只读引用，它所引用的变量是活的！活的...所以可以变化。
+这也是ES6的import优于commonJS的require的原因吧。</p>
 </blockquote>
 <hr>
-<h2 id="ES6-gt-Module"><a href="#ES6-gt-Module" class="headerlink" title="ES6 -&gt; Module"></a>ES6 -&gt; Module</h2><ul>
-<li>在ES6之前，社区制定了一些模块加载方案，最主要的有后端Node的CommonJS和前端的AMD。<br>但是又了ES6之后~ES6新实现的模块化可以取代现有的CommonJS和AMD。</li>
+<h2>ES6 -&gt; Module</h2>
+<ul>
+<li>在ES6之前，社区制定了一些模块加载方案，最主要的有后端Node的CommonJS和前端的AMD。
+但是又了ES6之后~ES6新实现的模块化可以取代现有的CommonJS和AMD。</li>
 </ul>
 <blockquote>
-<p>ES6的模块化<br>CommonJS会加载整个模块然后生成一个对象(运行时加载)，比如</p>
+<p>ES6的模块化
+CommonJS会加载整个模块然后生成一个对象(运行时加载)，比如</p>
 </blockquote>
-<pre><code>// CommonJS模块
-let { stat, exists, readFile } = require(&apos;fs&apos;);
-
-// 等同于
-let _fs = require(&apos;fs&apos;);
-let stat = _fs.stat, exists = _fs.exists, readfile = _fs.readfile;
-</code></pre><p>ES6的模块化不是对象，而是通过export命令显式指定输出的代码，输入时也采用静态命令的形式。</p>
-<pre><code>// ES6模块
-import { stat, exists, readFile } from &apos;fs&apos;;
-</code></pre><p>这样载入模块只会载入这三个方法，称为”编译时加载”…加载时，效率要比CommonJS模块的加载方式高。</p>
+<pre><code>    // CommonJS模块
+    let { stat, exists, readFile } = require('fs');
+    
+    // 等同于
+    let _fs = require('fs');
+    let stat = _fs.stat, exists = _fs.exists, readfile = _fs.readfile;
+</code></pre>
+<p>ES6的模块化不是对象，而是通过export命令显式指定输出的代码，输入时也采用静态命令的形式。</p>
+<pre><code>    // ES6模块
+    import { stat, exists, readFile } from 'fs';
+</code></pre>
+<p>这样载入模块只会载入这三个方法，称为&quot;编译时加载&quot;...加载时，效率要比CommonJS模块的加载方式高。</p>
 <hr>
-<h2 id="exports"><a href="#exports" class="headerlink" title="exports"></a>exports</h2><blockquote>
+<h2>exports</h2>
+<blockquote>
 <p>exports可以用as关键字重命名抛出去的接口</p>
+</blockquote>
+<blockquote>
 <p>export命令规定的是对外的接口</p>
 </blockquote>
-<pre><code>// 报错
-export 1;
-
-// 报错
-var m = 1;
-export m;
-
-//正确的写法
-// 写法一
-export var m = 1;
-
-// 写法二
-var m = 1;
-export {m};
-
-// 写法三
-var n = 1;
-export {n as m};
-</code></pre><ul>
+<pre><code>    // 报错
+    export 1;
+    
+    // 报错
+    var m = 1;
+    export m;
+    
+    //正确的写法
+    // 写法一
+    export var m = 1;
+    
+    // 写法二
+    var m = 1;
+    export {m};
+    
+    // 写法三
+    var n = 1;
+    export {n as m};
+</code></pre>
+<ul>
 <li>它们的实质是，在接口名与模块内部变量之间，建立了一一对应的关系</li>
 </ul>
 <hr>
-<h2 id="import"><a href="#import" class="headerlink" title="import"></a>import</h2><blockquote>
+<h2>import</h2>
+<blockquote>
 <p>import也可以使用as关键字来</p>
+</blockquote>
+<blockquote>
 <p>并且import具有提升效果</p>
+</blockquote>
+<blockquote>
 <p>如果在一个模块之中，先输入后输出同一个模块，import语句可以与export语句写在一起。但是并不建议用这种写法</p>
+</blockquote>
+<blockquote>
 <p>整体加载:除了指定加载某个输出值，还可以使用整体加载，即用星号（*）指定一个对象，所有输出值都加载在这个对象上面。</p>
 </blockquote>
 <hr>
-<h2 id="默认输出-gt-export-default"><a href="#默认输出-gt-export-default" class="headerlink" title="默认输出 -&gt; export default"></a>默认输出 -&gt; export default</h2><pre><code>// import-default.js
-import customName from &apos;./export-default&apos;;
-customName(); // &apos;foo&apos;
-</code></pre><blockquote>
-<p>上面代码的import命令，可以用任意名称指向export-default.js输出的方法，这时就不需要知道原模块输出的函数名。需要注意的是，这时import命令后面，不使用大括号。因为加载的是默认export的方法<br>export default命令用在非匿名函数前，也是可以的。</p>
+<h2>默认输出 -&gt; export default</h2>
+<pre><code>    // import-default.js
+    import customName from './export-default';
+    customName(); // 'foo'
+</code></pre>
+<blockquote>
+<p>上面代码的import命令，可以用任意名称指向export-default.js输出的方法，这时就不需要知道原模块输出的函数名。需要注意的是，这时import命令后面，不使用大括号。因为加载的是默认export的方法
+export default命令用在非匿名函数前，也是可以的。</p>
 </blockquote>
 <ul>
 <li>正是因为export default命令其实只是输出一个叫做default的变量，所以它后面不能跟变量声明语句。</li>
@@ -667,7 +715,7 @@ customName(); // &apos;foo&apos;
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-count">11</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -680,7 +728,7 @@ customName(); // &apos;foo&apos;
             
             <div class="site-state-item site-state-tags">
               
-                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-count">10</span>
                 <span class="site-state-item-name">标签</span>
               
             </div>
@@ -715,7 +763,7 @@ customName(); // &apos;foo&apos;
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#AMD-–-gt-RequireJS"><span class="nav-number">1.</span> <span class="nav-text">AMD –> RequireJS</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#模块也可命名"><span class="nav-number">1.1.</span> <span class="nav-text">模块也可命名</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#require插件"><span class="nav-number">2.</span> <span class="nav-text">require插件~</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#无主和有主的模块"><span class="nav-number">3.</span> <span class="nav-text">无主和有主的模块</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#那为什么有些模块需要命名——变成有主模块？"><span class="nav-number">3.1.</span> <span class="nav-text">那为什么有些模块需要命名——变成有主模块？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#而把它们声明为有主的，那么所有的模块只能使用同一个名字引用它们，这样系统就只会载入它们一次。"><span class="nav-number">3.2.</span> <span class="nav-text">而把它们声明为有主的，那么所有的模块只能使用同一个名字引用它们，这样系统就只会载入它们一次。</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#然而！ES6的Module实现了模块引用"><span class="nav-number">4.</span> <span class="nav-text">然而！ES6的Module实现了模块引用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ES6-gt-Module"><span class="nav-number">5.</span> <span class="nav-text">ES6 -> Module</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#exports"><span class="nav-number">6.</span> <span class="nav-text">exports</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#import"><span class="nav-number">7.</span> <span class="nav-text">import</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#默认输出-gt-export-default"><span class="nav-number">8.</span> <span class="nav-text">默认输出 -> export default</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">AMD --> RequireJS</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.1.</span> <span class="nav-text">模块也可命名</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">require插件~</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">无主和有主的模块</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">3.1.</span> <span class="nav-text">那为什么有些模块需要命名——变成有主模块？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">3.2.</span> <span class="nav-text">而把它们声明为有主的，那么所有的模块只能使用同一个名字引用它们，这样系统就只会载入它们一次。</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text">然而！ES6的Module实现了模块引用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">5.</span> <span class="nav-text">ES6 -> Module</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">6.</span> <span class="nav-text">exports</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">7.</span> <span class="nav-text">import</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">8.</span> <span class="nav-text">默认输出 -> export default</span></a></li></ol></div>
             
 
           </div>
