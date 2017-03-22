@@ -88,27 +88,24 @@
 
 
 <meta name="description" content="macrotask-queue和microtask-queue
+JS异步的话，我能想到有回调函数，Promise，Generator，async…差不多
 
-JS异步的话，我能想到有回调函数，Promise，Generator，async...差不多
-
-12345678910111213141516171819setTimeout(function()&amp;#123;	console.log(4)&amp;#125;,0); new Promise(function(resolve)&amp;#123;	c">
+12345678910111213141516171819setTimeout(function()&amp;#123;	console.log(4)&amp;#125;,0); new Promise(function(resolve)&amp;#123;	cons">
 <meta property="og:type" content="article">
 <meta property="og:title" content="macrotask-queue和microtask-queue">
 <meta property="og:url" content="http://kimzZ.com/2017/03/23/macrotask-queue和microtask-queue/index.html">
 <meta property="og:site_name" content="kimZLeung">
 <meta property="og:description" content="macrotask-queue和microtask-queue
+JS异步的话，我能想到有回调函数，Promise，Generator，async…差不多
 
-JS异步的话，我能想到有回调函数，Promise，Generator，async...差不多
-
-12345678910111213141516171819setTimeout(function()&amp;#123;	console.log(4)&amp;#125;,0); new Promise(function(resolve)&amp;#123;	c">
+12345678910111213141516171819setTimeout(function()&amp;#123;	console.log(4)&amp;#125;,0); new Promise(function(resolve)&amp;#123;	cons">
 <meta property="og:updated_time" content="2017-03-22T12:31:46.115Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="macrotask-queue和microtask-queue">
 <meta name="twitter:description" content="macrotask-queue和microtask-queue
+JS异步的话，我能想到有回调函数，Promise，Generator，async…差不多
 
-JS异步的话，我能想到有回调函数，Promise，Generator，async...差不多
-
-12345678910111213141516171819setTimeout(function()&amp;#123;	console.log(4)&amp;#125;,0); new Promise(function(resolve)&amp;#123;	c">
+12345678910111213141516171819setTimeout(function()&amp;#123;	console.log(4)&amp;#125;,0); new Promise(function(resolve)&amp;#123;	cons">
 
 
 
@@ -323,24 +320,19 @@ JS异步的话，我能想到有回调函数，Promise，Generator，async...差
       
 
       
-        <h2>macrotask-queue和microtask-queue</h2>
-<blockquote>
-<p>JS异步的话，我能想到有<code>回调函数</code>，<code>Promise</code>，<code>Generator</code>，<code>async</code>...差不多</p>
+        <h2 id="macrotask-queue和microtask-queue"><a href="#macrotask-queue和microtask-queue" class="headerlink" title="macrotask-queue和microtask-queue"></a>macrotask-queue和microtask-queue</h2><blockquote>
+<p>JS异步的话，我能想到有<code>回调函数</code>，<code>Promise</code>，<code>Generator</code>，<code>async</code>…差不多</p>
 </blockquote>
-<p><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">setTimeout(function()&#123;</div><div class="line">	console.log(4)</div><div class="line">&#125;,0); </div><div class="line"></div><div class="line">new Promise(function(resolve)&#123;</div><div class="line">	console.log(1) </div><div class="line">	for( var i=0 ; i&lt;10000 ; i++ )&#123; </div><div class="line">		i==9999 &amp;&amp; resolve() </div><div class="line">	&#125; </div><div class="line">	console.log(2) </div><div class="line">&#125;).then(function()&#123;</div><div class="line">	console.log(5) </div><div class="line">&#125;)</div><div class="line"></div><div class="line">console.log(3);</div><div class="line"></div><div class="line">/*</div><div class="line"> * 那如果这样写会打印什么呢？</div><div class="line"> */</div></pre></td></tr></table></figure></p>
-<h4>结果是<code>1, 2, 3, 5, 4</code></h4>
-<p>这就涉及到<code>JS</code>的两个队列，就是<code>macrotask-queue</code>（宏任务队列）和<code>microtask-queue</code>（微任务队列）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">setTimeout(function()&#123;</div><div class="line">	console.log(4)</div><div class="line">&#125;,0); </div><div class="line"></div><div class="line">new Promise(function(resolve)&#123;</div><div class="line">	console.log(1) </div><div class="line">	for( var i=0 ; i&lt;10000 ; i++ )&#123; </div><div class="line">		i==9999 &amp;&amp; resolve() </div><div class="line">	&#125; </div><div class="line">	console.log(2) </div><div class="line">&#125;).then(function()&#123;</div><div class="line">	console.log(5) </div><div class="line">&#125;)</div><div class="line"></div><div class="line">console.log(3);</div><div class="line"></div><div class="line">/*</div><div class="line"> * 那如果这样写会打印什么呢？</div><div class="line"> */</div></pre></td></tr></table></figure>
+<h4 id="结果是1-2-3-5-4"><a href="#结果是1-2-3-5-4" class="headerlink" title="结果是1, 2, 3, 5, 4"></a>结果是<code>1, 2, 3, 5, 4</code></h4><p>这就涉及到<code>JS</code>的两个队列，就是<code>macrotask-queue</code>（宏任务队列）和<code>microtask-queue</code>（微任务队列）</p>
 <hr>
-<h2>What?</h2>
-<p>其实这个宏任务队列就是，我们常说的任务队列，什么<code>setTimeout</code>和<code>setInterval</code>都是定时器过了之后塞里面去的。听得比较多。而微任务队列其实是<code>Promise.then</code>放进去的一个新队列，这两个队列在JS中有一定的执行顺序。</p>
+<h2 id="What"><a href="#What" class="headerlink" title="What?"></a>What?</h2><p>其实这个宏任务队列就是，我们常说的任务队列，什么<code>setTimeout</code>和<code>setInterval</code>都是定时器过了之后塞里面去的。听得比较多。而微任务队列其实是<code>Promise.then</code>放进去的一个新队列，这两个队列在JS中有一定的执行顺序。</p>
 <blockquote>
 <p>当我们跑起来异步任务的时候：JS 引擎会将所有任务按照类别分到这两个队列中，首先在 <code>macrotask</code> 的队列（这个队列也被叫做 task queue）中取出第一个任务，执行完毕后取出 <code>microtask</code> 队列中的所有任务顺序执行；之后再取 <code>macrotask</code> 任务，周而复始，直至两个队列的任务都取完。</p>
 </blockquote>
-<p>下面列出两个队列的分类：
-<code>macrotask</code>：script（整体代码）, setTimeout, setInterval, setImmediate, I/O, UI rendering
-<code>microtask</code>：process.nextTick, Promises（这里指浏览器实现的原生 Promise）, Object.observe, MutationObserver</p>
+<p>下面列出两个队列的分类：<br> <code>macrotask</code>：script（整体代码）, setTimeout, setInterval, setImmediate, I/O, UI rendering<br> <code>microtask</code>：process.nextTick, Promises（这里指浏览器实现的原生 Promise）, Object.observe, MutationObserver</p>
 <blockquote>
-<p>所以说<code>Promise.then</code>玩游戏不用排队...</p>
+<p>所以说<code>Promise.then</code>玩游戏不用排队…</p>
 </blockquote>
 
       
@@ -512,7 +504,7 @@ JS异步的话，我能想到有回调函数，Promise，Generator，async...差
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">macrotask-queue和microtask-queue</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">1.0.1.</span> <span class="nav-text">结果是1, 2, 3, 5, 4</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">What?</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#macrotask-queue和microtask-queue"><span class="nav-number">1.</span> <span class="nav-text">macrotask-queue和microtask-queue</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#结果是1-2-3-5-4"><span class="nav-number">1.0.1.</span> <span class="nav-text">结果是1, 2, 3, 5, 4</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#What"><span class="nav-number">2.</span> <span class="nav-text">What?</span></a></li></ol></div>
             
 
           </div>

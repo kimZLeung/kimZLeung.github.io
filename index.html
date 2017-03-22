@@ -318,10 +318,9 @@
         
           
           macrotask-queue和microtask-queue
+JS异步的话，我能想到有回调函数，Promise，Generator，async…差不多
 
-JS异步的话，我能想到有回调函数，Promise，Generator，async...差不多
-
-12345678910111213141516171819setTimeout(function()&#123;	console.log(
+12345678910111213141516171819setTimeout(function()&#123;	console.log(4)&
           ...
           <!--noindex-->
           <div class="post-button text-center">
@@ -449,8 +448,7 @@ JS异步的话，我能想到有回调函数，Promise，Generator，async...差
         
           
           关于Getter的疑惑
-
-事情是这样的：今天看了一下Vuex的文档，发现Getters这个属性挺好用的，就是里面回调函数的参数好像有点奇怪，Getters里面的回调接受state为第一个参数，接受getters为第二个参数，getters指向store.getters对象。恩不错，挺好的。 See 
+事情是这样的：今天看了一下Vuex的文档，发现Getters这个属性挺好用的，就是里面回调函数的参数好像有点奇怪，Getters里面的回调接受state为第一个参数，接受getters为第二个参数，getters指向store.getters对象。恩不错，挺好的。 See c
           ...
           <!--noindex-->
           <div class="post-button text-center">
@@ -706,12 +704,11 @@ CMD和AMD的区别：CMD相当于按需加载，定义一个模块的时候不�
       
         
           
-          上源码:
-import compose from './compose';
+          上源码:import compose from &apos;./compose&apos;;
 
 export default function applyMiddleware(...middlewares) {            
     return (next)  =&gt; 
-    (reducer, i
+    (r
           ...
           <!--noindex-->
           <div class="post-button text-center">
@@ -839,18 +836,14 @@ export default function applyMiddleware(...middlewares) {
         
           
           applyMiddleware的两种用法
-
-
 第一种用法
-  const store = createStore(
-    reducer,
-    applyMiddleware(...middleware)
-  )
-
-
+const store = createStore(
+  reducer,
+  applyMiddleware(...middleware)
+)
 
 这是另一种用法
-  const createStoreWithMiddle
+const createStoreWithMiddleware = applyMi
           ...
           <!--noindex-->
           <div class="post-button text-center">
@@ -978,11 +971,9 @@ export default function applyMiddleware(...middlewares) {
         
           
           connect方法
-
 参数mapStateToProps -&gt; function(state, [ownProps])
-
 如果定义了这个参数，就相当于动态把store和props绑定了，只要store改变了就会调用mapStateToProps
-第二个可选参数ownProps，指代传入到组件的
+第二个可选参数ownProps，指代传入到组件的Pr
           ...
           <!--noindex-->
           <div class="post-button text-center">
@@ -1110,12 +1101,10 @@ export default function applyMiddleware(...middlewares) {
         
           
           200 from cache
-
-这个是真的是从浏览器缓存拿过来的，Cache-Control的设定了max-age还没过期（Cache-Controll还有很多可选字段），或者Expires限期没过之类的。
-其实实际上是并没有发请求的。200 from cache是一个伪请求。
+这个是真的是从浏览器缓存拿过来的，Cache-Control的设定了max-age还没过期（Cache-Controll还有很多可选字段），或者Expires限期没过之类的。其实实际上是并没有发请求的。200 from cache是一个伪请求。
 
 
-对于Cache-
+对于Cache-Co
           ...
           <!--noindex-->
           <div class="post-button text-center">
@@ -1243,11 +1232,11 @@ export default function applyMiddleware(...middlewares) {
         
           
           Gulp的四大方法
-
 gulp.src(globs[,options])
 gulp.dest(path[,options])
 gulp.task(name[,deps],fn)
 gulp.watch(golb,[,opts,cb]) 或者 gulp.watch(glob[,opts],tasks)
+
 
           ...
           <!--noindex-->
@@ -1376,11 +1365,10 @@ gulp.watch(golb,[,opts,cb]) 或者 gulp.watch(glob[,opts],tasks)
         
           
           Node-Stream
-
 Node里面有四种stream .是Readable，Writable，Duplex，Transform。所有的流都继承了EventEmitter，所以都可以使用简单的事件机制。
 
 
-Readable：可读流，可以通过监听data事件来启动流动模式，也可以用pipe来启动流
+Readable：可读流，可以通过监听data事件来启动流动模式，也可以用pipe来启动流动
           ...
           <!--noindex-->
           <div class="post-button text-center">
@@ -1508,7 +1496,6 @@ Readable：可读流，可以通过监听data事件来启动流动模式，也�
         
           
           网页的生成过程
-
 首先会把HTML的代码转码为DOM
 然后CSS的代码转换成CSSOM
 结合两个Object Model，生成渲染树（Reander Tree）
@@ -1517,6 +1504,7 @@ Readable：可读流，可以通过监听data事件来启动流动模式，也�
 
 
 其中第四步和第五步比较耗时，在网页跑起来的时候，对网页内元素的样式进行改变会导致网页不断重新渲染。
+
 
 
           ...
