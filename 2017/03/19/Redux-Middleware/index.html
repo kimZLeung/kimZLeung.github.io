@@ -87,31 +87,34 @@
 
 
 
-<meta name="description" content="上源码:import compose from &amp;apos;./compose&amp;apos;;
+<meta name="description" content="上源码:
+import compose from &apos;./compose&apos;;
 
 export default function applyMiddleware(...middlewares) {            
     return (next)  =&amp;gt; 
     (reducer, initialState) =&amp;gt; {
-        var store =">
+    	var store = next(reducer">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Redux-Middleware">
 <meta property="og:url" content="http://kimzZ.com/2017/03/19/Redux-Middleware/index.html">
 <meta property="og:site_name" content="kimZLeung">
-<meta property="og:description" content="上源码:import compose from &amp;apos;./compose&amp;apos;;
+<meta property="og:description" content="上源码:
+import compose from &apos;./compose&apos;;
 
 export default function applyMiddleware(...middlewares) {            
     return (next)  =&amp;gt; 
     (reducer, initialState) =&amp;gt; {
-        var store =">
+    	var store = next(reducer">
 <meta property="og:updated_time" content="2017-03-18T13:55:15.869Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Redux-Middleware">
-<meta name="twitter:description" content="上源码:import compose from &amp;apos;./compose&amp;apos;;
+<meta name="twitter:description" content="上源码:
+import compose from &apos;./compose&apos;;
 
 export default function applyMiddleware(...middlewares) {            
     return (next)  =&amp;gt; 
     (reducer, initialState) =&amp;gt; {
-        var store =">
+    	var store = next(reducer">
 
 
 
@@ -326,25 +329,26 @@ export default function applyMiddleware(...middlewares) {
       
 
       
-        <h2 id="上源码"><a href="#上源码" class="headerlink" title="上源码:"></a>上源码:</h2><pre><code>import compose from &apos;./compose&apos;;
+        <h2>上源码:</h2>
+<pre><code>import compose from './compose';
 
 export default function applyMiddleware(...middlewares) {            
     return (next)  =&gt; 
     (reducer, initialState) =&gt; {
-        var store = next(reducer, initialState);
-        var dispatch = store.dispatch;
-        var chain = [];
-        var middlewareAPI = {
-          getState: store.getState,
-          dispatch: (action) =&gt; dispatch(action)
-        };
-        chain = middlewares.map(middleware =&gt;
-            middleware(middlewareAPI));
-        dispatch = compose(...chain, store.dispatch);
-        return {
-          ...store,
-          dispatch
-        };
+    	var store = next(reducer, initialState);
+    	var dispatch = store.dispatch;
+    	var chain = [];
+    	var middlewareAPI = {
+    	  getState: store.getState,
+    	  dispatch: (action) =&gt; dispatch(action)
+    	};
+    	chain = middlewares.map(middleware =&gt;
+    		middleware(middlewareAPI));
+    	dispatch = compose(...chain, store.dispatch);
+    	return {
+    	  ...store,
+    	  dispatch
+    	};
       };
 }
 
@@ -352,22 +356,32 @@ export default function applyMiddleware(...middlewares) {
 export default compose(...funcs) {
     return funcs.reduceRight((composed, f) =&gt; f(composed));
 }
-</code></pre><hr>
-<h2 id="分析："><a href="#分析：" class="headerlink" title="分析："></a>分析：</h2><blockquote>
-<p>一开始调用传入的createStore方法创建了store<br> 在每一个中间件都传进了store的getState方法和dispatch方法<br> 然后遍历middlewares数组传进参数全部调用一次。获得chain数组<br> 然后用compose把函数一层一层嵌套起来。最初传入store.dispatch；<br> 根据redux中间件的链式调用。一直处理action然后最终会发一个正确的action去触发reducer来改变state的状态。</p>
+</code></pre>
+<hr>
+<h2>分析：</h2>
+<blockquote>
+<p>一开始调用传入的createStore方法创建了store
+在每一个中间件都传进了store的getState方法和dispatch方法
+然后遍历middlewares数组传进参数全部调用一次。获得chain数组
+然后用compose把函数一层一层嵌套起来。最初传入store.dispatch；
+根据redux中间件的链式调用。一直处理action然后最终会发一个正确的action去触发reducer来改变state的状态。</p>
 </blockquote>
 <hr>
-<h2 id="其实中间件就是一堆扩展dispatch的东西…可以使得store-dispatch的同时来进行很多别的操作，然后获得更多的功能。"><a href="#其实中间件就是一堆扩展dispatch的东西…可以使得store-dispatch的同时来进行很多别的操作，然后获得更多的功能。" class="headerlink" title="其实中间件就是一堆扩展dispatch的东西…可以使得store.dispatch的同时来进行很多别的操作，然后获得更多的功能。"></a>其实中间件就是一堆扩展dispatch的东西…可以使得store.dispatch的同时来进行很多别的操作，然后获得更多的功能。</h2><hr>
+<h2>其实中间件就是一堆扩展dispatch的东西...可以使得store.dispatch的同时来进行很多别的操作，然后获得更多的功能。</h2>
+<hr>
 <blockquote>
 <p>中间件扩展了dispatch。使dispatch可以接受更多的参数。</p>
 </blockquote>
 <p>加入了中间件之后的dispatch过程：</p>
 <ul>
-<li><p>用户触发 -&gt; 中间件1 -&gt; 中间件2 -&gt; dispatch action -&gt; reducer -&gt; state change</p>
+<li>
+<p>用户触发 -&gt; 中间件1 -&gt; 中间件2 -&gt; dispatch action -&gt; reducer -&gt; state change</p>
 </li>
-<li><p>中间件通过next去把改造过或并没有改造的action传到下一个中间件</p>
+<li>
+<p>中间件通过next去把改造过或并没有改造的action传到下一个中间件</p>
 </li>
-<li><p>中间件处理过程中再dispatch的话，这个dispatch会从最开始重新调用dispatch，再走一遍中间件</p>
+<li>
+<p>中间件处理过程中再dispatch的话，这个dispatch会从最开始重新调用dispatch，再走一遍中间件</p>
 </li>
 </ul>
 
@@ -422,8 +436,8 @@ export default compose(...funcs) {
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/03/19/JS模块化前世今生/" rel="prev" title="JS模块化前世今生">
-                JS模块化前世今生 <i class="fa fa-chevron-right"></i>
+              <a href="/2017/03/22/关于Vuex的疑惑/" rel="prev" title="Vuex的疑惑">
+                Vuex的疑惑 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -496,7 +510,7 @@ export default compose(...funcs) {
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-count">10</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -509,7 +523,7 @@ export default compose(...funcs) {
             
             <div class="site-state-item site-state-tags">
               
-                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-count">9</span>
                 <span class="site-state-item-name">标签</span>
               
             </div>
@@ -544,7 +558,7 @@ export default compose(...funcs) {
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#上源码"><span class="nav-number">1.</span> <span class="nav-text">上源码:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分析："><span class="nav-number">2.</span> <span class="nav-text">分析：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其实中间件就是一堆扩展dispatch的东西…可以使得store-dispatch的同时来进行很多别的操作，然后获得更多的功能。"><span class="nav-number">3.</span> <span class="nav-text">其实中间件就是一堆扩展dispatch的东西…可以使得store.dispatch的同时来进行很多别的操作，然后获得更多的功能。</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">上源码:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">分析：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">其实中间件就是一堆扩展dispatch的东西...可以使得store.dispatch的同时来进行很多别的操作，然后获得更多的功能。</span></a></li></ol></div>
             
 
           </div>

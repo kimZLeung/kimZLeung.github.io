@@ -88,6 +88,7 @@
 
 
 <meta name="description" content="网页的生成过程
+
 首先会把HTML的代码转码为DOM
 然后CSS的代码转换成CSSOM
 结合两个Object Model，生成渲染树（Reander Tree）
@@ -106,6 +107,7 @@
 <meta property="og:url" content="http://kimzZ.com/2017/03/19/重排和重绘/index.html">
 <meta property="og:site_name" content="kimZLeung">
 <meta property="og:description" content="网页的生成过程
+
 首先会把HTML的代码转码为DOM
 然后CSS的代码转换成CSSOM
 结合两个Object Model，生成渲染树（Reander Tree）
@@ -123,6 +125,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="重排和重绘">
 <meta name="twitter:description" content="网页的生成过程
+
 首先会把HTML的代码转码为DOM
 然后CSS的代码转换成CSSOM
 结合两个Object Model，生成渲染树（Reander Tree）
@@ -350,7 +353,8 @@
       
 
       
-        <h2 id="网页的生成过程"><a href="#网页的生成过程" class="headerlink" title="网页的生成过程"></a>网页的生成过程</h2><ol>
+        <h2>网页的生成过程</h2>
+<ol>
 <li>首先会把HTML的代码转码为DOM</li>
 <li>然后CSS的代码转换成CSSOM</li>
 <li>结合两个Object Model，生成渲染树（Reander Tree）</li>
@@ -368,23 +372,26 @@
 <blockquote>
 <p>重新渲染需要执行第四步和第五步，从第四步开始执行叫重排（reflow），直接执行第五步叫重绘（repaint）重绘不一定需要重排，但是重排之后一定会执行重绘。</p>
 </blockquote>
-<h2 id="重排和重绘"><a href="#重排和重绘" class="headerlink" title="重排和重绘"></a>重排和重绘</h2><p><strong>重排和重绘会不断执行它们非常耗费资源提高性能的关键之一的降低“重排”和“重绘”的频率和成本。尽量少触发这两个</strong></p>
+<h2>重排和重绘</h2>
+<p><strong>重排和重绘会不断执行它们非常耗费资源提高性能的关键之一的降低“重排”和“重绘”的频率和成本。尽量少触发这两个</strong></p>
 <blockquote>
 <p>其实浏览器会自动把多次修改的样式集合起来排成一个队列，只进行一次重排和重绘，但是如果修改了样式之后马上对样式进行读取。浏览器就不得不立即进行重排，然后再修改样式的话，就会触发两次重排和重绘。对性能的耗损十分严重。</p>
 </blockquote>
 <ul>
 <li>table元素的重排和重绘成本是div元素的3倍（估计）。</li>
 </ul>
-<h2 id="如何降低重排重绘成本"><a href="#如何降低重排重绘成本" class="headerlink" title="如何降低重排重绘成本"></a>如何降低重排重绘成本</h2><ol>
+<h2>如何降低重排重绘成本</h2>
+<ol>
 <li>多个读写DOM操作放一起</li>
 <li>缓存已经得到的重排结果</li>
 <li>通过class改变样式</li>
 <li>使用离线DOM，而不直接操作真实的DOM书。比如可以用文档碎片 Document Fragment对象</li>
 <li>将要剧烈重排的元素先设成display：none，操作完再show出来</li>
 <li>position为absolute和fixed的元素因为脱离了普通文档流，对DOM树的影响较小。</li>
-<li>使用 window.requestAnimationFrame()、window.requestIdleCallback() </li>
+<li>使用 window.requestAnimationFrame()、window.requestIdleCallback()</li>
 </ol>
-<p>参考：<a href="http://www.ruanyifeng.com/blog/2015/09/web-page-performance-in-depth.html" target="_blank" rel="external">网页性能管理 - 阮一峰</a><br><a href="http://www.aliued.cn/2012/11/12/%E6%B5%8F%E8%A7%88%E5%99%A8%E7%9A%84%E9%87%8D%E7%BB%98repaints%E4%B8%8E%E9%87%8D%E6%8E%92reflows.html" target="_blank" rel="external">浏览器的重绘与重排</a></p>
+<p>参考：<a href="http://www.ruanyifeng.com/blog/2015/09/web-page-performance-in-depth.html" target="_blank" rel="external">网页性能管理 - 阮一峰</a>
+<a href="http://www.aliued.cn/2012/11/12/%E6%B5%8F%E8%A7%88%E5%99%A8%E7%9A%84%E9%87%8D%E7%BB%98repaints%E4%B8%8E%E9%87%8D%E6%8E%92reflows.html" target="_blank" rel="external">浏览器的重绘与重排</a></p>
 
       
     </div>
@@ -511,7 +518,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-count">10</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -524,7 +531,7 @@
             
             <div class="site-state-item site-state-tags">
               
-                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-count">9</span>
                 <span class="site-state-item-name">标签</span>
               
             </div>
@@ -559,7 +566,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#网页的生成过程"><span class="nav-number">1.</span> <span class="nav-text">网页的生成过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#重排和重绘"><span class="nav-number">2.</span> <span class="nav-text">重排和重绘</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何降低重排重绘成本"><span class="nav-number">3.</span> <span class="nav-text">如何降低重排重绘成本</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">网页的生成过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">重排和重绘</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">如何降低重排重绘成本</span></a></li></ol></div>
             
 
           </div>

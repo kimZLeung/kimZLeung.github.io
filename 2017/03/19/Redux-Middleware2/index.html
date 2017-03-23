@@ -88,39 +88,51 @@
 
 
 <meta name="description" content="applyMiddleware的两种用法
+
+
 第一种用法
-const store = createStore(
-  reducer,
-  applyMiddleware(...middleware)
-)
+  const store = createStore(
+    reducer,
+    applyMiddleware(...middleware)
+  )
+
+
 
 这是另一种用法
-const createStoreWithMiddleware = applyMiddleware(thunkMiddleware, historyMiddleware, logge">
+  const createStoreWithMiddleware = applyMiddleware(thunkMiddleware, historyMid">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Redux-Middleware2">
 <meta property="og:url" content="http://kimzZ.com/2017/03/19/Redux-Middleware2/index.html">
 <meta property="og:site_name" content="kimZLeung">
 <meta property="og:description" content="applyMiddleware的两种用法
+
+
 第一种用法
-const store = createStore(
-  reducer,
-  applyMiddleware(...middleware)
-)
+  const store = createStore(
+    reducer,
+    applyMiddleware(...middleware)
+  )
+
+
 
 这是另一种用法
-const createStoreWithMiddleware = applyMiddleware(thunkMiddleware, historyMiddleware, logge">
+  const createStoreWithMiddleware = applyMiddleware(thunkMiddleware, historyMid">
 <meta property="og:updated_time" content="2017-03-18T13:55:26.648Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Redux-Middleware2">
 <meta name="twitter:description" content="applyMiddleware的两种用法
+
+
 第一种用法
-const store = createStore(
-  reducer,
-  applyMiddleware(...middleware)
-)
+  const store = createStore(
+    reducer,
+    applyMiddleware(...middleware)
+  )
+
+
 
 这是另一种用法
-const createStoreWithMiddleware = applyMiddleware(thunkMiddleware, historyMiddleware, logge">
+  const createStoreWithMiddleware = applyMiddleware(thunkMiddleware, historyMid">
 
 
 
@@ -335,47 +347,61 @@ const createStoreWithMiddleware = applyMiddleware(thunkMiddleware, historyMiddle
       
 
       
-        <h2 id="applyMiddleware的两种用法"><a href="#applyMiddleware的两种用法" class="headerlink" title="applyMiddleware的两种用法"></a>applyMiddleware的两种用法</h2><ul>
-<li><p>第一种用法</p>
-<pre><code>const store = createStore(
-  reducer,
-  applyMiddleware(...middleware)
-)
-</code></pre></li>
-<li><p>这是另一种用法</p>
-<pre><code>const createStoreWithMiddleware = applyMiddleware(thunkMiddleware, historyMiddleware, loggerMiddleware)(createStore);
-const store = createStoreWithMiddleware(rootReducer, initialState);
-</code></pre></li>
+        <h2>applyMiddleware的两种用法</h2>
+<ul>
+<li>
+<p>第一种用法</p>
+<pre><code>  const store = createStore(
+    reducer,
+    applyMiddleware(...middleware)
+  )
+</code></pre>
+</li>
+<li>
+<p>这是另一种用法</p>
+<pre><code>  const createStoreWithMiddleware = applyMiddleware(thunkMiddleware, historyMiddleware, loggerMiddleware)(createStore);
+  const store = createStoreWithMiddleware(rootReducer, initialState);
+</code></pre>
+</li>
 </ul>
 <hr>
-<h2 id="理解"><a href="#理解" class="headerlink" title="理解"></a>理解</h2><blockquote>
+<h2>理解</h2>
+<blockquote>
 <p>起初我对这两种用法产生了疑惑，通过看applyMiddleware和createStore的源码清楚了这两种用法的意义</p>
 </blockquote>
 <ul>
-<li><p>第一种用法是通过createStore内部的一个判断机制</p>
-<pre><code>if (typeof enhancer !== &apos;undefined&apos;) {
-  if (typeof enhancer !== &apos;function&apos;) {
-    throw new Error(&apos;Expected the enhancer to be a function.&apos;)
-  }
-
-  return enhancer(createStore)(reducer, preloadedState)
-}
-</code></pre><p>这个判断机制使得当调用createStore传入第三个参数的时候会检测第三个参数是否为函数类型，如果是便调用，然后就是通过直接调用<code>applyMiddleware</code>返回的函数，通过闭包访问到之前传进去<code>applyMiddleware</code>的中间件，然后对返回的store的<code>dispatch</code>进行中间件包装处理</p>
-</li>
-<li><p>第二种用法是通过先调用<code>applyMiddleware</code>传入中间件，然后直接调用返回的函数，传入<code>createStore</code>这个函数，然后还是会返回一个函数…先上代码</p>
-<pre><code>export default function applyMiddleware(...middlewares) {
-    return (createStore) =&gt; (reducer, preloadedState, enhancer) =&gt; {
-        // ...
+<li>
+<p>第一种用法是通过createStore内部的一个判断机制</p>
+<pre><code>    if (typeof enhancer !== 'undefined') {
+      if (typeof enhancer !== 'function') {
+        throw new Error('Expected the enhancer to be a function.')
+      }
+  
+      return enhancer(createStore)(reducer, preloadedState)
     }
-}
-</code></pre></li>
+</code></pre>
+</li>
 </ul>
-<p>从上面的源码看到的是传入一个<code>middleware</code>的数组，再传入一个<code>createStore</code>然后返回的是一个类似<code>createStore</code>的函数，这个函数传入的参数和<code>createStore</code>一个样。但是里面是对<code>createStore</code>的一种增强包装，它会先调用<code>var store = createStore(reducer, preloadedState, enhancer)</code>来创建一个<code>store</code>，然后再通过一些操作，通过闭包访问之前的中间件，用于增强这个<code>store</code>的<code>dispatch</code><br>最后返回的依然是一个</p>
+<p>这个判断机制使得当调用createStore传入第三个参数的时候会检测第三个参数是否为函数类型，如果是便调用，然后就是通过直接调用<code>applyMiddleware</code>返回的函数，通过闭包访问到之前传进去<code>applyMiddleware</code>的中间件，然后对返回的store的<code>dispatch</code>进行中间件包装处理</p>
+<ul>
+<li>
+<p>第二种用法是通过先调用<code>applyMiddleware</code>传入中间件，然后直接调用返回的函数，传入<code>createStore</code>这个函数，然后还是会返回一个函数...先上代码</p>
+<pre><code>  export default function applyMiddleware(...middlewares) {
+      return (createStore) =&gt; (reducer, preloadedState, enhancer) =&gt; {
+          // ...
+      }
+  }
+</code></pre>
+</li>
+</ul>
+<p>从上面的源码看到的是传入一个<code>middleware</code>的数组，再传入一个<code>createStore</code>然后返回的是一个类似<code>createStore</code>的函数，这个函数传入的参数和<code>createStore</code>一个样。但是里面是对<code>createStore</code>的一种增强包装，它会先调用<code>var store = createStore(reducer, preloadedState, enhancer)</code>来创建一个<code>store</code>，然后再通过一些操作，通过闭包访问之前的中间件，用于增强这个<code>store</code>的<code>dispatch</code>
+最后返回的依然是一个</p>
 <pre><code>return {
   ...store,
   dispatch
 }
-</code></pre><p>这个东西通过<code>ES7</code>的扩展运算符解构了对象然后用新的<code>dispatch</code>覆盖了旧的<code>dispatch</code></p>
+</code></pre>
+<p>这个东西通过<code>ES7</code>的扩展运算符解构了对象然后用新的<code>dispatch</code>覆盖了旧的<code>dispatch</code></p>
 <blockquote>
 <p>从而返回了一个新的<code>store</code>,完成<code>createStore</code>的增强</p>
 </blockquote>
@@ -505,7 +531,7 @@ const store = createStoreWithMiddleware(rootReducer, initialState);
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-count">10</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -518,7 +544,7 @@ const store = createStoreWithMiddleware(rootReducer, initialState);
             
             <div class="site-state-item site-state-tags">
               
-                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-count">9</span>
                 <span class="site-state-item-name">标签</span>
               
             </div>
@@ -553,7 +579,7 @@ const store = createStoreWithMiddleware(rootReducer, initialState);
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#applyMiddleware的两种用法"><span class="nav-number">1.</span> <span class="nav-text">applyMiddleware的两种用法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#理解"><span class="nav-number">2.</span> <span class="nav-text">理解</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">applyMiddleware的两种用法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">理解</span></a></li></ol></div>
             
 
           </div>
