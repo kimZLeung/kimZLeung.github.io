@@ -1,0 +1,742 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="webpack," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/upload.jpg?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="Q start
+昨天小伙伴用webpack+express搭建了一个本地热替换开发环境，让我不禁回忆起之前我貌似也做过类似的事情，只是照抄了一下代码就没管了，今天回顾一下。
+
+从webpack-dev-server讲起
+众所周知，我们可以直接在webpack的配置文件中声明配置然后启用热替换模式~然后就可以享受自动刷新的待遇
+
+1234567891011// 入口文件加入这两行entry: [	&quot;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="webpack-HMR">
+<meta property="og:url" content="http://kimzZ.com/2017/03/24/webpack-HMR/index.html">
+<meta property="og:site_name" content="kimZLeung">
+<meta property="og:description" content="Q start
+昨天小伙伴用webpack+express搭建了一个本地热替换开发环境，让我不禁回忆起之前我貌似也做过类似的事情，只是照抄了一下代码就没管了，今天回顾一下。
+
+从webpack-dev-server讲起
+众所周知，我们可以直接在webpack的配置文件中声明配置然后启用热替换模式~然后就可以享受自动刷新的待遇
+
+1234567891011// 入口文件加入这两行entry: [	&quot;">
+<meta property="og:updated_time" content="2017-03-24T14:04:16.783Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="webpack-HMR">
+<meta name="twitter:description" content="Q start
+昨天小伙伴用webpack+express搭建了一个本地热替换开发环境，让我不禁回忆起之前我貌似也做过类似的事情，只是照抄了一下代码就没管了，今天回顾一下。
+
+从webpack-dev-server讲起
+众所周知，我们可以直接在webpack的配置文件中声明配置然后启用热替换模式~然后就可以享受自动刷新的待遇
+
+1234567891011// 入口文件加入这两行entry: [	&quot;">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://kimzZ.com/2017/03/24/webpack-HMR/"/>
+
+
+
+
+
+  <title> webpack-HMR | kimZLeung </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">kimZLeung</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">kimz's Bolg</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://kimzZ.com/2017/03/24/webpack-HMR/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="kimZ">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/upload.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="kimZLeung">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                webpack-HMR
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-24T22:00:04+08:00">
+                2017-03-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Q-start"><a href="#Q-start" class="headerlink" title="Q start"></a>Q start</h2><blockquote>
+<p>昨天小伙伴用<code>webpack</code>+<code>express</code>搭建了一个本地热替换开发环境，让我不禁回忆起之前我貌似也做过类似的事情，只是照抄了一下代码就没管了，今天回顾一下。</p>
+</blockquote>
+<h2 id="从webpack-dev-server讲起"><a href="#从webpack-dev-server讲起" class="headerlink" title="从webpack-dev-server讲起"></a>从webpack-dev-server讲起</h2><blockquote>
+<p>众所周知，我们可以直接在<code>webpack</code>的配置文件中声明配置然后启用热替换模式~然后就可以享受自动刷新的待遇</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 入口文件加入这两行</span></div><div class="line">entry: [</div><div class="line">	<span class="string">"webpack/hot/dev-server"</span>,</div><div class="line">	<span class="string">"webpack-dev-server/client?http://localhost:8080"</span>,</div><div class="line">	<span class="string">"./js/index.js"</span></div><div class="line">],</div><div class="line"></div><div class="line"><span class="comment">// 引入插件</span></div><div class="line">plugins: [</div><div class="line">	<span class="keyword">new</span> webpack.HotModuleReplacementPlugin()</div><div class="line">]</div></pre></td></tr></table></figure>
+<p>或者<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 直接服务器配置相关</span></div><div class="line">devServer: &#123;</div><div class="line">    <span class="attr">historyApiFallback</span>: <span class="literal">true</span>,</div><div class="line">    <span class="attr">hot</span>: <span class="literal">false</span>,</div><div class="line">    <span class="attr">inline</span>: <span class="literal">true</span>,</div><div class="line">    <span class="attr">grogress</span>: <span class="literal">true</span></div><div class="line">&#125;,</div></pre></td></tr></table></figure></p>
+<h3 id="然后启用webpack-dev-server就可以启用热替换"><a href="#然后启用webpack-dev-server就可以启用热替换" class="headerlink" title="然后启用webpack-dev-server就可以启用热替换"></a>然后启用<code>webpack-dev-server</code>就可以启用热替换</h3><hr>
+<h2 id="通过本地搭建express服务器实现无刷新的自动热替换"><a href="#通过本地搭建express服务器实现无刷新的自动热替换" class="headerlink" title="通过本地搭建express服务器实现无刷新的自动热替换"></a>通过本地搭建express服务器实现无刷新的自动热替换</h2><blockquote>
+<p>等待刷新还是不爽，如果不用刷新就可以进行代码替换…</p>
+</blockquote>
+<ol>
+<li><p>首先我们把依赖装好<br><code>npm i webpack express webpack-dev-middleware webpack-hot-middleware</code></p>
+</li>
+<li><p>然后就是修改<code>webpack</code>的配置</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 使用了webpack-hot-middleware这个中间件，这里传入reload=true的参数</span></div><div class="line">entry: &#123;</div><div class="line">    [<span class="string">'./src/index.js'</span>, <span class="string">'webpack-hot-middleware/client?reload=true'</span>]</div><div class="line">&#125;,</div><div class="line"><span class="comment">// ...</span></div><div class="line">plugins: [</div><div class="line">    <span class="keyword">new</span> webpack.optimize.OccurenceOrderPlugin(),</div><div class="line">    <span class="keyword">new</span> webpack.HotModuleReplacementPlugin(),</div><div class="line">    <span class="keyword">new</span> webpack.NoErrorsPlugin(),</div><div class="line">]</div></pre></td></tr></table></figure>
+</li>
+<li><p>然后就可以搭建服务器了<br>上面讲到的<code>webpack-hot-middleware</code>是配合<code>webpack-dev-middleware</code>一起使用的</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 先调用express取得一个服务器</span></div><div class="line"><span class="keyword">var</span> app = express();</div><div class="line"></div><div class="line"><span class="comment">// 生成webpack的编译器并为express服务器注入中间件</span></div><div class="line"><span class="comment">// webpackDevMiddleware是一个专门用于开发的中间件。可以给我们托管本地文件</span></div><div class="line"><span class="comment">// 配合webpackHotMiddleware使用可以达到热替换的目的</span></div><div class="line">app.use(webpackDevMiddleware(compiler, &#123;</div><div class="line">  <span class="attr">publicPath</span>: <span class="string">'/'</span>,</div><div class="line">  <span class="attr">noInfo</span>: <span class="literal">true</span>,</div><div class="line">  <span class="attr">stats</span>: &#123;</div><div class="line">    <span class="attr">colors</span>: <span class="literal">true</span></div><div class="line">  &#125;</div><div class="line">&#125;));</div><div class="line"></div><div class="line">app.use(webpackHotMiddleware(compiler));</div><div class="line"></div><div class="line"><span class="comment">// 然后监听端口</span></div><div class="line">server.listen(<span class="string">'2333'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'Server start on '</span> + config.dev.port)</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>那介绍一下<code>webpackDevMiddleware</code>的配置吧</p>
+<ul>
+<li>需要一个最基本的<code>webpack</code>对象</li>
+<li>noInfo：就是只打印警告和报错</li>
+<li>quiet：什么都不打印</li>
+<li>lazy：不监听文件变化</li>
+<li>watchOptions：{ aggregateTimeout：，poll： }监听文件变化的配置</li>
+<li>publicPath：就是webpack里面那个，文件路径补全</li>
+<li>index：服务器的默认路径.(默认：index)</li>
+<li>headers： 响应头</li>
+<li>stats：配置文字样式对象</li>
+<li>serverSideRender：服务器端渲染模式。可以设置true或者false</li>
+</ul>
+<hr>
+<h2 id="还是在刷新啊…"><a href="#还是在刷新啊…" class="headerlink" title="还是在刷新啊…"></a>还是在刷新啊…</h2><blockquote>
+<p>就是这样我们通过了<code>express</code>和<code>webpack</code>的两个强大的中间件搭建起了本地配置好的热替换服务器，因为有<code>webpackDevMiddleware</code>帮我们托管本地文件，调试也不错，挺方便。</p>
+</blockquote>
+<h3 id="但是我发现我修改JS的时候还是会自动刷新啊"><a href="#但是我发现我修改JS的时候还是会自动刷新啊" class="headerlink" title="但是我发现我修改JS的时候还是会自动刷新啊 = ="></a>但是我发现我修改JS的时候还是会自动刷新啊 = =</h3><p>原来到目前为止我们只是搭了一个<code>webpack-dev-server --hot --inline</code>的翻版。好气啊</p>
+<hr>
+<h2 id="了解一下webpack强大的HMR功能"><a href="#了解一下webpack强大的HMR功能" class="headerlink" title="了解一下webpack强大的HMR功能"></a>了解一下webpack强大的HMR功能</h2><blockquote>
+<p>硬着头皮去google查了一翻</p>
+</blockquote>
+<h3 id="引一段"><a href="#引一段" class="headerlink" title="引一段"></a>引一段</h3><blockquote>
+<p>模块热替换(HMR)的作用是，在应用运行时，无需刷新页面，便能替换、增加、删除必要的模块。 HMR 对于那些由单一状态树构成的应用非常有用。因为这些应用的组件是 “dumb” (相对于 “smart”) 的，所以在组件的代码更改后，组件的状态依然能够正确反映应用的最新状态。（其实是配合<code>React</code>很强大）</p>
+</blockquote>
+<p>当我们自己的<code>express</code>服务器引入了<code>webpack-hot-middleware</code>或者说我们的<code>webpack-dev-server</code>设置了<code>--hot</code>的时候，<code>webpack</code>会暴露出这个<code>module.hot</code>给我们用</p>
+<h3 id="那module-hot又是什么"><a href="#那module-hot又是什么" class="headerlink" title="那module.hot又是什么"></a>那module.hot又是什么</h3><p><code>module.hot</code>提供给我们一个最常用的<code>module.hot.accept()</code>函数。</p>
+<blockquote>
+<p><code>module.hot.accept()</code>函数其实是一个钩子函数，<code>update</code>在开发环境中就是一个个事件，这个<code>update</code>事件会根据依赖的顺序在模块之间冒泡，当<code>update</code>事件冒泡到根节点，说明代码没有处理<code>update</code>事件, 于是刷新页面。我们可以通过<code>module.hot.accept()</code>函数来捕获这个<code>update</code>事件</p>
+</blockquote>
+<p><code>update</code>事件小解释： 如果在C模块作出了修改，但是C模块并没有作出捕获，那么C模块的<code>update</code>事件会冒泡到依赖C模块的B模块，然后再冒泡到依赖B模块的<code>entry</code>文件，如果在<code>entry</code>文件里作出捕获，就不会刷新页面地进行热替换</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">1. Entry ----&gt; B ----&gt; C </div><div class="line">2. Entry ----&gt; B ----&gt; C++ (update)</div><div class="line">3. Entry ----&gt; B (update) ----&gt; C++</div><div class="line">4. Entry (catch) ----&gt; B ----&gt; C++</div></pre></td></tr></table></figure>
+<p>我们可以简单地：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// entry file</span></div><div class="line"><span class="keyword">if</span>(<span class="built_in">module</span>.hot) &#123;</div><div class="line">    <span class="built_in">module</span>.hot.accept()</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>通过这种方式在入门文件启动<code>HMR</code>功能</p>
+<blockquote>
+<p>因为通过<code>webpack</code>打包好的文件是从入口文件开始，所以对所有文件的修改都会最终冒泡的入口文件那里，所以直接在入口文件处捕获事件是比较合理的。</p>
+</blockquote>
+<p>我们也可以指定特定的模块启动<code>HMR</code>功能<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> (<span class="built_in">module</span>.hot) &#123;</div><div class="line">    <span class="comment">// accept update of dependency</span></div><div class="line">    <span class="built_in">module</span>.hot.accept(<span class="string">"./handler.js"</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="comment">// replace request handler of server</span></div><div class="line">        server.removeListener(<span class="string">"request"</span>, requestHandler);</div><div class="line">        requestHandler = <span class="built_in">require</span>(<span class="string">"./handler.js"</span>);</div><div class="line">        server.on(<span class="string">"request"</span>, requestHandler);</div><div class="line">    &#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><code>accept</code>的第二个参数是一个回调函数，会在捕获对应模块的<code>update</code>行为之后触发回调。</p>
+<h3 id="module-hot-dispose"><a href="#module-hot-dispose" class="headerlink" title="module.hot.dispose"></a>module.hot.dispose</h3><blockquote>
+<p><code>module.hot.dispose</code>，这个方法可以传入一个函数作为参数，<code>GitHub</code>上的文档说：添加一个 <code>one time handler</code>, 在当前模块发生热替换的时候执行。允许销毁和移除之前声明或者创建的内容（比如绑定的 DOM 事件）。如果想从旧的模块传递状态到更新后的模块，可以把数据放在 <code>data</code> （参数） 对象。在替换后的模块中允许通过<code>module.hot.data</code>访问。</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/* </span></div><div class="line"> * For example (这是一个保存Counter组件更新之前的state的例子)</div><div class="line"> */</div><div class="line"><span class="keyword">if</span> (<span class="built_in">module</span>.hot) &#123;</div><div class="line">  <span class="comment">// module.hot.data是个&#123;&#125;，我们用它来在旧模块和新模块之间传递数据</span></div><div class="line">  <span class="built_in">module</span>.hot.data = <span class="built_in">module</span>.hot.data || &#123;&#125;;</div><div class="line">  <span class="keyword">let</span> &#123;proxy, rootInstance&#125; = <span class="built_in">module</span>.hot.data;</div><div class="line"></div><div class="line">  <span class="keyword">if</span> (!proxy) &#123;</div><div class="line">    proxy = createProxy(Counter);</div><div class="line">    <span class="keyword">const</span> Component = proxy.get();</div><div class="line"></div><div class="line">    rootInstance = ReactDOM.render(</div><div class="line">      &lt;Component initialCount=&#123;10&#125; valueAddEachClick=&#123;2&#125;/&gt;,</div><div class="line">      document.getElementById('main')</div><div class="line">    );</div><div class="line">  &#125; else &#123;</div><div class="line">    proxy.update(Counter);</div><div class="line">    deepForceUpdate(rootInstance);</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  module.hot.accept();</div><div class="line">  </div><div class="line">  // 参数data复试后会储存在module.hot.data里面</div><div class="line">  module.hot.dispose(function(data) &#123;</div><div class="line">    // dispose方法用来定义一个一次性的函数，</div><div class="line">    // 这个函数会在当前模块被更新之前调用。所以</div><div class="line">    // 我们在这里，也就是proxy变量被销毁之前储存它。</div><div class="line">    data.proxy = proxy;</div><div class="line">    data.rootInstance = rootInstance;</div><div class="line">  &#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<hr>
+<h2 id="我只知道这么多了"><a href="#我只知道这么多了" class="headerlink" title="我只知道这么多了 = ="></a>我只知道这么多了 = =</h2><p>参考：</p>
+<ol>
+<li><a href="https://github.com/webpack/docs/wiki/hot-module-replacement" target="_blank" rel="external">GitHub-webpack-docs</a></li>
+<li><a href="https://blog.oyyd.net/post/how_does_react_hot_loader_works" target="_blank" rel="external">探究Webpack中的HMR(hot module replacement)</a></li>
+<li><a href="https://segmentfault.com/a/1190000003879041#articleHeader0" target="_blank" rel="external">React的模块热替换</a></li>
+<li><a href="https://doc.webpack-china.org/guides/hmr-react/" target="_blank" rel="external">模块热替换 - React</a></li>
+<li><a href="https://github.com/webpack/webpack-dev-middleware" target="_blank" rel="external">GitHub - webpack/webpack-dev-middleware</a></li>
+</ol>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/webpack/" rel="tag"># webpack</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/23/macrotask-queue和microtask-queue/" rel="next" title="macrotask-queue和microtask-queue">
+                <i class="fa fa-chevron-left"></i> macrotask-queue和microtask-queue
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/upload.jpg"
+               alt="kimZ" />
+          <p class="site-author-name" itemprop="name">kimZ</p>
+           
+              <p class="site-description motion-element" itemprop="description">Share what we play</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Q-start"><span class="nav-number">1.</span> <span class="nav-text">Q start</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#从webpack-dev-server讲起"><span class="nav-number">2.</span> <span class="nav-text">从webpack-dev-server讲起</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#然后启用webpack-dev-server就可以启用热替换"><span class="nav-number">2.1.</span> <span class="nav-text">然后启用webpack-dev-server就可以启用热替换</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#通过本地搭建express服务器实现无刷新的自动热替换"><span class="nav-number">3.</span> <span class="nav-text">通过本地搭建express服务器实现无刷新的自动热替换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#还是在刷新啊…"><span class="nav-number">4.</span> <span class="nav-text">还是在刷新啊…</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#但是我发现我修改JS的时候还是会自动刷新啊"><span class="nav-number">4.1.</span> <span class="nav-text">但是我发现我修改JS的时候还是会自动刷新啊 = =</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#了解一下webpack强大的HMR功能"><span class="nav-number">5.</span> <span class="nav-text">了解一下webpack强大的HMR功能</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#引一段"><span class="nav-number">5.1.</span> <span class="nav-text">引一段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#那module-hot又是什么"><span class="nav-number">5.2.</span> <span class="nav-text">那module.hot又是什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#module-hot-dispose"><span class="nav-number">5.3.</span> <span class="nav-text">module.hot.dispose</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#我只知道这么多了"><span class="nav-number">6.</span> <span class="nav-text">我只知道这么多了 = =</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kimZ</span>
+</div>
+
+
+<div class="powered-by">
+  KimZ
+</div>
+
+<div class="theme-info">
+  to be lazyer, to be nicer
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

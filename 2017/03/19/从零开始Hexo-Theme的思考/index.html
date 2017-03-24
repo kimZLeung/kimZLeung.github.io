@@ -88,48 +88,39 @@
 
 
 <meta name="description" content="Start
-
 讲真一开始我以为写hexo主题贼简单。就很弱鸡。但是开始看Hexo的Workflow之后就发现事情开始比较厉害了
 
 
 说一说Hexo的Workflow
-
 hexo的主题的话，它会读取你init出来的文件夹里根目录的_config.yml里面的theme属性。采取你theme文件夹下的对应名字的文件夹的主题。
 
 主题本身也是文件夹
-
-里面也有_config.yml文件用来配置这个hex">
+里面也有_config.yml文件用来配置这个hexo的主">
 <meta property="og:type" content="article">
 <meta property="og:title" content="从零开始Hexo Theme的思考">
 <meta property="og:url" content="http://kimzZ.com/2017/03/19/从零开始Hexo-Theme的思考/index.html">
 <meta property="og:site_name" content="kimZLeung">
 <meta property="og:description" content="Start
-
 讲真一开始我以为写hexo主题贼简单。就很弱鸡。但是开始看Hexo的Workflow之后就发现事情开始比较厉害了
 
 
 说一说Hexo的Workflow
-
 hexo的主题的话，它会读取你init出来的文件夹里根目录的_config.yml里面的theme属性。采取你theme文件夹下的对应名字的文件夹的主题。
 
 主题本身也是文件夹
-
-里面也有_config.yml文件用来配置这个hex">
+里面也有_config.yml文件用来配置这个hexo的主">
 <meta property="og:updated_time" content="2017-03-18T13:40:53.894Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="从零开始Hexo Theme的思考">
 <meta name="twitter:description" content="Start
-
 讲真一开始我以为写hexo主题贼简单。就很弱鸡。但是开始看Hexo的Workflow之后就发现事情开始比较厉害了
 
 
 说一说Hexo的Workflow
-
 hexo的主题的话，它会读取你init出来的文件夹里根目录的_config.yml里面的theme属性。采取你theme文件夹下的对应名字的文件夹的主题。
 
 主题本身也是文件夹
-
-里面也有_config.yml文件用来配置这个hex">
+里面也有_config.yml文件用来配置这个hexo的主">
 
 
 
@@ -344,68 +335,53 @@ hexo的主题的话，它会读取你init出来的文件夹里根目录的_confi
       
 
       
-        <h2>Start</h2>
-<blockquote>
+        <h2 id="Start"><a href="#Start" class="headerlink" title="Start"></a>Start</h2><blockquote>
 <p>讲真一开始我以为写hexo主题贼简单。就很弱鸡。但是开始看Hexo的Workflow之后就发现事情开始比较厉害了</p>
 </blockquote>
 <hr>
-<h2>说一说Hexo的Workflow</h2>
-<blockquote>
+<h2 id="说一说Hexo的Workflow"><a href="#说一说Hexo的Workflow" class="headerlink" title="说一说Hexo的Workflow"></a>说一说Hexo的Workflow</h2><blockquote>
 <p>hexo的主题的话，它会读取你init出来的文件夹里根目录的<code>_config.yml</code>里面的<code>theme</code>属性。采取你<code>theme</code>文件夹下的对应名字的文件夹的主题。</p>
 </blockquote>
-<h3>主题本身也是文件夹</h3>
-<blockquote>
-<p>里面也有<code>_config.yml</code>文件用来配置这个hexo的主题.
-我们使用浏览器去访问hexo搭起来的博客网页时，Hexo首先会去读取<code>layout.ejs</code>（如果模板引擎是<code>EJS</code>）
-然后<code>layout.ejs</code>里面的body变量会根据我们访问的URL去对应替换这个文件里面的body的变量哦
-比如我们访问的是<code>/</code>这个根路由，body就代表了<code>index.ejs</code>如果我们访问<code>/post</code>body就是<code>post.ejs</code>可以直接<code>&lt;%- body %&gt;</code>引入这个模板文件</p>
+<h3 id="主题本身也是文件夹"><a href="#主题本身也是文件夹" class="headerlink" title="主题本身也是文件夹"></a>主题本身也是文件夹</h3><blockquote>
+<p>里面也有<code>_config.yml</code>文件用来配置这个hexo的主题.<br>我们使用浏览器去访问hexo搭起来的博客网页时，Hexo首先会去读取<code>layout.ejs</code>（如果模板引擎是<code>EJS</code>）<br>然后<code>layout.ejs</code>里面的body变量会根据我们访问的URL去对应替换这个文件里面的body的变量哦<br>比如我们访问的是<code>/</code>这个根路由，body就代表了<code>index.ejs</code>如果我们访问<code>/post</code>body就是<code>post.ejs</code>可以直接<code>&lt;%- body %&gt;</code>引入这个模板文件 </p>
 </blockquote>
-<h3>Hexo本身有提供一些好用的变量</h3>
-<blockquote>
+<h3 id="Hexo本身有提供一些好用的变量"><a href="#Hexo本身有提供一些好用的变量" class="headerlink" title="Hexo本身有提供一些好用的变量"></a>Hexo本身有提供一些好用的变量</h3><blockquote>
 <p>比如<code>page.posts</code>代表所有文章</p>
 </blockquote>
-<h3>使用Hexo Helper</h3>
-<pre><code>hexo.extend.helper.register(name, function(){
+<h3 id="使用Hexo-Helper"><a href="#使用Hexo-Helper" class="headerlink" title="使用Hexo Helper"></a>使用Hexo Helper</h3><pre><code>hexo.extend.helper.register(name, function(){
     // TODO
 });
 
 // 注册Hexo的Helper
-</code></pre>
-<blockquote>
+</code></pre><blockquote>
 <p>Helper可以让我们在模板中快速插入内容，官方有提供比如<code>paginator</code> and so on</p>
 </blockquote>
 <hr>
-<h2>EJS</h2>
-<blockquote>
+<h2 id="EJS"><a href="#EJS" class="headerlink" title="EJS"></a>EJS</h2><blockquote>
 <p>EJS是一个模板引擎。可以允许我们在<code>HTML</code>里面写<code>JS的逻辑</code></p>
 </blockquote>
 <ul>
 <li><code>&lt;%</code>这个开头的话会执行里面的JS代码，但是不会渲染到HTML里面</li>
 <li><code>&lt;%=</code>这个会执行里面的代码并且会把返回输出到HTML里面,并且被escape转义编码</li>
 <li><code>&lt;%-</code>这个和上面那个基本一样但输出的值不会被escape转码</li>
-<li><code>&lt;%#</code>这个是...注释</li>
+<li><code>&lt;%#</code>这个是…注释</li>
 <li><code>&lt;%%</code>输出字面的‘&lt;%’</li>
 <li><code>&lt;%&gt;</code>普通的结束标签。一般都要<code>&lt;% %&gt;</code>这样包着</li>
 <li><code>-%&gt;</code>移除随后的换行符</li>
 </ul>
-<h2>嵌套</h2>
-<pre><code>&lt;%- include('./header', {title: title}) -%&gt;   // 第二个参数是传进去的变量，在另一个模块可以直接用。
+<h2 id="嵌套"><a href="#嵌套" class="headerlink" title="嵌套"></a>嵌套</h2><pre><code>&lt;%- include(&apos;./header&apos;, {title: title}) -%&gt;   // 第二个参数是传进去的变量，在另一个模块可以直接用。
 &lt;h1&gt;
   Title
 &lt;/h1&gt;
-</code></pre>
-<h2>用法</h2>
-<pre><code>var templates = ejs.compile(str, options);
+</code></pre><h2 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h2><pre><code>var templates = ejs.compile(str, options);
 templates(data);
 
 // also can do this
 ejs.render(str, data, options)
 
 // 都是渲染HTML的字符串而已
-</code></pre>
-<hr>
-<h3>感谢远成大大的<a href="http://lyyourc.com/2016/01/27/Write-a-Hexo-Theme-From-Strach/" target="_blank" rel="external">博客</a>给我很大启发</h3>
-
+</code></pre><hr>
+<h3 id="感谢远成大大的博客给我很大启发"><a href="#感谢远成大大的博客给我很大启发" class="headerlink" title="感谢远成大大的博客给我很大启发"></a>感谢远成大大的<a href="http://lyyourc.com/2016/01/27/Write-a-Hexo-Theme-From-Strach/" target="_blank" rel="external">博客</a>给我很大启发</h3>
       
     </div>
 
@@ -527,7 +503,7 @@ ejs.render(str, data, options)
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-count">11</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -540,7 +516,7 @@ ejs.render(str, data, options)
             
             <div class="site-state-item site-state-tags">
               
-                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-count">10</span>
                 <span class="site-state-item-name">标签</span>
               
             </div>
@@ -575,7 +551,7 @@ ejs.render(str, data, options)
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">Start</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">说一说Hexo的Workflow</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">2.1.</span> <span class="nav-text">主题本身也是文件夹</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">2.2.</span> <span class="nav-text">Hexo本身有提供一些好用的变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">2.3.</span> <span class="nav-text">使用Hexo Helper</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">EJS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text">嵌套</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">5.</span> <span class="nav-text">用法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">5.1.</span> <span class="nav-text">感谢远成大大的博客给我很大启发</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Start"><span class="nav-number">1.</span> <span class="nav-text">Start</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#说一说Hexo的Workflow"><span class="nav-number">2.</span> <span class="nav-text">说一说Hexo的Workflow</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#主题本身也是文件夹"><span class="nav-number">2.1.</span> <span class="nav-text">主题本身也是文件夹</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hexo本身有提供一些好用的变量"><span class="nav-number">2.2.</span> <span class="nav-text">Hexo本身有提供一些好用的变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用Hexo-Helper"><span class="nav-number">2.3.</span> <span class="nav-text">使用Hexo Helper</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#EJS"><span class="nav-number">3.</span> <span class="nav-text">EJS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#嵌套"><span class="nav-number">4.</span> <span class="nav-text">嵌套</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#用法"><span class="nav-number">5.</span> <span class="nav-text">用法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#感谢远成大大的博客给我很大启发"><span class="nav-number">5.1.</span> <span class="nav-text">感谢远成大大的博客给我很大启发</span></a></li></ol></li></ol></div>
             
 
           </div>
