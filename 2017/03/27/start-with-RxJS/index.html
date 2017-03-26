@@ -115,7 +115,7 @@ Rx = Observables + LINQ + Schedulers （我反正看不懂
 
 marble图1--a--b---c-d--|--&amp;gt;
 我们可以把这四个点看作四个不同时间触发">
-<meta property="og:updated_time" content="2017-03-26T12:27:19.695Z">
+<meta property="og:updated_time" content="2017-03-26T13:09:03.439Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="start-with-RxJS">
 <meta name="twitter:description" content="如何理解RxJS
@@ -365,9 +365,9 @@ marble图1--a--b---c-d--|--&amp;gt;
 <hr>
 <h2 id="Subscribe"><a href="#Subscribe" class="headerlink" title="Subscribe"></a>Subscribe</h2><p><code>subscribe</code>是一个订阅流的方法，这个方法可以传入三个参数，分别是三个函数<code>onNext</code>、<code>onError</code>、<code>onCompleted</code></p>
 <ul>
-<li><code>onNext</code>是在<code>Observer</code>调用<code>onNext()</code>方法时会调用，一般在事件触发时就会调用（所以我们处理事件时<code>subscribe</code>只传的那一个回调其实是<code>onNext</code>函数）。如果是自己<code>create</code>的<code>Observer</code>可以调用<code>onNext</code>方法去启动<code>onNext</code>回调</li>
+<li><code>onNext</code>是在<code>Observable</code>调用<code>onNext()</code>方法时会调用，一般在事件触发时就会调用（所以我们处理事件时<code>subscribe</code>只传的那一个回调其实是<code>onNext</code>函数）。如果是自己<code>create</code>的<code>Observer</code>可以调用<code>Observable</code>的<code>onNext</code>方法去启动<code>onNext</code>回调</li>
 <li><code>onError</code>方法…就跟<code>Promise</code>那个差不多，抛出错误时调用</li>
-<li><code>onCompleted</code>方法，如果是自己<code>create</code>的<code>Observer</code>的话可以用<code>onCompleted</code>方法结束这个<code>Observer</code>并调用这个回调函数</li>
+<li><code>onCompleted</code>方法，如果是自己<code>create</code>的<code>Observable</code>的话可以用<code>Observer</code>的<code>onCompleted</code>方法结束这个<code>Observable</code>并调用这个回调函数</li>
 </ul>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">rx.Observable.create(<span class="function"><span class="keyword">function</span>(<span class="params">observer</span>) </span>&#123;</div><div class="line">	observer.onNext(<span class="number">42</span>)		<span class="comment">// emit onNext</span></div><div class="line">	observer.onCompleted()	<span class="comment">// emit onCompleted</span></div><div class="line"></div><div class="line">	<span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">		<span class="built_in">console</span>.log(<span class="string">'disposed'</span>)</div><div class="line">	&#125;</div><div class="line">&#125;)</div><div class="line">.subscribe(<span class="function"><span class="keyword">function</span>(<span class="params">x</span>) </span>&#123;</div><div class="line">	<span class="built_in">console</span>.log(<span class="string">'onNext: '</span>, x)	<span class="comment">// "onNext: 42"</span></div><div class="line">&#125;, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</div><div class="line">	<span class="built_in">console</span>.log(<span class="string">'onError: '</span>, e)</div><div class="line">&#125;, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="built_in">console</span>.log(<span class="string">'onCompleted'</span>)	<span class="comment">// "onCompleted"</span></div><div class="line">&#125;)</div></pre></td></tr></table></figure>
 <blockquote>
