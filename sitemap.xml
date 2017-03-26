@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://kimzZ.com/2017/03/27/start-with-RxJS/</loc>
+    
+    <lastmod>2017-03-26T12:21:53.042Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://kimzZ.com/2017/03/24/webpack-HMR/</loc>
     
     <lastmod>2017-03-24T15:51:22.026Z</lastmod>

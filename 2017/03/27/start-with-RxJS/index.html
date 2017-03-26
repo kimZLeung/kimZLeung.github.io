@@ -1,0 +1,752 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Rx JS异步," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/upload.jpg?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="如何理解RxJS
+Rx = Observables + LINQ + Schedulers （我反正看不懂
+
+其实就是异步的数据流
+何为异步数据流
+页面上的一些点击事件，会在用户点击时异步触发
+一些异步的网络请求会在服务器响应时异步触发后续行为
+
+而Rx就为我们提供了一系列的工具来处理这些异步流。
+
+marble图1--a--b---c-d--|--&amp;gt;
+我们可以把这四个点看作四个不同时间触发">
+<meta property="og:type" content="article">
+<meta property="og:title" content="start-with-Rx">
+<meta property="og:url" content="http://kimzZ.com/2017/03/27/start-with-RxJS/index.html">
+<meta property="og:site_name" content="kimZLeung">
+<meta property="og:description" content="如何理解RxJS
+Rx = Observables + LINQ + Schedulers （我反正看不懂
+
+其实就是异步的数据流
+何为异步数据流
+页面上的一些点击事件，会在用户点击时异步触发
+一些异步的网络请求会在服务器响应时异步触发后续行为
+
+而Rx就为我们提供了一系列的工具来处理这些异步流。
+
+marble图1--a--b---c-d--|--&amp;gt;
+我们可以把这四个点看作四个不同时间触发">
+<meta property="og:updated_time" content="2017-03-26T12:21:53.042Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="start-with-Rx">
+<meta name="twitter:description" content="如何理解RxJS
+Rx = Observables + LINQ + Schedulers （我反正看不懂
+
+其实就是异步的数据流
+何为异步数据流
+页面上的一些点击事件，会在用户点击时异步触发
+一些异步的网络请求会在服务器响应时异步触发后续行为
+
+而Rx就为我们提供了一系列的工具来处理这些异步流。
+
+marble图1--a--b---c-d--|--&amp;gt;
+我们可以把这四个点看作四个不同时间触发">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://kimzZ.com/2017/03/27/start-with-RxJS/"/>
+
+
+
+
+
+  <title> start-with-Rx | kimZLeung </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">kimZLeung</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">kimz's Bolg</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://kimzZ.com/2017/03/27/start-with-RxJS/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="kimZ">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/upload.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="kimZLeung">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                start-with-Rx
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-27T04:17:12+08:00">
+                2017-03-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="如何理解RxJS"><a href="#如何理解RxJS" class="headerlink" title="如何理解RxJS"></a>如何理解RxJS</h2><blockquote>
+<p><code>Rx</code> = <code>Observables</code> + <code>LINQ</code> + <code>Schedulers</code> （我反正看不懂</p>
+</blockquote>
+<h3 id="其实就是异步的数据流"><a href="#其实就是异步的数据流" class="headerlink" title="其实就是异步的数据流"></a>其实就是异步的数据流</h3><hr>
+<h2 id="何为异步数据流"><a href="#何为异步数据流" class="headerlink" title="何为异步数据流"></a>何为异步数据流</h2><ul>
+<li>页面上的一些点击事件，会在用户点击时异步触发</li>
+<li>一些异步的网络请求会在服务器响应时异步触发后续行为</li>
+</ul>
+<p>而<code>Rx</code>就为我们提供了一系列的工具来处理这些异步流。</p>
+<hr>
+<h2 id="marble图"><a href="#marble图" class="headerlink" title="marble图"></a>marble图</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">--a--b---c-d--|--&gt;</div></pre></td></tr></table></figure>
+<p>我们可以把这四个点看作四个不同时间触发的点击事件。<br>然后我们可以把这个异步数据路看成一个四维数组。<br>这是一个典型的<code>Observable</code>的数据结构</p>
+<hr>
+<h2 id="Observables"><a href="#Observables" class="headerlink" title="Observables"></a>Observables</h2><p><code>Observable</code>作为一个异步的数组，它就包含有一些数组的方法，也就是我们用来处理这些异步数据流的方法<code>operator</code></p>
+<blockquote>
+<p><code>Observables</code>还有一个很棒的特性是实现链式调用 —&gt; 流，每次调用<code>operator</code>都会返回一个基于上一个<code>operator</code>的新的<code>Observables</code></p>
+</blockquote>
+<p>我们可以订阅<code>subscribe</code>一个设定好的流<code>Observables</code>（无论是事件或是别的什么）来执行我们想要实现的行为</p>
+<hr>
+<h2 id="Subscribe"><a href="#Subscribe" class="headerlink" title="Subscribe"></a>Subscribe</h2><p><code>subscribe</code>是一个订阅流的方法，这个方法可以传入三个参数，分别是三个函数<code>onNext</code>、<code>onError</code>、<code>onCompleted</code></p>
+<ul>
+<li><code>onNext</code>是在<code>Observer</code>调用<code>onNext()</code>方法时会调用，一般在事件触发时就会调用（所以我们处理事件时<code>subscribe</code>只传的那一个回调其实是<code>onNext</code>函数）。如果是自己<code>create</code>的<code>Observer</code>可以调用<code>onNext</code>方法去启动<code>onNext</code>回调</li>
+<li><code>onError</code>方法…就跟<code>Promise</code>那个差不多，抛出错误时调用</li>
+<li><code>onCompleted</code>方法，如果是自己<code>create</code>的<code>Observer</code>的话可以用<code>onCompleted</code>方法结束这个<code>Observer</code>并调用这个回调函数</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">rx.Observable.create(<span class="function"><span class="keyword">function</span>(<span class="params">observer</span>) </span>&#123;</div><div class="line">	observer.onNext(<span class="number">42</span>)		<span class="comment">// emit onNext</span></div><div class="line">	observer.onCompleted()	<span class="comment">// emit onCompleted</span></div><div class="line"></div><div class="line">	<span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">		<span class="built_in">console</span>.log(<span class="string">'disposed'</span>)</div><div class="line">	&#125;</div><div class="line">&#125;)</div><div class="line">.subscribe(<span class="function"><span class="keyword">function</span>(<span class="params">x</span>) </span>&#123;</div><div class="line">	<span class="built_in">console</span>.log(<span class="string">'onNext: '</span>, x)	<span class="comment">// "onNext: 42"</span></div><div class="line">&#125;, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</div><div class="line">	<span class="built_in">console</span>.log(<span class="string">'onError: '</span>, e)</div><div class="line">&#125;, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="built_in">console</span>.log(<span class="string">'onCompleted'</span>)	<span class="comment">// "onCompleted"</span></div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<blockquote>
+<p><code>subscribe</code>方法返回一个对象，调用该对象上的<code>dispose</code>方法可以取消订阅</p>
+</blockquote>
+<hr>
+<h2 id="热Observables和冷Observables"><a href="#热Observables和冷Observables" class="headerlink" title="热Observables和冷Observables"></a>热Observables和冷Observables</h2><blockquote>
+<p>顾名思义，热<code>Observables</code>是类似事件一类的<code>Observable</code>，不会随着订阅而开始启动更新数据，而是每时每刻都在更新数据。<br>然而冷<code>Observables</code>则只会在我们<code>subscribe</code>之后才会开始数据更新和推送，如我们自己用<code>interval</code>创建出来的<code>Observable</code>（interval创建出来的会在订阅后每**秒默认从1开始推送整数）</p>
+</blockquote>
+<p>我们也可以用<code>publish</code>方法把<code>Cold Observables</code>转换为<code>Hot Observables</code><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> source = Rx.Observable.interval(<span class="number">1000</span>);</div><div class="line"><span class="keyword">var</span> hot = source.publish()	<span class="comment">// 使用publish把流转换为Hot Observables</span></div><div class="line">hot.connect()				<span class="comment">// 然后使用connect方法启动数据更新</span></div><div class="line"><span class="keyword">var</span> subscription1</div><div class="line"><span class="keyword">var</span> subscription2</div><div class="line"></div><div class="line">setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  subscription1 = hot.subscribe(</div><div class="line">    <span class="function"><span class="keyword">function</span> (<span class="params">x</span>) </span>&#123; <span class="built_in">console</span>.log(<span class="string">'Observer 1: onNext: '</span> + x); &#125;,</div><div class="line">    <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123; <span class="built_in">console</span>.log(<span class="string">'Observer 1: onError: '</span> + e.message); &#125;,</div><div class="line">    <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123; <span class="built_in">console</span>.log(<span class="string">'Observer 1: onCompleted'</span>); &#125;);</div><div class="line"></div><div class="line">  subscription2 = hot.subscribe(</div><div class="line">    <span class="function"><span class="keyword">function</span> (<span class="params">x</span>) </span>&#123; <span class="built_in">console</span>.log(<span class="string">'Observer 2: onNext: '</span> + x); &#125;,</div><div class="line">    <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123; <span class="built_in">console</span>.log(<span class="string">'Observer 2: onError: '</span> + e.message); &#125;,</div><div class="line">    <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123; <span class="built_in">console</span>.log(<span class="string">'Observer 2: onCompleted'</span>); &#125;);</div><div class="line">&#125;, <span class="number">5000</span>)</div><div class="line"></div><div class="line"></div><div class="line">setTimeout(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">  subscription1.dispose();</div><div class="line">  subscription2.dispose();</div><div class="line">&#125;, <span class="number">10000</span>);</div></pre></td></tr></table></figure></p>
+<hr>
+<h2 id="构建起事件的桥梁"><a href="#构建起事件的桥梁" class="headerlink" title="构建起事件的桥梁"></a>构建起事件的桥梁</h2><blockquote>
+<p>在<code>RxJS</code>中，我们可以使用<code>Rx.Observable.fromEvent(DOMElement, EventName)</code>来取得事件的<code>source</code>，然后调用各种方法来处理这个事件流，最后通过订阅来执行我们想要完成的操作。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 我们可以简单地这样使用</span></div><div class="line"><span class="keyword">var</span> res = <span class="built_in">document</span>.getElementById(<span class="string">'result'</span>);</div><div class="line"></div><div class="line"><span class="keyword">var</span> subscription = Rx.Observable.fromEvent(<span class="built_in">document</span>, <span class="string">'mousemove'</span>)</div><div class="line">.map(<span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</div><div class="line">	<span class="keyword">return</span> &#123;<span class="attr">x</span>: e.clientX, <span class="attr">y</span>: e.clientY&#125;</div><div class="line">&#125;)</div><div class="line">.subscribe(<span class="function"><span class="keyword">function</span> (<span class="params">data</span>) </span>&#123;</div><div class="line">	res.innerHTML = data.x + <span class="string">', '</span> + data.y;</div><div class="line">&#125;);</div><div class="line"><span class="comment">// 当触发点击事件时会调用`subscribe`的`onNext`函数，会用`innerHTML`改变DOM内容</span></div></pre></td></tr></table></figure></p>
+</blockquote>
+<p>会出现这样的封装<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">Rx.dom = &#123;&#125;;</div><div class="line"></div><div class="line"><span class="keyword">var</span> events = <span class="string">"blur focus focusin focusout load resize scroll unload click dblclick "</span> +</div><div class="line">  <span class="string">"mousedown mouseup mousemove mouseover mouseout mouseenter mouseleave "</span> +</div><div class="line">  <span class="string">"change select submit keydown keypress keyup error contextmenu"</span>;</div><div class="line"></div><div class="line"><span class="keyword">if</span> (root.PointerEvent) &#123;</div><div class="line">  events += <span class="string">" pointerdown pointerup pointermove pointerover pointerout pointerenter pointerleave"</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">if</span> (root.TouchEvent) &#123;</div><div class="line">  events += <span class="string">" touchstart touchend touchmove touchcancel"</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// 把各种事件封装到Rx.dom对象的属性上，使得直接调用Rx.dom[EventName]传入对应的DOM元素即可以创建对应的Rx的事件流</span></div><div class="line">events.split(<span class="string">' '</span>).forEach(<span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</div><div class="line">  Rx.dom[e] = <span class="function"><span class="keyword">function</span> (<span class="params">element, selector</span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> Rx.Observable.fromEvent(element, e, selector);</div><div class="line">  &#125;;</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>关于事件我们还可以使用<code>Rx.Observable.fromEventPattern(addHandler, [removeHandler], [selector])</code>，没太懂，设置了之后会调用第一个<code>addHandler</code>里面的语句，<code>addHandler</code>和<code>removeHandler</code>有同一个参数，是最后一个<code>selector</code>函数</p>
+</blockquote>
+<hr>
+<h2 id="Rx-Observable-fromCallback-和Rx-Observable-fromPromise"><a href="#Rx-Observable-fromCallback-和Rx-Observable-fromPromise" class="headerlink" title="Rx.Observable.fromCallback()和Rx.Observable.fromPromise()"></a>Rx.Observable.fromCallback()和Rx.Observable.fromPromise()</h2><blockquote>
+<p>这两个方法可以分别把<code>Callback</code>函数和<code>Promise</code>对象转化为<code>Rx</code>的流，并且转化之后可以直接<code>subscribe</code>它，用<code>onNext</code>等方法处理他们<code>return</code>出来的值（或<code>resolve</code>出来的值）<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 随便创建一个Promise对象</span></div><div class="line"><span class="keyword">var</span> pro = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span>(<span class="params">resolve, reject</span>) </span>&#123;</div><div class="line">  setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    resolve(<span class="number">100</span>)</div><div class="line">  &#125;, <span class="number">3000</span>)</div><div class="line">&#125;)</div><div class="line"></div><div class="line"><span class="comment">// 转化</span></div><div class="line">rx.Observable.fromPromise(pro)</div><div class="line">.subscribe(<span class="function"><span class="keyword">function</span>(<span class="params">res</span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(res)</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
+</blockquote>
+<hr>
+<h2 id="处理流的一些API"><a href="#处理流的一些API" class="headerlink" title="处理流的一些API"></a>处理流的一些API</h2><blockquote>
+<p>处理<code>Rx</code>的流的API有很多，<code>concat</code>，<code>merge</code>，<code>filter</code>… <code>Rx</code>的<code>Observable</code>目测其实是<code>Array</code>里衍化出来的奇行种吧…</p>
+</blockquote>
+<h3 id="merge和concat"><a href="#merge和concat" class="headerlink" title="merge和concat"></a>merge和concat</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> source1 = Rx.Observable.range(<span class="number">1</span>, <span class="number">3</span>);</div><div class="line"><span class="keyword">var</span> source2 = Rx.Observable.range(<span class="number">1</span>, <span class="number">3</span>);</div><div class="line"></div><div class="line"><span class="comment">// 打印 1 2 3 1 2 3 because concat的机制是第二个流等待第一个流完全输出完之后才会启动输出（同步）</span></div><div class="line">source1.concat(source2)</div><div class="line">   .subscribe(<span class="function"><span class="keyword">function</span> (<span class="params">x</span>) </span>&#123; <span class="built_in">console</span>.log(x); &#125;);</div><div class="line"></div><div class="line"><span class="comment">// 打印 1 1 2 2 3 3 because merge的机制是两个流一起输出，两个都输出完就输出完了（异步）</span></div><div class="line">source1.merge(source2)</div><div class="line">  .subscribe(<span class="function"><span class="keyword">function</span> (<span class="params">x</span>) </span>&#123; <span class="built_in">console</span>.log(x); &#125;);</div></pre></td></tr></table></figure>
+<h3 id="buffer"><a href="#buffer" class="headerlink" title="buffer"></a>buffer</h3><blockquote>
+<p>buffer是一个十分重要的API，它给我们提高了缓存起状态和数据的机会，而不需要我们另外手动开拓一片空间储存用户的操作，并且为我们提供了阈值判断<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 创造一个每1秒输出1个整数的流</span></div><div class="line">Rx.Observable.interval(<span class="number">1000</span>)</div><div class="line"></div><div class="line"><span class="comment">// 缓存限制，上一个流输出5个值之后才会输出到下一个流</span></div><div class="line">.bufferWithCount(<span class="number">5</span>)</div><div class="line"></div><div class="line"><span class="comment">// 通过reduce处理上一个流的5个值，将这5个数相加</span></div><div class="line">.map(<span class="function"><span class="keyword">function</span> (<span class="params">arr</span>) </span>&#123; <span class="keyword">return</span> arr.reduce(<span class="function"><span class="keyword">function</span> (<span class="params">acc, x</span>) </span>&#123; <span class="keyword">return</span> acc + x; &#125;, <span class="number">0</span>); &#125;)</div><div class="line"></div><div class="line"><span class="comment">// 然后输出相加的总和</span></div><div class="line">.subscribe(<span class="function"><span class="keyword">function</span> (<span class="params">sum</span>) </span>&#123; <span class="built_in">console</span>.log(sum); &#125;)</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p>图例<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">--1--2--3--4--5--6--7--8--9--10--...--&gt;  // interval</div><div class="line"></div><div class="line">-------------[1]-------------[2]--...--&gt;  // bufferWithCount</div><div class="line"></div><div class="line">-------------10---------------35--...--&gt;  // map</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p><code>bufferCount(count, [skip])</code>第一参数是限制缓存数据量，第二个参数可选，定义的是第一次与第二次缓存跳跃的个数（比如缓存5个数据，把skip设为3 ：第一次缓存 0 1 2 3 4 第二次缓存 3 4 5 6 7）。除了<code>bufferCount</code>限制缓存数据量，还可以使用<code>bufferTimeOrCount</code>来限制时间。<code>bufferTimeOrCount(timeSpan, count, [scheduler])</code>第一个参数就是时间，第二个是的数字，任意一个参数到达限制都会解除限制流入下一个流，同时开始下一次缓存<br><code>buffer()</code>可以传入一个函数，当这个流开始工作时，这个函数开始执行并根据原来的流的数据创造新的流，当这个流被成功创造，就会返回出来。同时开始下一次重新调用并重新创造。</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 每一秒返回</span></div><div class="line">Rx.Observable.interval(<span class="number">1000</span>)</div><div class="line">  .buffer(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="comment">// 2秒后返回第一个值的流（由于在buffer中，第一个值便是缓存好的数组）</span></div><div class="line">    <span class="keyword">return</span> Rx.Observable.timer(<span class="number">2000</span>)</div><div class="line">  &#125;)</div><div class="line">  .take(<span class="number">4</span>)</div><div class="line">  <span class="comment">// 得到的是缓存出来的数组</span></div><div class="line">  .subscribe(<span class="function"><span class="keyword">function</span>(<span class="params">data</span>) </span>&#123;</div><div class="line">    <span class="built_in">console</span>.log(data)</div><div class="line">  &#125;)</div><div class="line">  </div><div class="line">  <span class="comment">// 输出..---[0, 1]--[2, 3]--[4, 5]--[6, 7]---|--&gt;</span></div></pre></td></tr></table></figure>
+<blockquote>
+<p><code>buffer(bufferOpenings, bufferClosingSelector )</code>还可以接受两个参数，第一个参数是一个<code>Observable</code>，会传入第二个函数作为第二个函数的参数。第一个参数为一个时间标记，当第一个<code>Observable</code>输出值的时候会触发第二个函数开始创建新的<code>Observable</code>，然后和第一种情况一样，当输出第一个值时会输出缓存的流（注意传入opening之后，开启缓存流的唯一入口只有opening）<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 设定一个0.5秒输出一次的流</span></div><div class="line"><span class="keyword">var</span> opening = Rx.Observable.interval(<span class="number">500</span>)</div><div class="line"></div><div class="line">Rx.Observable.interval(<span class="number">1000</span>)</div><div class="line">	<span class="comment">// 这个流每1秒输出一次，buffer传入的opening立刻开始，0.5秒后再马上开始，再0.5秒后开始第三个...</span></div><div class="line">  .buffer(opening, <span class="function"><span class="keyword">function</span>(<span class="params">x</span>) </span>&#123;</div><div class="line">	<span class="comment">// 当x+2000，也就是两秒多一点点之后，第一个缓存流输出，接下来0.5秒后输出第二个流，接下来再0.5秒后输出第三个...</span></div><div class="line">    <span class="keyword">return</span> Rx.Observable.timer(x + <span class="number">2000</span>)</div><div class="line">  &#125;)</div><div class="line">  .take(<span class="number">4</span>)</div><div class="line">  .subscribe(<span class="function"><span class="keyword">function</span>(<span class="params">data</span>) </span>&#123;</div><div class="line">    <span class="built_in">console</span>.log(data)</div><div class="line">  &#125;)</div><div class="line">  </div><div class="line">  <span class="comment">// 输出..---[0, 1]--[0, 1, 2]--[1, 2]--[1, 2, 3]---|--&gt;</span></div></pre></td></tr></table></figure></p>
+</blockquote>
+<h3 id="其实总结起来说，buffer这一类的API虽然多，而且传的参数也很多。但是用法基本上大同小异"><a href="#其实总结起来说，buffer这一类的API虽然多，而且传的参数也很多。但是用法基本上大同小异" class="headerlink" title="其实总结起来说，buffer这一类的API虽然多，而且传的参数也很多。但是用法基本上大同小异"></a>其实总结起来说，<code>buffer</code>这一类的<code>API</code>虽然多，而且传的参数也很多。但是用法基本上大同小异</h3><ul>
+<li>我们可以看到<code>bufferCount</code>可以多传一个<code>skip</code>，来决定这一次<code>buffer</code>和下一次<code>buffer</code>的跨度（数据量的跨度）</li>
+<li>而<code>bufferWithTime</code>也可以传一个<code>timeShift</code>，也是决定了两次<code>buffer</code>之间的时间跨度（时间的跨度）</li>
+<li><code>buffer</code>可以多传一个<code>bufferOpening</code>，事实上也是决定两次的<code>buffer</code>之间的跨度而已（时间的跨度）</li>
+</ul>
+<hr>
+<p>参考：<br><a href="http://reactivex.io/documentation/operators/buffer.html" target="_blank" rel="external">ReactiveX - Buffer operator</a><br><a href="https://github.com/Reactive-Extensions/RxJS/tree/master/doc/api/core/operators" target="_blank" rel="external">GitHub - RxJS operatorAPI</a><br><a href="https://github.com/Reactive-Extensions/RxJS/tree/master/doc" target="_blank" rel="external">GitHub - RxJS Doc</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Rx-JS异步/" rel="tag"># Rx JS异步</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/24/webpack-HMR/" rel="next" title="webpack-HMR">
+                <i class="fa fa-chevron-left"></i> webpack-HMR
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/upload.jpg"
+               alt="kimZ" />
+          <p class="site-author-name" itemprop="name">kimZ</p>
+           
+              <p class="site-description motion-element" itemprop="description">Share what we play</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#如何理解RxJS"><span class="nav-number">1.</span> <span class="nav-text">如何理解RxJS</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#其实就是异步的数据流"><span class="nav-number">1.1.</span> <span class="nav-text">其实就是异步的数据流</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#何为异步数据流"><span class="nav-number">2.</span> <span class="nav-text">何为异步数据流</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#marble图"><span class="nav-number">3.</span> <span class="nav-text">marble图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Observables"><span class="nav-number">4.</span> <span class="nav-text">Observables</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Subscribe"><span class="nav-number">5.</span> <span class="nav-text">Subscribe</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#热Observables和冷Observables"><span class="nav-number">6.</span> <span class="nav-text">热Observables和冷Observables</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#构建起事件的桥梁"><span class="nav-number">7.</span> <span class="nav-text">构建起事件的桥梁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Rx-Observable-fromCallback-和Rx-Observable-fromPromise"><span class="nav-number">8.</span> <span class="nav-text">Rx.Observable.fromCallback()和Rx.Observable.fromPromise()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#处理流的一些API"><span class="nav-number">9.</span> <span class="nav-text">处理流的一些API</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#merge和concat"><span class="nav-number">9.1.</span> <span class="nav-text">merge和concat</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#buffer"><span class="nav-number">9.2.</span> <span class="nav-text">buffer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其实总结起来说，buffer这一类的API虽然多，而且传的参数也很多。但是用法基本上大同小异"><span class="nav-number">9.3.</span> <span class="nav-text">其实总结起来说，buffer这一类的API虽然多，而且传的参数也很多。但是用法基本上大同小异</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kimZ</span>
+</div>
+
+
+<div class="powered-by">
+  KimZ
+</div>
+
+<div class="theme-info">
+  to be lazyer, to be nicer
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>
