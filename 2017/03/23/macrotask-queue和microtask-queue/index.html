@@ -99,7 +99,7 @@ JS异步的话，我能想到有回调函数，Promise，Generator，async…差
 JS异步的话，我能想到有回调函数，Promise，Generator，async…差不多
 
 12345678910111213141516171819setTimeout(function()&amp;#123;	console.log(4)&amp;#125;,0); new Promise(function(resolve)&amp;#123;	cons">
-<meta property="og:updated_time" content="2017-03-27T14:57:38.414Z">
+<meta property="og:updated_time" content="2017-03-27T15:00:09.109Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="macrotask-queue和microtask-queue">
 <meta name="twitter:description" content="macrotask-queue和microtask-queue
@@ -332,7 +332,7 @@ JS异步的话，我能想到有回调函数，Promise，Generator，async…差
 </blockquote>
 <p>下面列出两个队列的分类：</p>
 <ul>
-<li><code>macrotask</code>：script（整体代码）, setTimeout, setInterval, /<em> setImmediate </em>/, I/O, UI rendering</li>
+<li><code>macrotask</code>：script（整体代码）, setTimeout, setInterval, I/O, UI rendering， // setImmediate</li>
 <li><code>microtask</code>：process.nextTick, Promises（这里指浏览器实现的原生 Promise）, Object.observe, MutationObserver, setImmediate（进行过setImmediate和process.nextTick的尝试，process.nextTick并没有作为mircotask提前执行，并且新版对setImmediate做出了修改）</li>
 </ul>
 <blockquote>
