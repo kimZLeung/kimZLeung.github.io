@@ -1,0 +1,696 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="webpack treeShaking," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/upload.jpg?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="webpack2的treeShaking
+其实treeShaking也不是什么新概念，简单来说，treeShaking就是…树抖动的意思，树抖动，就会把落叶抖下来，这些树叶，就是import进来模块却没有使用的模块。
+
+具体来说：treeShaking做到的是，把我们import进来，却没有在此模块使用的模块，不打包进入bundle，不过如果使用CommonJS来进行引入的话，是无法实现treeS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="webpack-treeShaking">
+<meta property="og:url" content="http://kimzZ.com/2017/05/25/webpack-treeShaking/index.html">
+<meta property="og:site_name" content="kimZLeung">
+<meta property="og:description" content="webpack2的treeShaking
+其实treeShaking也不是什么新概念，简单来说，treeShaking就是…树抖动的意思，树抖动，就会把落叶抖下来，这些树叶，就是import进来模块却没有使用的模块。
+
+具体来说：treeShaking做到的是，把我们import进来，却没有在此模块使用的模块，不打包进入bundle，不过如果使用CommonJS来进行引入的话，是无法实现treeS">
+<meta property="og:updated_time" content="2017-05-24T10:18:24.233Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="webpack-treeShaking">
+<meta name="twitter:description" content="webpack2的treeShaking
+其实treeShaking也不是什么新概念，简单来说，treeShaking就是…树抖动的意思，树抖动，就会把落叶抖下来，这些树叶，就是import进来模块却没有使用的模块。
+
+具体来说：treeShaking做到的是，把我们import进来，却没有在此模块使用的模块，不打包进入bundle，不过如果使用CommonJS来进行引入的话，是无法实现treeS">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://kimzZ.com/2017/05/25/webpack-treeShaking/"/>
+
+
+
+
+
+  <title> webpack-treeShaking | kimZLeung </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">kimZLeung</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">kimz's Bolg</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://kimzZ.com/2017/05/25/webpack-treeShaking/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="kimZ">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/upload.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="kimZLeung">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                webpack-treeShaking
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-25T00:50:05+08:00">
+                2017-05-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="webpack2的treeShaking"><a href="#webpack2的treeShaking" class="headerlink" title="webpack2的treeShaking"></a>webpack2的treeShaking</h2><blockquote>
+<p>其实treeShaking也不是什么新概念，简单来说，treeShaking就是…树抖动的意思，树抖动，就会把落叶抖下来，这些树叶，就是import进来模块却没有使用的模块。</p>
+</blockquote>
+<p>具体来说：treeShaking做到的是，把我们import进来，却没有在此模块使用的模块，不打包进入<code>bundle</code>，不过如果使用<code>CommonJS</code>来进行引入的话，是无法实现<code>treeShaking</code>的，因为<code>CommonJS</code>的<code>require</code>是引入并执行。与ES6实现的<code>import</code>不一样。</p>
+<hr>
+<h2 id="So，准备工作"><a href="#So，准备工作" class="headerlink" title="So，准备工作"></a>So，准备工作</h2><blockquote>
+<p>因为我们在前端使用ES6的import语法的时候，用得最多的是使用<code>babel</code>对ES6进行转码，而最常用的就是<code>babel-preset-es2015</code>这个东西来对ES6进行转码，然鹅！这个东西会把<code>import</code>转码成<code>CommonJS</code>的形式。所以我们换一个方法，下面是我的<code>.babelrc</code></p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="string">"presets"</span>: [<span class="string">"stage-0"</span>],</div><div class="line">  <span class="string">"plugins"</span>:[</div><div class="line">    <span class="string">"transform-es2015-template-literals"</span>,</div><div class="line">    <span class="string">"transform-es2015-literals"</span>,</div><div class="line">    <span class="string">"transform-es2015-function-name"</span>,</div><div class="line">    <span class="string">"transform-es2015-arrow-functions"</span>,</div><div class="line">    <span class="string">"transform-es2015-block-scoped-functions"</span>,</div><div class="line">    <span class="string">"transform-es2015-classes"</span>,</div><div class="line">    <span class="string">"transform-es2015-object-super"</span>,</div><div class="line">    <span class="string">"transform-es2015-shorthand-properties"</span>,</div><div class="line">    <span class="string">"transform-es2015-computed-properties"</span>,</div><div class="line">    <span class="string">"transform-es2015-for-of"</span>,</div><div class="line">    <span class="string">"transform-es2015-sticky-regex"</span>,</div><div class="line">    <span class="string">"transform-es2015-unicode-regex"</span>,</div><div class="line">    <span class="string">"check-es2015-constants"</span>,</div><div class="line">    <span class="string">"transform-es2015-spread"</span>,</div><div class="line">    <span class="string">"transform-es2015-parameters"</span>,</div><div class="line">    <span class="string">"transform-es2015-destructuring"</span>,</div><div class="line">    <span class="string">"transform-es2015-block-scoping"</span>,</div><div class="line">    <span class="string">"transform-es2015-typeof-symbol"</span>,</div><div class="line">    [<span class="string">"transform-regenerator"</span>, &#123; <span class="string">"async"</span>: <span class="literal">false</span>, <span class="string">"asyncGenerators"</span>: <span class="literal">false</span> &#125;]</div><div class="line">  ]</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>因为其实<code>preset-2015</code>就是由以上一大堆插件，加上一个<code>transform-es2015-modules-commonjs</code>插件，所以我们把全部插件用上，唯独不使用这个插件，于是可以不使用<code>CommonJS</code>来引入了</p>
+<blockquote>
+<p>还有一步不要忘记了，treeShaking是配合<code>UglifyJsPlugin</code>这个插件启用的，所以</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// webpack.config.js</span></div><div class="line"> plugins:[</div><div class="line">   <span class="keyword">new</span> webpack.optimize.UglifyJsPlugin()</div><div class="line"> ]</div></pre></td></tr></table></figure>
+<hr>
+<h2 id="treeShaking体验"><a href="#treeShaking体验" class="headerlink" title="treeShaking体验"></a>treeShaking体验</h2><p>我简单写了几个JS试了下</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// src/sub.js</span></div><div class="line"><span class="keyword">const</span> sub = <span class="function"><span class="params">()</span> =&gt;</span> (<span class="string">'this is sub'</span>)</div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="keyword">default</span> sub</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">// src/oldSub.js</span></div><div class="line"><span class="keyword">const</span> old = <span class="function"><span class="params">()</span> =&gt;</span> (<span class="string">'this is old'</span>)</div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="keyword">default</span> old</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">// src/index.js</span></div><div class="line"><span class="keyword">import</span> sub <span class="keyword">from</span> <span class="string">'./sub'</span></div><div class="line"><span class="keyword">import</span> old <span class="keyword">from</span> <span class="string">'./oldSub'</span></div><div class="line"></div><div class="line"><span class="keyword">export</span> &#123; sub, old &#125;</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">// __dirname/index.js</span></div><div class="line"><span class="keyword">import</span> &#123; sub, old &#125; <span class="keyword">from</span> <span class="string">'./src'</span></div><div class="line"></div><div class="line"><span class="built_in">console</span>.log(sub())</div></pre></td></tr></table></figure>
+<p>然后运行<code>webpack</code>进行打包之后，可以在打包出来的文件里看到虽然<code>oldSub</code>有<code>export</code>出去，但是并没有对<code>old</code>进行使用，所以并没有打包进去</p>
+<p>从以上代码可以看出，<code>src/index.js</code>打包完成后在输出文件里面只向外导出了<code>sub</code>函数，并没有向外导出<code>oldSub</code></p>
+<hr>
+<h2 id="换一种写法"><a href="#换一种写法" class="headerlink" title="换一种写法"></a>换一种写法</h2><blockquote>
+<p>刚刚是并没有把<code>old</code>打包进去最后的JS，但是当我把<code>oldSub</code>代码改一下</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">old</span> </span>&#123;</div><div class="line">  render() &#123;</div><div class="line">    <span class="keyword">return</span> <span class="string">'old'</span></div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="keyword">default</span> old</div></pre></td></tr></table></figure>
+<p>只改这些，然后运行一次，我们会发现，<code>old</code>又被打包进去了。</p>
+<hr>
+<h2 id="到底为什么没有shake下来？"><a href="#到底为什么没有shake下来？" class="headerlink" title="到底为什么没有shake下来？"></a>到底为什么没有shake下来？</h2><blockquote>
+<p>我们知道，ES6的<code>Class</code>语法里面写方法，用<code>babel</code>转码，是直接把方法写到这个对象的原型里面的，我在google上查到如果有涉及到对象的原型上的修改的话，<code>treeShaking</code>将不会把这个模块<code>shake</code>下来，因为它需要确保对原生的<code>Array</code>对象这些的原型修改能够起到作用。</p>
+</blockquote>
+<p>所以如果想要这样使用<code>treeShaking</code>的话，需要引入<code>babili-webpack-plugin</code>插件，这个东西可以不像<code>babel</code>那样把<code>Class</code>里面的方法转码成对象的原型上的方法</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> babili = <span class="built_in">require</span>(<span class="string">'babili-webpack-plugin'</span>)</div><div class="line">...</div><div class="line"></div><div class="line">  plugins: [</div><div class="line">    <span class="keyword">new</span> babili()</div><div class="line">  ]</div></pre></td></tr></table></figure>
+<p>这个插件可以将<code>Class</code>定义转换后无副作用。具体还未了解多少</p>
+<p>参考：</p>
+<ul>
+<li><a href="http://imweb.io/topic/58666d57b3ce6d8e3f9f99b0" target="_blank" rel="external">webpack2的treeShaking好用吗？</a></li>
+<li><a href="https://webpack.js.org/guides/tree-shaking/" target="_blank" rel="external">webpack - Tree Shaking</a></li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/webpack-treeShaking/" rel="tag"># webpack treeShaking</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/05/18/吐槽一下，留个坑准备填/" rel="next" title="吐槽一下，留个坑准备填">
+                <i class="fa fa-chevron-left"></i> 吐槽一下，留个坑准备填
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/upload.jpg"
+               alt="kimZ" />
+          <p class="site-author-name" itemprop="name">kimZ</p>
+           
+              <p class="site-description motion-element" itemprop="description">Share what we play</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">17</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">16</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#webpack2的treeShaking"><span class="nav-number">1.</span> <span class="nav-text">webpack2的treeShaking</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#So，准备工作"><span class="nav-number">2.</span> <span class="nav-text">So，准备工作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#treeShaking体验"><span class="nav-number">3.</span> <span class="nav-text">treeShaking体验</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#换一种写法"><span class="nav-number">4.</span> <span class="nav-text">换一种写法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#到底为什么没有shake下来？"><span class="nav-number">5.</span> <span class="nav-text">到底为什么没有shake下来？</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kimZ</span>
+</div>
+
+
+<div class="powered-by">
+  KimZ
+</div>
+
+<div class="theme-info">
+  to be lazyer, to be nicer
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>
