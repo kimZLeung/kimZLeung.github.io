@@ -4,6 +4,23 @@
 
     
   <url>
+    <loc>http://kimzZ.com/2017/03/23/macrotask-queue%E5%92%8Cmicrotask-queue/</loc>
+    <lastmod>2017-05-26T12:43:07.342Z</lastmod>
+    <data>
+        <display>
+        <title>macrotask-queue和microtask-queue</title>
+        <pubTime>2017-03-22T20:15:43.000Z</pubTime>
+        
+        <tag>异步机制</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://kimzZ.com/2017/05/25/webpack-treeShaking/</loc>
     <lastmod>2017-05-24T12:56:13.423Z</lastmod>
     <data>
@@ -97,23 +114,6 @@
         <pubTime>2017-03-28T23:03:06.000Z</pubTime>
         
         <tag>JS 函数式编程</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://kimzZ.com/2017/03/23/macrotask-queue%E5%92%8Cmicrotask-queue/</loc>
-    <lastmod>2017-03-27T15:00:09.109Z</lastmod>
-    <data>
-        <display>
-        <title>macrotask-queue和microtask-queue</title>
-        <pubTime>2017-03-22T20:15:43.000Z</pubTime>
-        
-        <tag>异步机制</tag>
          
          
            

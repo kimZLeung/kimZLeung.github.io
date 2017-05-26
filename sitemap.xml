@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://kimzZ.com/2017/03/23/macrotask-queue%E5%92%8Cmicrotask-queue/</loc>
+    
+    <lastmod>2017-05-26T12:43:07.342Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://kimzZ.com/2017/05/25/webpack-treeShaking/</loc>
     
     <lastmod>2017-05-24T12:56:13.423Z</lastmod>
@@ -40,13 +47,6 @@
     <loc>http://kimzZ.com/2017/03/29/JS-%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/</loc>
     
     <lastmod>2017-03-28T15:03:55.715Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://kimzZ.com/2017/03/23/macrotask-queue%E5%92%8Cmicrotask-queue/</loc>
-    
-    <lastmod>2017-03-27T15:00:09.109Z</lastmod>
     
   </url>
   
