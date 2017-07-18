@@ -1,0 +1,688 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="npm," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/upload.jpg?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="疑惑
+事情是这样的，我之前尝试使用React的Next和Vue的Nuxt写着玩的时候，发现npm install安装依赖之后，项目根目录下除了package.json还多了一个package-lock.json文件，当时有点疑惑但是后来事情做就没去查，今天到服务器上部署项目安装依赖的时候，又发现项目根目录多了个package-lock.json…奇怪了我自己搭起来的东西，也没配置什么别的选项，为什">
+<meta property="og:type" content="article">
+<meta property="og:title" content="NPM5 - Package-lock.json">
+<meta property="og:url" content="http://kimzZ.com/2017/07/18/NPM5-Package-lock-json/index.html">
+<meta property="og:site_name" content="kimZLeung">
+<meta property="og:description" content="疑惑
+事情是这样的，我之前尝试使用React的Next和Vue的Nuxt写着玩的时候，发现npm install安装依赖之后，项目根目录下除了package.json还多了一个package-lock.json文件，当时有点疑惑但是后来事情做就没去查，今天到服务器上部署项目安装依赖的时候，又发现项目根目录多了个package-lock.json…奇怪了我自己搭起来的东西，也没配置什么别的选项，为什">
+<meta property="og:updated_time" content="2017-07-18T05:33:29.825Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="NPM5 - Package-lock.json">
+<meta name="twitter:description" content="疑惑
+事情是这样的，我之前尝试使用React的Next和Vue的Nuxt写着玩的时候，发现npm install安装依赖之后，项目根目录下除了package.json还多了一个package-lock.json文件，当时有点疑惑但是后来事情做就没去查，今天到服务器上部署项目安装依赖的时候，又发现项目根目录多了个package-lock.json…奇怪了我自己搭起来的东西，也没配置什么别的选项，为什">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://kimzZ.com/2017/07/18/NPM5-Package-lock-json/"/>
+
+
+
+
+
+  <title> NPM5 - Package-lock.json | kimZLeung </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">kimZLeung</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">kimz's Bolg</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://kimzZ.com/2017/07/18/NPM5-Package-lock-json/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="kimZ">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/upload.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="kimZLeung">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                NPM5 - Package-lock.json
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-18T11:30:31Z">
+                2017-07-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="疑惑"><a href="#疑惑" class="headerlink" title="疑惑"></a>疑惑</h2><blockquote>
+<p>事情是这样的，我之前尝试使用<code>React</code>的<code>Next</code>和<code>Vue</code>的<code>Nuxt</code>写着玩的时候，发现<code>npm install</code>安装依赖之后，项目根目录下除了<code>package.json</code>还多了一个<code>package-lock.json</code>文件，当时有点疑惑但是后来事情做就没去查，今天到服务器上部署项目安装依赖的时候，又发现项目根目录多了个<code>package-lock.json</code>…奇怪了我自己搭起来的东西，也没配置什么别的选项，为什么出现这个文件呢</p>
+</blockquote>
+<hr>
+<h2 id="了解"><a href="#了解" class="headerlink" title="了解"></a>了解</h2><blockquote>
+<p>通过了解原来这个文件是<code>npm5</code>的新东西。每当通过<code>npm</code>安装依赖，即改变<code>node_modules</code>目录之中的依赖时，都会自动生成这个<code>package-lock.json</code>文件，这个文件的主要作用是<code>lock</code>。</p>
+<p>也就是把项目的依赖的版本<code>lock</code>起来，让别的机器<code>install</code>依赖的时候，不会安装了最新更新的依赖的比较新的版本。而且<code>lock</code>文件还有一个作用，就是加快依赖的安装速度。</p>
+</blockquote>
+<p>为什么依赖的安装速度lock起来就会变快？因为这个<code>lock</code>文件是这样的</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  &quot;name&quot;: &quot;test&quot;,</div><div class="line">  &quot;version&quot;: &quot;1.0.0&quot;,</div><div class="line">  &quot;lockfileVersion&quot;: 1,</div><div class="line">  &quot;dependencies&quot;: &#123;</div><div class="line">    &quot;accepts&quot;: &#123;</div><div class="line">      &quot;version&quot;: &quot;1.3.3&quot;,</div><div class="line">      &quot;resolved&quot;: &quot;http://registry.npm.taobao.org/accepts/download/accepts-1.3.3.tgz&quot;,</div><div class="line">      &quot;integrity&quot;: &quot;sha1-w8p0NJOGSMPg2cHjKN1otiLChMo=&quot;,</div><div class="line">      &quot;dev&quot;: true</div><div class="line">    &#125;,</div><div class="line">    &quot;acorn-dynamic-import&quot;: &#123;</div><div class="line">      &quot;version&quot;: &quot;2.0.2&quot;,</div><div class="line">      &quot;resolved&quot;: &quot;http://registry.npm.taobao.org/acorn-dynamic-import/download/acorn-dynamic-import-2.0.2.tgz&quot;,</div><div class="line">      &quot;integrity&quot;: &quot;sha1-x1K9IQvvZ5UBtsbLf8hPj0cVjMQ=&quot;,</div><div class="line">      &quot;dev&quot;: true,</div><div class="line">      &quot;dependencies&quot;: &#123;</div><div class="line">        &quot;acorn&quot;: &#123;</div><div class="line">          &quot;version&quot;: &quot;4.0.13&quot;,</div><div class="line">          &quot;resolved&quot;: &quot;http://registry.npm.taobao.org/acorn/download/acorn-4.0.13.tgz&quot;,</div><div class="line">          &quot;integrity&quot;: &quot;sha1-EFSVrlNh1pe9GVyCUZLhrX8lN4c=&quot;,</div><div class="line">          &quot;dev&quot;: true</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">    &#125;,</div><div class="line">    // ...so many dependencies</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>我们可以清楚地看到，这个<code>package-lock.json</code>文件记录了整个<code>node_modules</code>的依赖关系，就是本项目下依赖到的包的详细信息，每一个<code>dependencies</code>的版本，下载地址都详细记录在这个文件里面，所以我们只要有这个文件，安装依赖只需要根据这个文件里面的地址进行下载就好了。</p>
+<hr>
+<h2 id="坑"><a href="#坑" class="headerlink" title="坑"></a>坑</h2><blockquote>
+<p>那<code>package-lock.json</code>，给我们带来的安装速度和依赖版本的稳定性之余，也当然给我们带来了一些坑。</p>
+</blockquote>
+<ul>
+<li>从前有一种操作就是：想要更新一个依赖的版本，可以直接在<code>package.json</code>里面修改依赖的版本号，然后直接<code>npm install</code>来安装最新的依赖</li>
+<li>但是有了<code>package-lock.json</code>就不可同日而语了，还记得我们前面讲过<code>package-lock.json</code>会锁定依赖的版本嘛？对的，锁定了之后，在<code>package.json</code>里面修改依赖的版本号，也不会更新<code>package-lock.json</code>里面的东西哦。</li>
+<li>只能直接通过<code>npm install xxx@版本号</code>来直接安装新版本的模块，通过直接修改<code>node_modules</code>里面的依赖版本从而来修改<code>package-lock.json</code>，这样才能安装到不同版本的依赖，并且同时修改<code>package.json</code></li>
+</ul>
+<p>自己尝试了一下：</p>
+<ul>
+<li>在一个目录下<code>npm init</code></li>
+<li>然后<code>npm install react --save</code>安装<code>react</code>，生成了<code>package.json</code>和<code>package-lock.json</code>两个文件</li>
+<li>然后我把<code>package.json</code>里面的<code>dependencies</code>去掉，把<code>node_modules</code>删掉，<code>package-lock.json</code>不作任何修改</li>
+<li>再次运行<code>npm install</code>，发现<code>react</code>的依赖人模人样地装上来<code>node_modules</code>里面了</li>
+<li>此刻的感受……</li>
+</ul>
+<p>自己的感受是：以后只要有<code>package-lock.json</code>的话，<code>npm install</code>就会根据这个文件来执行安装依赖了。没有<code>package-lock.json</code>，那我们回去找我们的<code>package.json</code>吧。并且如果想修改<code>package-lock.json</code>里面的东西的话，需要直接<code>npm install --save xxx@版本号</code>来直接修改<code>node_modules</code>里面的东西，才能实现<code>lock</code>文件的修改。</p>
+<p>想法起源于：</p>
+<ul>
+<li><a href="https://toutiao.io/posts/hrihhs/preview" target="_blank" rel="external">说说 npm 5 的新坑</a></li>
+<li><a href="https://juejin.im/post/5943849aac502e006b84ce07" target="_blank" rel="external">[译] 理解 NPM 5 中的 lock 文件</a></li>
+<li><a href="https://docs.npmjs.com/files/package-lock.json" target="_blank" rel="external">npmjs - package-lock.json</a></li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/npm/" rel="tag"># npm</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/05/25/webpack-treeShaking/" rel="next" title="webpack-treeShaking">
+                <i class="fa fa-chevron-left"></i> webpack-treeShaking
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/upload.jpg"
+               alt="kimZ" />
+          <p class="site-author-name" itemprop="name">kimZ</p>
+           
+              <p class="site-description motion-element" itemprop="description">Share what we play</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">17</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#疑惑"><span class="nav-number">1.</span> <span class="nav-text">疑惑</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#了解"><span class="nav-number">2.</span> <span class="nav-text">了解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#坑"><span class="nav-number">3.</span> <span class="nav-text">坑</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kimZ</span>
+</div>
+
+
+<div class="powered-by">
+  KimZ
+</div>
+
+<div class="theme-info">
+  to be lazyer, to be nicer
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>
