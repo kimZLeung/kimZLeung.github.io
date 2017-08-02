@@ -4,6 +4,23 @@
 
     
   <url>
+    <loc>http://kimzZ.com/2017/03/23/macrotask-queue%E5%92%8Cmicrotask-queue/</loc>
+    <lastmod>2017-08-02T07:20:53.330Z</lastmod>
+    <data>
+        <display>
+        <title>macrotask-queue和microtask-queue</title>
+        <pubTime>2017-03-22T20:15:43.000Z</pubTime>
+        
+        <tag>异步机制</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://kimzZ.com/2017/03/19/Node-steam/</loc>
     <lastmod>2017-08-01T09:56:51.219Z</lastmod>
     <data>
@@ -46,23 +63,6 @@
         <pubTime>2017-05-24T16:50:05.000Z</pubTime>
         
         <tag>webpack treeShaking</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://kimzZ.com/2017/03/23/macrotask-queue%E5%92%8Cmicrotask-queue/</loc>
-    <lastmod>2017-05-26T12:43:07.342Z</lastmod>
-    <data>
-        <display>
-        <title>macrotask-queue和microtask-queue</title>
-        <pubTime>2017-03-22T20:15:43.000Z</pubTime>
-        
-        <tag>异步机制</tag>
          
          
            
