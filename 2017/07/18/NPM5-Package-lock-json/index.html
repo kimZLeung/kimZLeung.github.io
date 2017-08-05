@@ -95,7 +95,7 @@
 <meta property="og:site_name" content="kimZLeung">
 <meta property="og:description" content="疑惑
 事情是这样的，我之前尝试使用React的Next和Vue的Nuxt写着玩的时候，发现npm install安装依赖之后，项目根目录下除了package.json还多了一个package-lock.json文件，当时有点疑惑但是后来事情做就没去查，今天到服务器上部署项目安装依赖的时候，又发现项目根目录多了个package-lock.json…奇怪了我自己搭起来的东西，也没配置什么别的选项，为什">
-<meta property="og:updated_time" content="2017-08-05T09:33:55.497Z">
+<meta property="og:updated_time" content="2017-08-05T09:41:40.829Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="NPM5 - Package-lock.json">
 <meta name="twitter:description" content="疑惑
@@ -348,7 +348,7 @@
 <li>然后我尝试把<code>react</code>放回去<code>package.json</code>里面，把<code>package-lock.json</code>里面的东西去掉</li>
 <li>然后<code>react</code>不装了。</li>
 </ul>
-<p>自己的感受是：<code>package-lock.json</code>是用于锁定依赖版本的，但是安装的依赖依旧是由<code>package.json</code>说了算</p>
+<p>自己的感受是：<code>package-lock.json</code>是用于锁定依赖版本并且可以加快依赖安装速度的，但是安装的依赖依旧是由<code>package.json</code>说了算</p>
 <hr>
 <h2 id="想法起源于："><a href="#想法起源于：" class="headerlink" title="想法起源于："></a>想法起源于：</h2><ul>
 <li><a href="https://toutiao.io/posts/hrihhs/preview" target="_blank" rel="external">说说 npm 5 的新坑</a></li>
