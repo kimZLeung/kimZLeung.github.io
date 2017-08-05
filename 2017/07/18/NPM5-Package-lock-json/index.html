@@ -95,7 +95,7 @@
 <meta property="og:site_name" content="kimZLeung">
 <meta property="og:description" content="疑惑
 事情是这样的，我之前尝试使用React的Next和Vue的Nuxt写着玩的时候，发现npm install安装依赖之后，项目根目录下除了package.json还多了一个package-lock.json文件，当时有点疑惑但是后来事情做就没去查，今天到服务器上部署项目安装依赖的时候，又发现项目根目录多了个package-lock.json…奇怪了我自己搭起来的东西，也没配置什么别的选项，为什">
-<meta property="og:updated_time" content="2017-07-18T05:37:22.736Z">
+<meta property="og:updated_time" content="2017-08-05T09:33:55.497Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="NPM5 - Package-lock.json">
 <meta name="twitter:description" content="疑惑
@@ -334,15 +334,21 @@
 <li>但是有了<code>package-lock.json</code>就不可同日而语了，还记得我们前面讲过<code>package-lock.json</code>会锁定依赖的版本嘛？对的，锁定了之后，在<code>package.json</code>里面修改依赖的版本号，也不会更新<code>package-lock.json</code>里面的东西哦。</li>
 <li>只能直接通过<code>npm install xxx@版本号</code>来直接安装新版本的模块，通过直接修改<code>node_modules</code>里面的依赖版本从而来修改<code>package-lock.json</code>，这样才能安装到不同版本的依赖，并且同时修改<code>package.json</code></li>
 </ul>
+<hr>
+<ul>
+<li>[x] npm <strong>5.3.0</strong> 亲测 … 修改<code>package.json</code>里面的版本号再运行<code>npm install</code>可以更新依赖</li>
+</ul>
+<hr>
 <p>自己尝试了一下：</p>
 <ul>
 <li>在一个目录下<code>npm init</code></li>
 <li>然后<code>npm install react --save</code>安装<code>react</code>，生成了<code>package.json</code>和<code>package-lock.json</code>两个文件</li>
 <li>然后我把<code>package.json</code>里面的<code>dependencies</code>去掉，把<code>node_modules</code>删掉，<code>package-lock.json</code>不作任何修改</li>
-<li>再次运行<code>npm install</code>，发现<code>react</code>的依赖人模人样地装上来<code>node_modules</code>里面了</li>
-<li>此刻的感受……</li>
+<li>再次运行<code>npm install</code>，发现<code>react</code>也不安装了</li>
+<li>然后我尝试把<code>react</code>放回去<code>package.json</code>里面，把<code>package-lock.json</code>里面的东西去掉</li>
+<li>然后<code>react</code>不装了。</li>
 </ul>
-<p>自己的感受是：以后只要有<code>package-lock.json</code>的话，<code>npm install</code>就会根据这个文件来执行安装依赖了。没有<code>package-lock.json</code>，那我们回去找我们的<code>package.json</code>吧。并且如果想修改<code>package-lock.json</code>里面的东西的话，需要直接<code>npm install --save xxx@版本号</code>来直接修改<code>node_modules</code>里面的东西，才能实现<code>lock</code>文件的修改。</p>
+<p>自己的感受是：<code>package-lock.json</code>是用于锁定依赖版本的，但是安装的依赖依旧是由<code>package.json</code>说了算</p>
 <hr>
 <h2 id="想法起源于："><a href="#想法起源于：" class="headerlink" title="想法起源于："></a>想法起源于：</h2><ul>
 <li><a href="https://toutiao.io/posts/hrihhs/preview" target="_blank" rel="external">说说 npm 5 的新坑</a></li>

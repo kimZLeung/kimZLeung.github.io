@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://kimzZ.com/2017/07/18/NPM5-Package-lock-json/</loc>
+    
+    <lastmod>2017-08-05T09:33:55.497Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://kimzZ.com/2017/03/23/macrotask-queue%E5%92%8Cmicrotask-queue/</loc>
     
     <lastmod>2017-08-02T07:20:53.330Z</lastmod>
@@ -12,13 +19,6 @@
     <loc>http://kimzZ.com/2017/03/19/Node-steam/</loc>
     
     <lastmod>2017-08-01T09:56:51.219Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://kimzZ.com/2017/07/18/NPM5-Package-lock-json/</loc>
-    
-    <lastmod>2017-07-18T05:37:22.736Z</lastmod>
     
   </url>
   
