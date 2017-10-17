@@ -71,7 +71,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Middleware Redux," />
+  <meta name="keywords" content="JS异步 Promise," />
 
 
 
@@ -87,34 +87,25 @@
 
 
 
-<meta name="description" content="上源码:
-import compose from &apos;./compose&apos;;
+<meta name="description" content="j2Promise JS的异步实现
 
-export default function applyMiddleware(...middlewares) {            
-    return (next)  =&amp;gt; 
-    (reducer, initialState) =&amp;gt; {
-    	var store = next(reducer">
+之前我曾经自己实现过一个模拟Promise的API，叫jPromise。但是半年之后的现在，重新看自己以前的代码，觉得自己当初造轮子的时候并没有真正去理解到Promise的一些机制和用法。并且自己封装的then方法虽然能达到预期效果，可是扩展性和可用性不足。鉴于此，我决定重新造一个jPromise的升级版，并且总结一下JS异步编程的一些自己的感悟。
+就叫它J2">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Redux-Middleware">
-<meta property="og:url" content="http://kimzZ.com/2017/03/19/Redux-Middleware/index.html">
+<meta property="og:title" content="just-a-Promise_2.0">
+<meta property="og:url" content="http://kimzZ.com/2017/10/18/j2Promise/index.html">
 <meta property="og:site_name" content="kimZLeung">
-<meta property="og:description" content="上源码:
-import compose from &apos;./compose&apos;;
+<meta property="og:description" content="j2Promise JS的异步实现
 
-export default function applyMiddleware(...middlewares) {            
-    return (next)  =&amp;gt; 
-    (reducer, initialState) =&amp;gt; {
-    	var store = next(reducer">
-<meta property="og:updated_time" content="2017-03-18T13:55:15.870Z">
+之前我曾经自己实现过一个模拟Promise的API，叫jPromise。但是半年之后的现在，重新看自己以前的代码，觉得自己当初造轮子的时候并没有真正去理解到Promise的一些机制和用法。并且自己封装的then方法虽然能达到预期效果，可是扩展性和可用性不足。鉴于此，我决定重新造一个jPromise的升级版，并且总结一下JS异步编程的一些自己的感悟。
+就叫它J2">
+<meta property="og:updated_time" content="2017-10-17T11:08:16.470Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Redux-Middleware">
-<meta name="twitter:description" content="上源码:
-import compose from &apos;./compose&apos;;
+<meta name="twitter:title" content="just-a-Promise_2.0">
+<meta name="twitter:description" content="j2Promise JS的异步实现
 
-export default function applyMiddleware(...middlewares) {            
-    return (next)  =&amp;gt; 
-    (reducer, initialState) =&amp;gt; {
-    	var store = next(reducer">
+之前我曾经自己实现过一个模拟Promise的API，叫jPromise。但是半年之后的现在，重新看自己以前的代码，觉得自己当初造轮子的时候并没有真正去理解到Promise的一些机制和用法。并且自己封装的then方法虽然能达到预期效果，可是扩展性和可用性不足。鉴于此，我决定重新造一个jPromise的升级版，并且总结一下JS异步编程的一些自己的感悟。
+就叫它J2">
 
 
 
@@ -142,13 +133,13 @@ export default function applyMiddleware(...middlewares) {
 
 
 
-  <link rel="canonical" href="http://kimzZ.com/2017/03/19/Redux-Middleware/"/>
+  <link rel="canonical" href="http://kimzZ.com/2017/10/18/j2Promise/"/>
 
 
 
 
 
-  <title> Redux-Middleware | kimZLeung </title>
+  <title> just-a-Promise_2.0 | kimZLeung </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -257,7 +248,7 @@ export default function applyMiddleware(...middlewares) {
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://kimzZ.com/2017/03/19/Redux-Middleware/">
+    <link itemprop="mainEntityOfPage" href="http://kimzZ.com/2017/10/18/j2Promise/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="kimZ">
@@ -278,7 +269,7 @@ export default function applyMiddleware(...middlewares) {
             
             
               
-                Redux-Middleware
+                just-a-Promise_2.0
               
             
           </h1>
@@ -293,8 +284,8 @@ export default function applyMiddleware(...middlewares) {
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-19T05:54:51+08:00">
-                2017-03-18
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-18T03:07:12+08:00">
+                2017-10-17
               </time>
             
 
@@ -329,61 +320,27 @@ export default function applyMiddleware(...middlewares) {
       
 
       
-        <h2>上源码:</h2>
-<pre><code>import compose from './compose';
-
-export default function applyMiddleware(...middlewares) {            
-    return (next)  =&gt; 
-    (reducer, initialState) =&gt; {
-    	var store = next(reducer, initialState);
-    	var dispatch = store.dispatch;
-    	var chain = [];
-    	var middlewareAPI = {
-    	  getState: store.getState,
-    	  dispatch: (action) =&gt; dispatch(action)
-    	};
-    	chain = middlewares.map(middleware =&gt;
-    		middleware(middlewareAPI));
-    	dispatch = compose(...chain, store.dispatch);
-    	return {
-    	  ...store,
-    	  dispatch
-    	};
-      };
-}
-
-// compose.js
-export default compose(...funcs) {
-    return funcs.reduceRight((composed, f) =&gt; f(composed));
-}
-</code></pre>
+        <h2>j2Promise JS的异步实现</h2>
 <hr>
-<h2>分析：</h2>
+<p>之前我曾经自己实现过一个模拟Promise的API，叫<code>jPromise</code>。但是半年之后的现在，重新看自己以前的代码，觉得自己当初造轮子的时候并没有真正去理解到<code>Promise</code>的一些机制和用法。并且自己封装的<code>then</code>方法虽然能达到预期效果，可是扩展性和可用性不足。鉴于此，我决定重新造一个<code>jPromise</code>的升级版，并且总结一下JS异步编程的一些自己的感悟。</p>
+<p>就叫它<code>J2Promise</code>吧</p>
+<hr>
+<h2>JS的异步：队列和回调。</h2>
+<p>JS作为一门神奇又灵活的语言。其最鲜明的特色之一就是高阶函数，可以把函数当成参数传到别的函数中，并且还可以动态绑定上下文进行调用。</p>
+<p>另外还有词法作用域。让JS编程能够做出各种各样的骚操作。</p>
+<p>有点扯远了，其实函数能作为参数传入另外的函数，并且调用，我们常常将其称为回调函数，这种灵活的机制可以说是JS异步实现的<strong>幕后最大黑手</strong>。</p>
 <blockquote>
-<p>一开始调用传入的createStore方法创建了store
-在每一个中间件都传进了store的getState方法和dispatch方法
-然后遍历middlewares数组传进参数全部调用一次。获得chain数组
-然后用compose把函数一层一层嵌套起来。最初传入store.dispatch；
-根据redux中间件的链式调用。一直处理action然后最终会发一个正确的action去触发reducer来改变state的状态。</p>
+<p>我们可以想象，当我们需要把事先写好的A函数安放在合适的时段进行调用，最简单的方式不就是：把A函数作为一个回调函数传入B函数，B函数将会是一个漫长~~~的操作。然后在适当的时间，我们在B函数内调用A函数，即可。其实我们可以发现，所谓的异步就是我们事先定好的A操作，然后在往后的某一段时间执行这个A操作，并且期间...我们的页面可以自由活动！（当然这是建立在B函数不在我们浏览器线程上工作的前提）</p>
 </blockquote>
-<hr>
-<h2>其实中间件就是一堆扩展dispatch的东西...可以使得store.dispatch的同时来进行很多别的操作，然后获得更多的功能。</h2>
-<hr>
+<h4>另外一个协助了回调函数的东西就是<strong>队列</strong></h4>
 <blockquote>
-<p>中间件扩展了dispatch。使dispatch可以接受更多的参数。</p>
+<p>与其说队列用于实现异步，倒不如说队列其实是一个异步任务的小基地。我们最常使用队列在存放我们尚未执行的异步任务，有赖于队列先进先出的特点，我们可以<strong>顺序执行多个</strong>未完成的异步任务。</p>
 </blockquote>
-<p>加入了中间件之后的dispatch过程：</p>
-<ul>
-<li>
-<p>用户触发 -&gt; 中间件1 -&gt; 中间件2 -&gt; dispatch action -&gt; reducer -&gt; state change</p>
-</li>
-<li>
-<p>中间件通过next去把改造过或并没有改造的action传到下一个中间件</p>
-</li>
-<li>
-<p>中间件处理过程中再dispatch的话，这个dispatch会从最开始重新调用dispatch，再走一遍中间件</p>
-</li>
-</ul>
+<p>这样结合队列和回调函数来做，JS的异步永远离不开这两个最坚实的基础。包括以下要实现的<code>j2Promise</code>，最基础的构成异步的部分，也是通过回调和队列结合实现的。</p>
+<p>虽然写出来的API可以实现链式调用，避免了回调过深，但是<code>Promise</code>本身也并没有任何神奇的魔法，我们的异步，最终还是要依赖到回调函数，因为回调函数是JS异步最基本的实现方式。</p>
+<hr>
+<h2>造Promise</h2>
+<p>见<a href="https://github.com/kimZLeung/FrontEnd-Learning/blob/master/JS%20others/j2Promise/j2Promise.js" target="_blank" rel="external">j2Promise.js</a></p>
 
       
     </div>
@@ -413,7 +370,7 @@ export default compose(...funcs) {
       
         <div class="post-tags">
           
-            <a href="/tags/Middleware-Redux/" rel="tag"># Middleware Redux</a>
+            <a href="/tags/JS异步-Promise/" rel="tag"># JS异步 Promise</a>
           
         </div>
       
@@ -426,8 +383,8 @@ export default compose(...funcs) {
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/03/19/Redux-Middleware2/" rel="next" title="Redux-Middleware2">
-                <i class="fa fa-chevron-left"></i> Redux-Middleware2
+              <a href="/2017/07/18/NPM5-Package-lock-json/" rel="next" title="NPM5 - Package-lock.json">
+                <i class="fa fa-chevron-left"></i> NPM5 - Package-lock.json
               </a>
             
           </div>
@@ -435,10 +392,6 @@ export default compose(...funcs) {
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/03/22/关于Vuex的疑惑/" rel="prev" title="Vuex的疑惑">
-                Vuex的疑惑 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -558,7 +511,7 @@ export default compose(...funcs) {
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">上源码:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">分析：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">其实中间件就是一堆扩展dispatch的东西...可以使得store.dispatch的同时来进行很多别的操作，然后获得更多的功能。</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">j2Promise JS的异步实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">JS的异步：队列和回调。</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">2.0.1.</span> <span class="nav-text">另外一个协助了回调函数的东西就是队列</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">造Promise</span></a></li></ol></div>
             
 
           </div>
