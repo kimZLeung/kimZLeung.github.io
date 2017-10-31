@@ -1,0 +1,705 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="JS异步 Generator async," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/upload.jpg?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="好久没用过的Generator的总结
+好的其实根本没用过Generator
+但是今天想总结一下Generator的用法和我们常用的...扩展运算符和for...of与底层iterator接口的关系。
+
+
+iterator和扩展运算符等我们经常会使用Array.from、for...of或者扩展运算符来遍历或者展开数组，其实这些新增的API使用了底层对数组默认实现的iterator接口，而itera">
+<meta property="og:type" content="article">
+<meta property="og:title" content="从Generator到async">
+<meta property="og:url" content="http://kimzZ.com/2017/11/01/从Generator到async/index.html">
+<meta property="og:site_name" content="kimZLeung">
+<meta property="og:description" content="好久没用过的Generator的总结
+好的其实根本没用过Generator
+但是今天想总结一下Generator的用法和我们常用的...扩展运算符和for...of与底层iterator接口的关系。
+
+
+iterator和扩展运算符等我们经常会使用Array.from、for...of或者扩展运算符来遍历或者展开数组，其实这些新增的API使用了底层对数组默认实现的iterator接口，而itera">
+<meta property="og:updated_time" content="2017-10-31T09:56:22.803Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="从Generator到async">
+<meta name="twitter:description" content="好久没用过的Generator的总结
+好的其实根本没用过Generator
+但是今天想总结一下Generator的用法和我们常用的...扩展运算符和for...of与底层iterator接口的关系。
+
+
+iterator和扩展运算符等我们经常会使用Array.from、for...of或者扩展运算符来遍历或者展开数组，其实这些新增的API使用了底层对数组默认实现的iterator接口，而itera">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://kimzZ.com/2017/11/01/从Generator到async/"/>
+
+
+
+
+
+  <title> 从Generator到async | kimZLeung </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">kimZLeung</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">kimz's Bolg</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://kimzZ.com/2017/11/01/从Generator到async/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="kimZ">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/upload.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="kimZLeung">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                从Generator到async
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-01T01:55:25+08:00">
+                2017-10-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="好久没用过的Generator的总结"><a href="#好久没用过的Generator的总结" class="headerlink" title="好久没用过的Generator的总结"></a>好久没用过的Generator的总结</h2><hr>
+<h2 id="好的其实根本没用过Generator"><a href="#好的其实根本没用过Generator" class="headerlink" title="好的其实根本没用过Generator"></a>好的其实根本没用过Generator</h2><blockquote>
+<p>但是今天想总结一下Generator的用法和我们常用的<code>...</code>扩展运算符和<code>for...of</code>与底层<code>iterator</code>接口的关系。</p>
+</blockquote>
+<hr>
+<h2 id="iterator和扩展运算符等"><a href="#iterator和扩展运算符等" class="headerlink" title="iterator和扩展运算符等"></a>iterator和扩展运算符等</h2><p>我们经常会使用<code>Array.from</code>、<code>for...of</code>或者扩展运算符来遍历或者展开数组，其实这些新增的API使用了底层对数组默认实现的<code>iterator</code>接口，而<code>iterator</code>接口又和<code>Generator</code>有着很相似的关系.</p>
+<p>比如<code>for...of a</code>跟着的一个a对象，浏览器会自动寻找到a对象上实现的<code>[Symbol.iterator]</code>属性，并且调用这个属性上的函数，获取这个a对象的<code>iterator</code>，再继续调用<code>next()</code>方法来遍历这个数组</p>
+<p><code>...</code>扩展运算符同理。</p>
+<p><code>Array.from</code>同理。</p>
+<p>同理在于：它们都不需要知道对方的遍历器生成器接口是如何实现，它们只需要判断你有没有提供这个接口，然后调用你这个接口，我就不断<code>next()</code>，把你的东西拿出来，展示给你看。</p>
+<hr>
+<h2 id="在说说Generator为何与iterator关系密切"><a href="#在说说Generator为何与iterator关系密切" class="headerlink" title="在说说Generator为何与iterator关系密切"></a>在说说Generator为何与iterator关系密切</h2><p>我们都知道，一个最简单的<code>Generator</code>如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">function* foo() &#123;</div><div class="line">	for (var i = 0; i &lt; 6; i++) &#123;</div><div class="line">		yield i;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这是一个很简单的<code>Generator</code>，我们可以通过执行它获取<code>iterator</code>来遍历出来它输出的值，很容易可以发现，<code>Generator</code>不就是<code>iterator</code>的爸爸吗？所谓<code>生成器</code>全名就是<code>遍历器</code>的<code>生成器</code>。</p>
+<p><code>Generator</code>生成的<code>iterator</code>自身原型上的<code>[Symbol.iterator]</code>也就是<code>Generator</code>自己，所以说，我们也可以把<code>foo()</code>这一句生成的<code>iterator</code>看成一个可遍历的对象，传到<code>for...of</code>和<code>...</code>后面都可以</p>
+<p>当然，我们更加方便的是可以直接用<code>Generator</code>函数作为对象的一个<code>[Symbol.iterator]</code>属性，这样我们就可以很方便地自行实现<code>[Symbol.iterator]</code>接口，不需要自己把<code>next</code>函数封装出来。比如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">// 直接使用上面的foo</div><div class="line">var bb = &#123;&#125;</div><div class="line">bb[Symbol.iterator] = foo</div><div class="line">[...bb] 	// [0, 1, 2, 3, 4, 5]</div></pre></td></tr></table></figure>
+<hr>
+<h2 id="我只知道yield，所以yield-是什么东西"><a href="#我只知道yield，所以yield-是什么东西" class="headerlink" title="我只知道yield，所以yield* 是什么东西"></a>我只知道yield，所以yield* 是什么东西</h2><p>如果在<code>Generator</code>函数内部，调用另一个<code>Generator</code>函数，默认情况下是没有效果的，such as</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">function* foo() &#123;</div><div class="line">  yield &apos;a&apos;</div><div class="line">  yield &apos;b&apos;</div><div class="line">&#125;</div><div class="line"></div><div class="line">function* bar() &#123;</div><div class="line">  yield &apos;x&apos;</div><div class="line">  yield foo()</div><div class="line">  yield &apos;y&apos;</div><div class="line">&#125;</div><div class="line"></div><div class="line">for (let v of bar())&#123;</div><div class="line">  console.log(v)</div><div class="line">&#125;</div><div class="line"></div><div class="line">// x, foo &#123;&#125;, y ... 因为我yield foo的返回值只是一个iterator遍历器嘛。。。</div></pre></td></tr></table></figure>
+<p>如果想把这个遍历器展开，把内部的也输出的话，需要用到<code>yield*</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">function* foo() &#123;</div><div class="line">  yield &apos;a&apos;</div><div class="line">  yield &apos;b&apos;</div><div class="line">&#125;</div><div class="line"></div><div class="line">function* bar() &#123;</div><div class="line">  yield &apos;x&apos;</div><div class="line">  yield* foo()</div><div class="line">  yield &apos;y&apos;</div><div class="line">&#125;</div><div class="line"></div><div class="line">for (let v of bar())&#123;</div><div class="line">  console.log(v)</div><div class="line">&#125;</div><div class="line"></div><div class="line">// x, a, b, y</div></pre></td></tr></table></figure>
+<p>我想了想其实觉得这个并没有什么用，无非就是在一个<code>Generator</code>里面展开另外一个<code>Generator</code>，<code>Generator</code>无非就可以用来生成<code>iterator</code>，可以展开数组嘛。。。所以无非就是可以展开嵌套数组嘛…</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">function* iterTree(tree) &#123;</div><div class="line">  if (Array.isArray(tree)) &#123;</div><div class="line">  	// 如果这一项是数组，则遍历每一项并且使用yield* 递归自己进行展开</div><div class="line">    for(let i=0; i &lt; tree.length; i++) &#123;</div><div class="line">      yield* iterTree(tree[i]);</div><div class="line">    &#125;</div><div class="line">  &#125; else &#123;</div><div class="line">  	// 如果不是则可以直接输出自己</div><div class="line">    yield tree;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">const tree = [ &apos;a&apos;, [&apos;b&apos;, &apos;c&apos;], [&apos;d&apos;, &apos;e&apos;] ];</div><div class="line"></div><div class="line">for(let x of iterTree(tree)) &#123;</div><div class="line">  console.log(x);</div><div class="line">&#125;</div><div class="line"></div><div class="line">// a, b, c, d, e</div></pre></td></tr></table></figure>
+<p>就像前面所说到的，我们把<code>Generator</code>生成的<code>iterator</code>传给<code>for...of</code>，然后浏览器寻找这个对象上的<code>[Symbol.iterator]</code>属性，调用并且获取<code>iterator</code>，然后执行<code>next</code>输出每一项。我自己试过执行<code>var b = iterTree(tree)[Symbol.iterator]()</code>，我没有传参，但是调用<code>next</code>方法依然可以输出<code>tree</code>的每一项。可见，我们的<code>iterTree(tree)[Symbol.iterator]</code>的实现并不是直接指向本来的函数，而是将本来的<code>Generator</code>传入的参数也一并保存了，可能期间通过柯理化和闭包来保存了<code>Generator</code>传入的参数（ 可能是Generator.bind(undefined, params) ）</p>
+<p>我也尝试过直接把iterTree直接赋值给一个对象的<code>[Symbol.iterator]</code>属性，然后用扩展运算符展开，得到的结果是<code>[undefined]</code>，嗯，目测内部实现是直接调用<code>obj[Symbol.iterator]()</code>的，上面属于特殊情况。</p>
+<hr>
+<h2 id="Generator的作用当然不止可以作为遍历器的爸爸"><a href="#Generator的作用当然不止可以作为遍历器的爸爸" class="headerlink" title="Generator的作用当然不止可以作为遍历器的爸爸"></a>Generator的作用当然不止可以作为遍历器的爸爸</h2><p>它还可以与Promise配合，实现自动顺序执行多个异步操作</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">var gen = function* ()&#123;</div><div class="line">  var f1 = yield readFile(&apos;/etc/fstab&apos;);</div><div class="line">  var f2 = yield readFile(&apos;/etc/shells&apos;);</div><div class="line">  console.log(f1.toString());</div><div class="line">  console.log(f2.toString());</div><div class="line">&#125;</div><div class="line"></div><div class="line">// 最简单的版本，通过Promise的then里面调用next，并传入返回值，来实现顺序执行异步操作</div><div class="line">function run(gen)&#123;</div><div class="line">  var g = gen()</div><div class="line"></div><div class="line">  function next(data)&#123;</div><div class="line">    var result = g.next(data)</div><div class="line">    if (result.done) return result.value</div><div class="line">    result.value.then(function(data)&#123;</div><div class="line">      next(data)</div><div class="line">    &#125;);</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  next()</div><div class="line">&#125;</div><div class="line"></div><div class="line">run(gen)</div></pre></td></tr></table></figure>
+<p>封装一个这样的自动执行器可以方便地将<code>Generator</code>传入并且自动执行，免去了使用者高成本的操作。</p>
+<hr>
+<h2 id="但是，我开始学的时候就已经有async和await了"><a href="#但是，我开始学的时候就已经有async和await了" class="headerlink" title="但是，我开始学的时候就已经有async和await了"></a>但是，我开始学的时候就已经有async和await了</h2><p>的确这个<code>Generator</code>的用法是有点麻烦，又要生个<code>iterator</code>，然后还要不断调用<code>next()</code>，后来，还要封装一个<code>co</code>模块进行自动化执行。</p>
+<p>然后async函数就出现了。</p>
+<p>看一下用法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">function bar () &#123;</div><div class="line">	return new Promise(function (res, rej) &#123;</div><div class="line">		setTimeout(function () &#123;</div><div class="line">			res(&apos;haha&apos;)</div><div class="line">		&#125;, 1000)</div><div class="line">	&#125;)</div><div class="line">&#125;</div><div class="line"></div><div class="line">async function foo () &#123;</div><div class="line">	const val = await bar()</div><div class="line">	console.log(val)</div><div class="line">&#125;</div><div class="line"></div><div class="line">// haha</div></pre></td></tr></table></figure>
+<p>看起来写法和<code>Generator</code>差不多，但是用法差挺多的，关于<code>async</code>详细说明可以点<a href="http://es6.ruanyifeng.com/#docs/async" target="_blank" rel="external">这里</a></p>
+<p>总的来说就是并不需要像<code>Generator</code>这样生成<code>iterator</code>然后调用<code>next</code>来遍历，而是直接用await就可以等到<code>Promise</code>then出来的值。</p>
+<p>我们都知道async会返回<code>Promise</code>值，我们平时写，要不就是直接返回一个<code>Promise</code>，或者说返回一个<code>await</code>等回来的值（这个值一般会通过Promise.resolve包装）。其实async内部自己会执行一个自动执行器。跟刚刚说的差不多</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">// 参考一下阮老师的demo</div><div class="line"></div><div class="line">async function fn(args) &#123;</div><div class="line">  // ...</div><div class="line">&#125;</div><div class="line"></div><div class="line">// 等同于</div><div class="line"></div><div class="line">function fn(args) &#123;</div><div class="line">  return spawn(function* () &#123;</div><div class="line">    // ...</div><div class="line">  &#125;);</div><div class="line">&#125;</div><div class="line"></div><div class="line">function spawn(genF) &#123;</div><div class="line">  return new Promise(function(resolve, reject) &#123;</div><div class="line">    const gen = genF()</div><div class="line">    function step(nextF) &#123;</div><div class="line">      let next </div><div class="line">      try &#123;</div><div class="line">        next = nextF()</div><div class="line">      &#125; catch(e) &#123;</div><div class="line">        return reject(e)</div><div class="line">      &#125;</div><div class="line">      if(next.done) &#123;</div><div class="line">        return resolve(next.value)</div><div class="line">      &#125;</div><div class="line">      // 解构Promise的value值，传入作为await的返回值，这个是只有在Promise resolve之后才会调用后面的函数，是这样配合实现异步操作的。</div><div class="line">      Promise.resolve(next.value).then(function(v) &#123;</div><div class="line">        step(function() &#123; return gen.next(v) &#125;)</div><div class="line">      &#125;, function(e) &#123;</div><div class="line">        step(function() &#123; return gen.throw(e) &#125;)</div><div class="line">      &#125;)</div><div class="line">    &#125;</div><div class="line">    step(function() &#123; return gen.next(undefined) &#125;)</div><div class="line">  &#125;)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这个<code>spawn</code>函数基本上就是一个<code>Generator</code>的自动执行器，通过把<code>async</code>函数里面的代码转化成一个<code>Generator</code>，然后将<code>await</code>替换成<code>yield</code>，然后通过<code>await</code>来等待后面的异步操作，并且将本来返回的Promise解构出来，操作成功之后获取到异步操作的返回值</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/JS异步-Generator-async/" rel="tag"># JS异步 Generator async</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/10/18/j2Promise/" rel="next" title="just-a-Promise_2.0">
+                <i class="fa fa-chevron-left"></i> just-a-Promise_2.0
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/upload.jpg"
+               alt="kimZ" />
+          <p class="site-author-name" itemprop="name">kimZ</p>
+           
+              <p class="site-description motion-element" itemprop="description">Share what we play</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#好久没用过的Generator的总结"><span class="nav-number">1.</span> <span class="nav-text">好久没用过的Generator的总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#好的其实根本没用过Generator"><span class="nav-number">2.</span> <span class="nav-text">好的其实根本没用过Generator</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#iterator和扩展运算符等"><span class="nav-number">3.</span> <span class="nav-text">iterator和扩展运算符等</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#在说说Generator为何与iterator关系密切"><span class="nav-number">4.</span> <span class="nav-text">在说说Generator为何与iterator关系密切</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#我只知道yield，所以yield-是什么东西"><span class="nav-number">5.</span> <span class="nav-text">我只知道yield，所以yield* 是什么东西</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Generator的作用当然不止可以作为遍历器的爸爸"><span class="nav-number">6.</span> <span class="nav-text">Generator的作用当然不止可以作为遍历器的爸爸</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#但是，我开始学的时候就已经有async和await了"><span class="nav-number">7.</span> <span class="nav-text">但是，我开始学的时候就已经有async和await了</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kimZ</span>
+</div>
+
+
+<div class="powered-by">
+  KimZ
+</div>
+
+<div class="theme-info">
+  to be lazyer, to be nicer
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

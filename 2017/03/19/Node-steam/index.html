@@ -88,30 +88,27 @@
 
 
 <meta name="description" content="Node-Stream
-
 Node里面有四种stream .是Readable，Writable，Duplex，Transform。所有的流都继承了EventEmitter，所以都可以使用简单的事件机制。
 
 
-Readable：可读流，可以通过监听data事件来启动流动模式，也可以用pipe来启动流动模式，可以用stream.resume()来启动流动模式（这个可以只监听end事件）。什么都不做的">
+Readable：可读流，可以通过监听data事件来启动流动模式，也可以用pipe来启动流动模式，可以用stream.resume()来启动流动模式（这个可以只监听end事件）。什么都不做的时">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Node steam">
 <meta property="og:url" content="http://kimzZ.com/2017/03/19/Node-steam/index.html">
 <meta property="og:site_name" content="kimZLeung">
 <meta property="og:description" content="Node-Stream
-
 Node里面有四种stream .是Readable，Writable，Duplex，Transform。所有的流都继承了EventEmitter，所以都可以使用简单的事件机制。
 
 
-Readable：可读流，可以通过监听data事件来启动流动模式，也可以用pipe来启动流动模式，可以用stream.resume()来启动流动模式（这个可以只监听end事件）。什么都不做的">
+Readable：可读流，可以通过监听data事件来启动流动模式，也可以用pipe来启动流动模式，可以用stream.resume()来启动流动模式（这个可以只监听end事件）。什么都不做的时">
 <meta property="og:updated_time" content="2017-08-01T09:56:51.219Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Node steam">
 <meta name="twitter:description" content="Node-Stream
-
 Node里面有四种stream .是Readable，Writable，Duplex，Transform。所有的流都继承了EventEmitter，所以都可以使用简单的事件机制。
 
 
-Readable：可读流，可以通过监听data事件来启动流动模式，也可以用pipe来启动流动模式，可以用stream.resume()来启动流动模式（这个可以只监听end事件）。什么都不做的">
+Readable：可读流，可以通过监听data事件来启动流动模式，也可以用pipe来启动流动模式，可以用stream.resume()来启动流动模式（这个可以只监听end事件）。什么都不做的时">
 
 
 
@@ -326,22 +323,19 @@ Readable：可读流，可以通过监听data事件来启动流动模式，也�
       
 
       
-        <h2>Node-Stream</h2>
-<blockquote>
+        <h2 id="Node-Stream"><a href="#Node-Stream" class="headerlink" title="Node-Stream"></a>Node-Stream</h2><blockquote>
 <p><code>Node</code>里面有四种<code>stream</code> .是<code>Readable</code>，<code>Writable</code>，<code>Duplex</code>，<code>Transform</code>。所有的流都继承了EventEmitter，所以都可以使用简单的事件机制。</p>
 </blockquote>
 <ul>
-<li>Readable：可读流，可以通过监听<code>data</code>事件来启动流动模式，也可以用<code>pipe</code>来启动流动模式，可以用<code>stream.resume()</code>来启动流动模式（这个可以只监听end事件）。什么都不做的时候是暂停模式（默认），暂停模式下可以用<code>read</code>方法来读取数据...就是用三种方式来驱动可读流。</li>
+<li>Readable：可读流，可以通过监听<code>data</code>事件来启动流动模式，也可以用<code>pipe</code>来启动流动模式，可以用<code>stream.resume()</code>来启动流动模式（这个可以只监听end事件）。什么都不做的时候是暂停模式（默认），暂停模式下可以用<code>read</code>方法来读取数据…就是用三种方式来驱动可读流。</li>
 <li>Writeable：可写流，用于接受一个可读流的写入。可以用<code>readStream.pipe(WriteStream)</code>用<code>pipe</code>来接通两个流的信息，也可以通过调用<code>WriteStream.write(data, encoding, callback)</code>来写数据</li>
 <li>Transform：转换流。相当于一个中转站<code>readStream.pipe(transformStream).pipe(writeStream)</code></li>
 <li>Duplex：同时可读可写，可以使可读流，也可以是可写流。<code>Duplex.pipe(transformStream).pipe(Duplex)</code></li>
 </ul>
 <blockquote>
-<p>以上的<code>Stream</code>监听<code>data</code>事件来启动，或者用<code>pipe</code>接起来自动启动，都会调用内部的<code>_read</code>或者<code>_write</code>方法，内部的方法会emit<code>data</code>事件，触发监听<code>data</code>事件时传进去的函数。
-需要注意的是通过监听<code>data</code>事件启动流动模式的方式并不是不好，只是无法控制读取速度。<code>pipe</code>与监听<code>data</code>事件的不同之处就是，如果使用<code>pipe</code>连接一个可读流和可写流的时候，只有在文件<code>stream</code>链末端的消费者需要数据时才会进行读取</p>
+<p>以上的<code>Stream</code>监听<code>data</code>事件来启动，或者用<code>pipe</code>接起来自动启动，都会调用内部的<code>_read</code>或者<code>_write</code>方法，内部的方法会emit<code>data</code>事件，触发监听<code>data</code>事件时传进去的函数。<br>需要注意的是通过监听<code>data</code>事件启动流动模式的方式并不是不好，只是无法控制读取速度。<code>pipe</code>与监听<code>data</code>事件的不同之处就是，如果使用<code>pipe</code>连接一个可读流和可写流的时候，只有在文件<code>stream</code>链末端的消费者需要数据时才会进行读取</p>
 </blockquote>
-<h2>一个简单的继承<code>Transform</code>流的流</h2>
-<pre><code>var Transform = require('stream').Transform;
+<h2 id="一个简单的继承Transform流的流"><a href="#一个简单的继承Transform流的流" class="headerlink" title="一个简单的继承Transform流的流"></a>一个简单的继承<code>Transform</code>流的流</h2><pre><code>var Transform = require(&apos;stream&apos;).Transform;
 util.inherits(TestStream, Transform);
 
 function TestStream(options) {
@@ -349,47 +343,31 @@ function TestStream(options) {
 }
 
 TestStream.prototype._transform = function(chunk, encoding, cb) {
-  this.push(chunk+'|');
+  this.push(chunk+&apos;|&apos;);
   cb();     // 相当于emit data事件
 };
 
 TestStream.prototype._flush = function(cb) {
-  cb('end');    // // 相当于emit end事件
+  cb(&apos;end&apos;);    // // 相当于emit end事件
 };
-</code></pre>
-<hr>
-<h2>通过readable读取数据的过程</h2>
-<blockquote>
-<p>这个过程十分复杂
-在拼接好<code>readable</code>管道之后，当消耗方开始读取数据时，会调用<code>read()</code>方法，关键就在于<code>read</code>方法走的过程：
-首先<code>read</code>方法会去看<code>doRead</code>状态量，来确定缓存中的数据是否足够多，如果足够多就不会调用<code>_read</code>来向数据源请求，直接从缓存中读取数据或以<code>data</code>事件输出。如果调用了<code>_read</code>方法，就会从底层拿到数据，然后通过<code>push</code>方法放进流（然后判断缓存区是否为空来判断是否以<code>data</code>事件立即输出或储存在缓存中）...</p>
-</blockquote>
-<blockquote>
+</code></pre><hr>
+<h2 id="通过readable读取数据的过程"><a href="#通过readable读取数据的过程" class="headerlink" title="通过readable读取数据的过程"></a>通过readable读取数据的过程</h2><blockquote>
+<p>这个过程十分复杂<br>在拼接好<code>readable</code>管道之后，当消耗方开始读取数据时，会调用<code>read()</code>方法，关键就在于<code>read</code>方法走的过程：<br>首先<code>read</code>方法会去看<code>doRead</code>状态量，来确定缓存中的数据是否足够多，如果足够多就不会调用<code>_read</code>来向数据源请求，直接从缓存中读取数据或以<code>data</code>事件输出。如果调用了<code>_read</code>方法，就会从底层拿到数据，然后通过<code>push</code>方法放进流（然后判断缓存区是否为空来判断是否以<code>data</code>事件立即输出或储存在缓存中）…</p>
 <p><strong><code>readable</code>事件</strong>是在调用完<code>_read</code>后，如果<code>push</code>是以异步方式调用的话，就会有一个<code>readable</code>事件，标识什么时候<code>push</code>进来缓冲区的，然后通过监听这个事件可以立即使用<code>push</code>进来的数据。首次监听readable事件时，还会触发一次read(0)的调用，从而引起_read和push方法的调用，从而启动循环</p>
-</blockquote>
-<blockquote>
 <p><strong>流动模式中</strong>：<code>flow</code>中每次<code>read()</code>都可能触发<code>push()</code>的调用，而<code>push()</code>中又可能触发<code>flow()</code>或<code>read()</code>的调用，这样就形成了数据生生不息的流动。</p>
 </blockquote>
-<h2>pipe的背压机制</h2>
-<p><strong>pipe</strong>的背压机制是指消耗源的<code>drain()</code>事件触发后才再重新启动数据源的<code>resume()</code>，也就是所谓的消耗源需要时再从数据源请求。</p>
-<p><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// pipe 内部</span></div><div class="line">readable.on(<span class="string">'data'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">data</span>) </span>&#123;</div><div class="line">  <span class="comment">// 当write返回false的时候，说明缓冲队列达到highWaterMark，也就是一个阈值，此时暂停读取数据</span></div><div class="line">  <span class="keyword">if</span> (<span class="literal">false</span> === writable.write(data)) &#123;</div><div class="line">    readable.pause()</div><div class="line">  &#125;</div><div class="line">&#125;)</div><div class="line"><span class="comment">// 当数据被消耗完毕时会触发`drain`事件，然后再让这个可读流继续读取数据</span></div><div class="line">writable.on(<span class="string">'drain'</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">  readable.resume()</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
+<h2 id="pipe的背压机制"><a href="#pipe的背压机制" class="headerlink" title="pipe的背压机制"></a>pipe的背压机制</h2><p><strong>pipe</strong>的背压机制是指消耗源的<code>drain()</code>事件触发后才再重新启动数据源的<code>resume()</code>，也就是所谓的消耗源需要时再从数据源请求。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// pipe 内部</span></div><div class="line">readable.on(<span class="string">'data'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">data</span>) </span>&#123;</div><div class="line">  <span class="comment">// 当write返回false的时候，说明缓冲队列达到highWaterMark，也就是一个阈值，此时暂停读取数据</span></div><div class="line">  <span class="keyword">if</span> (<span class="literal">false</span> === writable.write(data)) &#123;</div><div class="line">    readable.pause()</div><div class="line">  &#125;</div><div class="line">&#125;)</div><div class="line"><span class="comment">// 当数据被消耗完毕时会触发`drain`事件，然后再让这个可读流继续读取数据</span></div><div class="line">writable.on(<span class="string">'drain'</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">  readable.resume()</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
 <hr>
-<h2>两种模式（暂停和流动）</h2>
-<h3>暂停模式</h3>
-<blockquote>
-<p>调用 <code>readable.pause()</code> 方法， <code>readable.unpipe()</code> 方法， 或者接收 “背压”（back pressure），将会进入暂停模式
-在暂停模式里监听<code>data</code>事件也会不启动流，必须通过显示调用<code>read()</code>方法进行数据获取</p>
+<h2 id="两种模式（暂停和流动）"><a href="#两种模式（暂停和流动）" class="headerlink" title="两种模式（暂停和流动）"></a>两种模式（暂停和流动）</h2><h3 id="暂停模式"><a href="#暂停模式" class="headerlink" title="暂停模式"></a>暂停模式</h3><blockquote>
+<p>调用 <code>readable.pause()</code> 方法， <code>readable.unpipe()</code> 方法， 或者接收 “背压”（back pressure），将会进入暂停模式<br>在暂停模式里监听<code>data</code>事件也会不启动流，必须通过显示调用<code>read()</code>方法进行数据获取</p>
 </blockquote>
 <p>如果在暂停模式下监听<code>data</code>事件进行数据获取的话，有可能会因为缓冲中实时没有数据而令<code>read()</code>方法返回<code>null</code>。因为通过<code>read()</code>方法有可能会触发到<code>_read</code>去底层获取数据，然后当底层通过异步<code>push()</code>数据上来的时候，往往通过<code>data</code>事件无法获取。所以便用到了我们上面提到的<code>readable</code>事件。</p>
 <p>总的来说，在暂停模式下比较科学的方法是通过监听<code>readable</code>事件然后在回调里面使用<code>read</code>方法来消耗数据。</p>
-<h3>流动模式</h3>
-<p>从初始状态下监听<code>data</code>事件或者使用<code>pipe</code>方法可以进入流动模式</p>
+<h3 id="流动模式"><a href="#流动模式" class="headerlink" title="流动模式"></a>流动模式</h3><p>从初始状态下监听<code>data</code>事件或者使用<code>pipe</code>方法可以进入流动模式</p>
 <p>流动模式下，可以监听<code>data</code>事件进行数据的获取，也可以直接<code>pipe()</code>来将可读可写流接起来进行数据的流动。</p>
 <p>流动模式下我们的做法也往往只是监听<code>data</code>事件，要么就<code>pipe()</code></p>
-<h3>参考：</h3>
-<p><a href="http://purplebamboo.github.io/2014/11/30/gulp-analyze/" target="_blank" rel="external">node-stream流-gulp实战</a>
-<a href="https://segmentfault.com/a/1190000000357044" target="_blank" rel="external">node-stream介绍</a>
-<a href="http://fe.meituan.com/stream-internals.html" target="_blank" rel="external">stream进阶篇</a></p>
+<h3 id="参考："><a href="#参考：" class="headerlink" title="参考："></a>参考：</h3><p><a href="http://purplebamboo.github.io/2014/11/30/gulp-analyze/" target="_blank" rel="external">node-stream流-gulp实战</a><br><a href="https://segmentfault.com/a/1190000000357044" target="_blank" rel="external">node-stream介绍</a><br><a href="http://fe.meituan.com/stream-internals.html" target="_blank" rel="external">stream进阶篇</a></p>
 
       
     </div>
@@ -516,7 +494,7 @@ TestStream.prototype._flush = function(cb) {
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-count">20</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -529,7 +507,7 @@ TestStream.prototype._flush = function(cb) {
             
             <div class="site-state-item site-state-tags">
               
-                <span class="site-state-item-count">17</span>
+                <span class="site-state-item-count">18</span>
                 <span class="site-state-item-name">标签</span>
               
             </div>
@@ -564,7 +542,7 @@ TestStream.prototype._flush = function(cb) {
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">Node-Stream</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">一个简单的继承Transform流的流</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">通过readable读取数据的过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text">pipe的背压机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">5.</span> <span class="nav-text">两种模式（暂停和流动）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">5.1.</span> <span class="nav-text">暂停模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">5.2.</span> <span class="nav-text">流动模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">5.3.</span> <span class="nav-text">参考：</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Node-Stream"><span class="nav-number">1.</span> <span class="nav-text">Node-Stream</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一个简单的继承Transform流的流"><span class="nav-number">2.</span> <span class="nav-text">一个简单的继承Transform流的流</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#通过readable读取数据的过程"><span class="nav-number">3.</span> <span class="nav-text">通过readable读取数据的过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pipe的背压机制"><span class="nav-number">4.</span> <span class="nav-text">pipe的背压机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#两种模式（暂停和流动）"><span class="nav-number">5.</span> <span class="nav-text">两种模式（暂停和流动）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#暂停模式"><span class="nav-number">5.1.</span> <span class="nav-text">暂停模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#流动模式"><span class="nav-number">5.2.</span> <span class="nav-text">流动模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考："><span class="nav-number">5.3.</span> <span class="nav-text">参考：</span></a></li></ol></li></ol></div>
             
 
           </div>
