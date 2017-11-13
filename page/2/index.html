@@ -971,11 +971,9 @@ const createStoreWithMiddleware = applyMi
       
         
           
-          200 from cache
-这个是真的是从浏览器缓存拿过来的，Cache-Control的设定了max-age还没过期（Cache-Controll还有很多可选字段），或者Expires限期没过之类的。其实实际上是并没有发请求的。200 from cache是一个伪请求。
+          我们每一次使用浏览器去访问页面都会经过多个HTTP请求，当然，有相当一大部分的请求返回的是静态资源（如JS，CSS，IMG）这类的不经常修改变化的文件。而这一类文件通常来说也是比较大的，如果我们将这些文件缓存下来的话，将会加快页面的加载速度，省下每次的请求时间，从而达到优化页面的目的。
 
-
-对于Cache-Co
+强缓存和协
           ...
           <!--noindex-->
           <div class="post-button text-center">

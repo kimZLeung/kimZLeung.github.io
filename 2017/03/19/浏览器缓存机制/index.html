@@ -87,34 +87,22 @@
 
 
 
-<meta name="description" content="200 from cache
-这个是真的是从浏览器缓存拿过来的，Cache-Control的设定了max-age还没过期（Cache-Controll还有很多可选字段），或者Expires限期没过之类的。其实实际上是并没有发请求的。200 from cache是一个伪请求。
+<meta name="description" content="我们每一次使用浏览器去访问页面都会经过多个HTTP请求，当然，有相当一大部分的请求返回的是静态资源（如JS，CSS，IMG）这类的不经常修改变化的文件。而这一类文件通常来说也是比较大的，如果我们将这些文件缓存下来的话，将会加快页面的加载速度，省下每次的请求时间，从而达到优化页面的目的。
 
-
-对于Cache-Control我们可以在html里加上meta标签来给请求报头加上Cache-Control字段
-
-30">
+强缓存和协商缓存强缓存：状态码（200 from cache）客户端直接从缓存中请求，若缓存的数据还未过期，则">
 <meta property="og:type" content="article">
 <meta property="og:title" content="浏览器缓存机制">
 <meta property="og:url" content="http://kimzZ.com/2017/03/19/浏览器缓存机制/index.html">
 <meta property="og:site_name" content="kimZLeung">
-<meta property="og:description" content="200 from cache
-这个是真的是从浏览器缓存拿过来的，Cache-Control的设定了max-age还没过期（Cache-Controll还有很多可选字段），或者Expires限期没过之类的。其实实际上是并没有发请求的。200 from cache是一个伪请求。
+<meta property="og:description" content="我们每一次使用浏览器去访问页面都会经过多个HTTP请求，当然，有相当一大部分的请求返回的是静态资源（如JS，CSS，IMG）这类的不经常修改变化的文件。而这一类文件通常来说也是比较大的，如果我们将这些文件缓存下来的话，将会加快页面的加载速度，省下每次的请求时间，从而达到优化页面的目的。
 
-
-对于Cache-Control我们可以在html里加上meta标签来给请求报头加上Cache-Control字段
-
-30">
-<meta property="og:updated_time" content="2017-03-18T13:50:32.952Z">
+强缓存和协商缓存强缓存：状态码（200 from cache）客户端直接从缓存中请求，若缓存的数据还未过期，则">
+<meta property="og:updated_time" content="2017-11-13T05:58:21.914Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="浏览器缓存机制">
-<meta name="twitter:description" content="200 from cache
-这个是真的是从浏览器缓存拿过来的，Cache-Control的设定了max-age还没过期（Cache-Controll还有很多可选字段），或者Expires限期没过之类的。其实实际上是并没有发请求的。200 from cache是一个伪请求。
+<meta name="twitter:description" content="我们每一次使用浏览器去访问页面都会经过多个HTTP请求，当然，有相当一大部分的请求返回的是静态资源（如JS，CSS，IMG）这类的不经常修改变化的文件。而这一类文件通常来说也是比较大的，如果我们将这些文件缓存下来的话，将会加快页面的加载速度，省下每次的请求时间，从而达到优化页面的目的。
 
-
-对于Cache-Control我们可以在html里加上meta标签来给请求报头加上Cache-Control字段
-
-30">
+强缓存和协商缓存强缓存：状态码（200 from cache）客户端直接从缓存中请求，若缓存的数据还未过期，则">
 
 
 
@@ -329,32 +317,73 @@
       
 
       
-        <h2 id="200-from-cache"><a href="#200-from-cache" class="headerlink" title="200 from cache"></a>200 from cache</h2><blockquote>
-<p>这个是真的是从浏览器缓存拿过来的，Cache-Control的设定了max-age还没过期（Cache-Controll还有很多可选字段），或者Expires限期没过之类的。<br>其实实际上是并没有发请求的。200 from cache是一个伪请求。</p>
-</blockquote>
+        <p>我们每一次使用浏览器去访问页面都会经过多个HTTP请求，当然，有相当一大部分的请求返回的是静态资源（如JS，CSS，IMG）这类的不经常修改变化的文件。而这一类文件通常来说也是比较大的，如果我们将这些文件缓存下来的话，将会加快页面的加载速度，省下每次的请求时间，从而达到优化页面的目的。</p>
+<hr>
+<h2 id="强缓存和协商缓存"><a href="#强缓存和协商缓存" class="headerlink" title="强缓存和协商缓存"></a>强缓存和协商缓存</h2><p>强缓存：状态码（200 from cache）客户端直接从缓存中请求，若缓存的数据还未过期，则直接从缓存中取出使用，若已过期，则进入协商缓存阶段。（现在有分为from memory cache 还是 from disk cache）顾名思义就是在内存中的缓存和在磁盘中的缓存。</p>
+<p>协商缓存：状态码（304 not modify）强缓存没有命中，则客户端会向服务器发送一个关于缓存文件的标识，服务器验证这个标识来判断静态资源缓存是否失效，若没失效则直接通知客户端可以从缓存中取出，若失效了则把最新的文件返回给客户端。</p>
+<hr>
+<h2 id="强缓存的详细过程"><a href="#强缓存的详细过程" class="headerlink" title="强缓存的详细过程"></a>强缓存的详细过程</h2><p>客户端有一套自己的方法来验证强缓存的静态文件是否失效。</p>
 <ul>
-<li>对于Cache-Control我们可以在html里加上meta标签来给请求报头加上Cache-Control字段</li>
-</ul>
-<h2 id="304-not-modify"><a href="#304-not-modify" class="headerlink" title="304 not modify"></a>304 not modify</h2><blockquote>
-<p>当Cache-Control或者Expires的限定日期过去之后，浏览器就自然会发请求过去。问题是，当浏览器发送请求之后，服务器可以发现“你请求的这个文件没更新过，你之前就已经缓存它了。”对的，的确有这个功能。</p>
-<p>这就涉及到if-Modified-Since和if-Unmodified-Since这两个头部。浏览器通常使用if-Modified-Since这个头部来发送一个Last Modified值（上一次修改时间）给服务器。服务器确认并没有修改过之后会返回304 not modified状态码。如果没有匹配上的话，返回412（Precondition Failed）状态码，那就从返回新的源文件给浏览器</p>
-</blockquote>
-<ul>
-<li>讲真，如果有个傻×在服务器那边的源文件上多打几个回车。last Modified自然改变了（但是基本内容是不变的）。那么如果是这样的话，又能靠什么来判断这个文件是否有决定性的改变呢</li>
+<li>HTTP 1.0 时代：Expires</li>
 </ul>
 <blockquote>
-<p>Etag是服务器端的一个在实体上的头部字段，服务器会通过某种算法（md5之类）把资源相应给客户端时会在其头部加上一个Etag的标识符。然后客户端会保存这个标识符，下一次发回去请求时一起发。主要功能是帮助判断在服务器端的资源到底有没有被修改。<br>客户端是通过if-None-Match这个请求头来发送这个资源的Etag标识。</p>
-</blockquote>
-<hr>
-<h2 id="设置的很大的max-age的静态资源"><a href="#设置的很大的max-age的静态资源" class="headerlink" title="设置的很大的max-age的静态资源"></a>设置的很大的max-age的静态资源</h2><blockquote>
-<p>如果需要频繁更新。可能浏览器会因为max-age没到期所以一直在用浏览器缓存的版本。</p>
+<p>Expires的值为服务端返回的到期时间，即下一次请求时，请求时间小于服务端返回的到期时间，直接使用缓存数据。不过存在一个问题，到期时间是服务端生成的，而请求时间是客户端生成的，并不能保证服务端和客户端的实际时间没有太大误差，这会导致缓存命中的误差。所以我们现在使用Cache-Control</p>
 </blockquote>
 <ul>
-<li>解决方法： 可以在文件的url后面加类似Etag之类的标识。当资源更新的时候同时更新标识</li>
+<li>HTTP 1.1 时代：Cache-Control</li>
 </ul>
+<blockquote>
+<p>鉴于以上Expires的缺点，我们HTTP1.1使用Cache-Control代替它，Cache-Control常见的取值有private、public、no-cache、max-age，no-store，默认为private。（这里讨论响应头，Cache-Control可以存在在响应头和请求头中，但一般来说会在响应头中并且制定该资源缓存机制，在请求头中发挥的作用不大）</p>
+</blockquote>
+<ul>
+<li>private：仅向特定用户返回响应（只在响应头中存在）</li>
+<li>public：可向任意方提供响应的缓存（只在响应头中存在）</li>
+<li>max-age=xxx：缓存内容将在xxx秒后消失</li>
+<li>no-cache：需要使用协商缓存来验证缓存数据</li>
+<li>no-store：所有内容都不会缓存，强缓存和协商缓存都不触发</li>
+</ul>
+<p>当服务端同时设置了Cache-Control和Expires的时候，就会根据Cache-Control作为判断标准</p>
+<p>实际情况</p>
+<blockquote>
+<p>当客户端第一次向服务端请求某个静态文件<code>xxx.js</code>的时候，服务器收到请求并且进行文件的返回，并且在响应头上带上一个<code>Cache-Control: max-age=600</code>，然后浏览器收到之后，默认为允许缓存，所以浏览器会把这份<code>xxx.js</code>缓存起来，十分钟以内再次请求的话，浏览器会直接从缓存中获取，放回响应的状态码是 200 from cache 。但是如果10分钟过去了，缓存的时限也过去了，所以会向服务端去请求，这个时候一般就轮到协商缓存出场了</p>
+</blockquote>
 <hr>
-<h2 id="Tips"><a href="#Tips" class="headerlink" title="Tips"></a>Tips</h2><blockquote>
-<p>大多数浏览器F5刷新时都会自行加上“Cache-Control:max-age=0”的请求字段，如果选中url地址栏再回车则不会被强加。</p>
+<h2 id="协商缓存的详细过程"><a href="#协商缓存的详细过程" class="headerlink" title="协商缓存的详细过程"></a>协商缓存的详细过程</h2><blockquote>
+<p>浏览器第一次请求静态资源时，服务器会将缓存标识和数据一起返回给客户端，客户端将两个都备份到缓存中。需要到协商缓存时，客户端会将已备份的缓存标识发送给服务器，服务器根据缓存标识进行判断，若成功，则返回 304 not modify 状态码，通知客户端可以使用缓存。</p>
+</blockquote>
+<ul>
+<li>Last-Modified / If-Modified-Since</li>
+</ul>
+<p><code>Last-Modified</code>就是那个第一次请求静态资源时<strong>服务端返回</strong>的缓存标识，这个键的值是这个资源最后修改的时间。然后进行协商缓存的时候，由<strong>客户端</strong>发起的请求中，会带有<code>If-Modified-Since</code>这个请求头，当服务器发现这个请求头后，则会与被请求的资源的最后的修改时间作对比，若最后修改的时间大于这次请求发过来的<code>If-Modified-Since</code>，就表示静态资源作了修改，对比缓存失败，则会整个静态资源重新给客户端返回。若<code>If-Modified-Since</code>小于或者等于资源的最后修改时间，则表示资源无更新，直接返回304让浏览器使用之前缓存好的文件。</p>
+<ul>
+<li>Etag / If-None-Match（优先级高于Last-Modified / If-Modified-Since）</li>
+</ul>
+<p><code>Etag</code>也是那个第一次请求静态资源时<strong>服务端返回</strong>的缓存标识，不过不同的是，<code>Etag</code>并不是根据时间计算的，它有多种计算方式。</p>
+<blockquote>
+<p><code>Etag</code>可能会比<code>Last-Modified</code>更加精确，只要资源确切发生了变化，则<code>Etag</code>肯定会变化。<code>Last-Modified</code>并不会计算秒级内的修改。而只要资源变化了，<code>Etag</code>就会变化。</p>
+</blockquote>
+<p>然后进行协商缓存的时候，<strong>客户端</strong>会在发起的请求中带上<code>If-None-Match</code>字段来携带这个<code>Etag</code>，让其发送到服务端中，然后服务端会用这个字段与对应资源的<code>Etag</code>进行比较。情况和上面的<code>Last-Modified / If-Modified-Since</code>很相似。</p>
+<hr>
+<h2 id="每一次说到缓存都会说到的浏览器刷新方法"><a href="#每一次说到缓存都会说到的浏览器刷新方法" class="headerlink" title="每一次说到缓存都会说到的浏览器刷新方法"></a>每一次说到缓存都会说到的浏览器刷新方法</h2><ul>
+<li>选中浏览器地址，回车</li>
+<li>F5</li>
+<li>Ctrl + F5</li>
+</ul>
+<p>选中浏览器地址，回车</p>
+<blockquote>
+<p>这种方式是不会对原来的资源有任何影响，强缓存 -&gt; 对比缓存 -&gt; 请求资源</p>
+</blockquote>
+<p>F5</p>
+<blockquote>
+<p>这种方式把帮助强缓存系列的响应头的信息重置。使得强缓存失效，最多只能使用协商缓存</p>
+</blockquote>
+<p>Ctrl + F5</p>
+<blockquote>
+<p>这种方式会使强缓存和协商缓存同时失效，只能从服务器重新请求静态资源</p>
+</blockquote>
+<hr>
+<blockquote>
+<p>但是我自己在各个网站进行测试的时候，用F5刷新，各种网站还是会返回<code>200 from XX cache</code>的状态码，也就是使用了强缓存，令我十分费解。</p>
 </blockquote>
 
       
@@ -530,7 +559,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#200-from-cache"><span class="nav-number">1.</span> <span class="nav-text">200 from cache</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#304-not-modify"><span class="nav-number">2.</span> <span class="nav-text">304 not modify</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设置的很大的max-age的静态资源"><span class="nav-number">3.</span> <span class="nav-text">设置的很大的max-age的静态资源</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Tips"><span class="nav-number">4.</span> <span class="nav-text">Tips</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#强缓存和协商缓存"><span class="nav-number">1.</span> <span class="nav-text">强缓存和协商缓存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#强缓存的详细过程"><span class="nav-number">2.</span> <span class="nav-text">强缓存的详细过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#协商缓存的详细过程"><span class="nav-number">3.</span> <span class="nav-text">协商缓存的详细过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#每一次说到缓存都会说到的浏览器刷新方法"><span class="nav-number">4.</span> <span class="nav-text">每一次说到缓存都会说到的浏览器刷新方法</span></a></li></ol></div>
             
 
           </div>
