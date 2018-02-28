@@ -89,23 +89,20 @@
 
 <meta name="description" content="我们每一次使用浏览器去访问页面都会经过多个HTTP请求，当然，有相当一大部分的请求返回的是静态资源（如JS，CSS，IMG）这类的不经常修改变化的文件。而这一类文件通常来说也是比较大的，如果我们将这些文件缓存下来的话，将会加快页面的加载速度，省下每次的请求时间，从而达到优化页面的目的。
 
-强缓存和协商缓存
-强缓存：状态码（200 from cache）客户端直接从缓存中请求，若缓存的数据还未过期，">
+强缓存和协商缓存强缓存：状态码（200 from cache）客户端直接从缓存中请求，若缓存的数据还未过期，则">
 <meta property="og:type" content="article">
 <meta property="og:title" content="浏览器缓存机制">
 <meta property="og:url" content="http://kimzZ.com/2017/03/19/浏览器缓存机制/index.html">
 <meta property="og:site_name" content="kimZLeung">
 <meta property="og:description" content="我们每一次使用浏览器去访问页面都会经过多个HTTP请求，当然，有相当一大部分的请求返回的是静态资源（如JS，CSS，IMG）这类的不经常修改变化的文件。而这一类文件通常来说也是比较大的，如果我们将这些文件缓存下来的话，将会加快页面的加载速度，省下每次的请求时间，从而达到优化页面的目的。
 
-强缓存和协商缓存
-强缓存：状态码（200 from cache）客户端直接从缓存中请求，若缓存的数据还未过期，">
+强缓存和协商缓存强缓存：状态码（200 from cache）客户端直接从缓存中请求，若缓存的数据还未过期，则">
 <meta property="og:updated_time" content="2017-11-13T05:58:21.914Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="浏览器缓存机制">
 <meta name="twitter:description" content="我们每一次使用浏览器去访问页面都会经过多个HTTP请求，当然，有相当一大部分的请求返回的是静态资源（如JS，CSS，IMG）这类的不经常修改变化的文件。而这一类文件通常来说也是比较大的，如果我们将这些文件缓存下来的话，将会加快页面的加载速度，省下每次的请求时间，从而达到优化页面的目的。
 
-强缓存和协商缓存
-强缓存：状态码（200 from cache）客户端直接从缓存中请求，若缓存的数据还未过期，">
+强缓存和协商缓存强缓存：状态码（200 from cache）客户端直接从缓存中请求，若缓存的数据还未过期，则">
 
 
 
@@ -322,12 +319,10 @@
       
         <p>我们每一次使用浏览器去访问页面都会经过多个HTTP请求，当然，有相当一大部分的请求返回的是静态资源（如JS，CSS，IMG）这类的不经常修改变化的文件。而这一类文件通常来说也是比较大的，如果我们将这些文件缓存下来的话，将会加快页面的加载速度，省下每次的请求时间，从而达到优化页面的目的。</p>
 <hr>
-<h2>强缓存和协商缓存</h2>
-<p>强缓存：状态码（200 from cache）客户端直接从缓存中请求，若缓存的数据还未过期，则直接从缓存中取出使用，若已过期，则进入协商缓存阶段。（现在有分为from memory cache 还是 from disk cache）顾名思义就是在内存中的缓存和在磁盘中的缓存。</p>
+<h2 id="强缓存和协商缓存"><a href="#强缓存和协商缓存" class="headerlink" title="强缓存和协商缓存"></a>强缓存和协商缓存</h2><p>强缓存：状态码（200 from cache）客户端直接从缓存中请求，若缓存的数据还未过期，则直接从缓存中取出使用，若已过期，则进入协商缓存阶段。（现在有分为from memory cache 还是 from disk cache）顾名思义就是在内存中的缓存和在磁盘中的缓存。</p>
 <p>协商缓存：状态码（304 not modify）强缓存没有命中，则客户端会向服务器发送一个关于缓存文件的标识，服务器验证这个标识来判断静态资源缓存是否失效，若没失效则直接通知客户端可以从缓存中取出，若失效了则把最新的文件返回给客户端。</p>
 <hr>
-<h2>强缓存的详细过程</h2>
-<p>客户端有一套自己的方法来验证强缓存的静态文件是否失效。</p>
+<h2 id="强缓存的详细过程"><a href="#强缓存的详细过程" class="headerlink" title="强缓存的详细过程"></a>强缓存的详细过程</h2><p>客户端有一套自己的方法来验证强缓存的静态文件是否失效。</p>
 <ul>
 <li>HTTP 1.0 时代：Expires</li>
 </ul>
@@ -353,8 +348,7 @@
 <p>当客户端第一次向服务端请求某个静态文件<code>xxx.js</code>的时候，服务器收到请求并且进行文件的返回，并且在响应头上带上一个<code>Cache-Control: max-age=600</code>，然后浏览器收到之后，默认为允许缓存，所以浏览器会把这份<code>xxx.js</code>缓存起来，十分钟以内再次请求的话，浏览器会直接从缓存中获取，放回响应的状态码是 200 from cache 。但是如果10分钟过去了，缓存的时限也过去了，所以会向服务端去请求，这个时候一般就轮到协商缓存出场了</p>
 </blockquote>
 <hr>
-<h2>协商缓存的详细过程</h2>
-<blockquote>
+<h2 id="协商缓存的详细过程"><a href="#协商缓存的详细过程" class="headerlink" title="协商缓存的详细过程"></a>协商缓存的详细过程</h2><blockquote>
 <p>浏览器第一次请求静态资源时，服务器会将缓存标识和数据一起返回给客户端，客户端将两个都备份到缓存中。需要到协商缓存时，客户端会将已备份的缓存标识发送给服务器，服务器根据缓存标识进行判断，若成功，则返回 304 not modify 状态码，通知客户端可以使用缓存。</p>
 </blockquote>
 <ul>
@@ -370,8 +364,7 @@
 </blockquote>
 <p>然后进行协商缓存的时候，<strong>客户端</strong>会在发起的请求中带上<code>If-None-Match</code>字段来携带这个<code>Etag</code>，让其发送到服务端中，然后服务端会用这个字段与对应资源的<code>Etag</code>进行比较。情况和上面的<code>Last-Modified / If-Modified-Since</code>很相似。</p>
 <hr>
-<h2>每一次说到缓存都会说到的浏览器刷新方法</h2>
-<ul>
+<h2 id="每一次说到缓存都会说到的浏览器刷新方法"><a href="#每一次说到缓存都会说到的浏览器刷新方法" class="headerlink" title="每一次说到缓存都会说到的浏览器刷新方法"></a>每一次说到缓存都会说到的浏览器刷新方法</h2><ul>
 <li>选中浏览器地址，回车</li>
 <li>F5</li>
 <li>Ctrl + F5</li>
@@ -566,7 +559,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">强缓存和协商缓存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">强缓存的详细过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">协商缓存的详细过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text">每一次说到缓存都会说到的浏览器刷新方法</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#强缓存和协商缓存"><span class="nav-number">1.</span> <span class="nav-text">强缓存和协商缓存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#强缓存的详细过程"><span class="nav-number">2.</span> <span class="nav-text">强缓存的详细过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#协商缓存的详细过程"><span class="nav-number">3.</span> <span class="nav-text">协商缓存的详细过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#每一次说到缓存都会说到的浏览器刷新方法"><span class="nav-number">4.</span> <span class="nav-text">每一次说到缓存都会说到的浏览器刷新方法</span></a></li></ol></div>
             
 
           </div>
