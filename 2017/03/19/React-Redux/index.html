@@ -88,7 +88,9 @@
 
 
 <meta name="description" content="connect方法
+
 参数mapStateToProps -&amp;gt; function(state, [ownProps])
+
 如果定义了这个参数，就相当于动态把store和props绑定了，只要store改变了就会调用mapStateToProps
 第二个可选参数ownProps，指代传入到组件的Props
 
@@ -96,13 +98,15 @@
 
 
 
-参数mapDispatchToProps(dispatch, [ownProps]">
+参数mapDispatchToProps(dispatch, [ownProp">
 <meta property="og:type" content="article">
 <meta property="og:title" content="React-Redux">
 <meta property="og:url" content="http://kimzZ.com/2017/03/19/React-Redux/index.html">
 <meta property="og:site_name" content="kimZLeung">
 <meta property="og:description" content="connect方法
+
 参数mapStateToProps -&amp;gt; function(state, [ownProps])
+
 如果定义了这个参数，就相当于动态把store和props绑定了，只要store改变了就会调用mapStateToProps
 第二个可选参数ownProps，指代传入到组件的Props
 
@@ -110,12 +114,14 @@
 
 
 
-参数mapDispatchToProps(dispatch, [ownProps]">
+参数mapDispatchToProps(dispatch, [ownProp">
 <meta property="og:updated_time" content="2017-03-18T13:53:51.633Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="React-Redux">
 <meta name="twitter:description" content="connect方法
+
 参数mapStateToProps -&amp;gt; function(state, [ownProps])
+
 如果定义了这个参数，就相当于动态把store和props绑定了，只要store改变了就会调用mapStateToProps
 第二个可选参数ownProps，指代传入到组件的Props
 
@@ -123,7 +129,7 @@
 
 
 
-参数mapDispatchToProps(dispatch, [ownProps]">
+参数mapDispatchToProps(dispatch, [ownProp">
 
 
 
@@ -338,8 +344,10 @@
       
 
       
-        <h2 id="connect方法"><a href="#connect方法" class="headerlink" title="connect方法"></a>connect方法</h2><ul>
-<li>参数mapStateToProps -&gt; function(state, [ownProps])<ul>
+        <h2>connect方法</h2>
+<ul>
+<li>参数mapStateToProps -&gt; function(state, [ownProps])
+<ul>
 <li>如果定义了这个参数，就相当于动态把store和props绑定了，只要store改变了就会调用mapStateToProps</li>
 <li>第二个可选参数ownProps，指代传入到组件的Props</li>
 </ul>
@@ -347,7 +355,8 @@
 </ul>
 <hr>
 <ul>
-<li>参数mapDispatchToProps(dispatch, [ownProps])<ul>
+<li>参数mapDispatchToProps(dispatch, [ownProps])
+<ul>
 <li>如果传递一个对象，对象上的函数将会被触发为action creator（也就是说这些action creator会自动dispatch），而且这些方法会作为属性名合并到Props中</li>
 <li>（一般情况）如果传递的是一个函数，组件的Props将会获得其返回的对象的键作为Props的属性。</li>
 </ul>
@@ -355,38 +364,45 @@
 </ul>
 <hr>
 <ul>
-<li>mergeProps(stateProps, dispatchProps, ownProps)<ul>
-<li>这个参数是一个函数，这个函数相当于一个把关Props传递过程的东西。如果省略了这个参数，默认就是返回Object.assign({}, ownProps, stateProps, dispatchProps)…也就是默认把传入的Props，和一个从state拿到的Props，和一个从dispatch拿到的Props的actioncreator都合并到Props上去。</li>
+<li>mergeProps(stateProps, dispatchProps, ownProps)
+<ul>
+<li>这个参数是一个函数，这个函数相当于一个把关Props传递过程的东西。如果省略了这个参数，默认就是返回Object.assign({}, ownProps, stateProps, dispatchProps)...也就是默认把传入的Props，和一个从state拿到的Props，和一个从dispatch拿到的Props的actioncreator都合并到Props上去。</li>
 </ul>
 </li>
 </ul>
 <hr>
 <ul>
-<li>最后还有一个option配置对象的参数，有两个可用的属性<ul>
+<li>最后还有一个option配置对象的参数，有两个可用的属性
+<ul>
 <li>一个是pure，默认为true。简单来说就是当前connect的组件是一个纯组件的话，会执行一个是否重新渲染的判断来避免组件的多次重新渲染。</li>
 <li>一个是withRef，默认为false。如果设为true，connector会保存对被包装组件的实例的引用。然后通过实例的方法getWrappedInstance()获得。</li>
 </ul>
 </li>
 </ul>
 <hr>
-<h2 id="还有一个bindActionCreators"><a href="#还有一个bindActionCreators" class="headerlink" title="还有一个bindActionCreators"></a>还有一个bindActionCreators</h2><blockquote>
+<h2>还有一个bindActionCreators</h2>
+<blockquote>
 <p>这波比较关键</p>
 </blockquote>
 <ul>
 <li>这个方法可以把action creators转化成对象。然后对象的键就是函数名，然后值就是这个action creator，然后被dispatch包起来了</li>
 </ul>
-<h2 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h2><ul>
-<li>actionCreators <strong>(fn or obj)</strong><ul>
-<li>一个action creator或者是键值对是action creators的对象 </li>
+<h2>参数</h2>
+<ul>
+<li>actionCreators <strong>(fn or obj)</strong>
+<ul>
+<li>一个action creator或者是键值对是action creators的对象</li>
 </ul>
 </li>
-<li>dispatch<ul>
+<li>dispatch
+<ul>
 <li>没啥好说的就是store.dispatch</li>
 </ul>
 </li>
 </ul>
 <hr>
-<h3 id="参考资料："><a href="#参考资料：" class="headerlink" title="参考资料："></a>参考资料：</h3><ol>
+<h3>参考资料：</h3>
+<ol>
 <li><a href="http://cn.redux.js.org/docs/api/bindActionCreators.html" target="_blank" rel="external">bindActionCreators</a></li>
 <li><a href="http://www.ruanyifeng.com/blog/2016/09/redux_tutorial_part_three_react-redux.html" target="_blank" rel="external">阮一峰redux入门（3）</a></li>
 <li><a href="http://cn.redux.js.org/docs/react-redux/api.html" target="_blank" rel="external">react-redux API</a></li>
@@ -565,7 +581,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#connect方法"><span class="nav-number">1.</span> <span class="nav-text">connect方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#还有一个bindActionCreators"><span class="nav-number">2.</span> <span class="nav-text">还有一个bindActionCreators</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参数"><span class="nav-number">3.</span> <span class="nav-text">参数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#参考资料："><span class="nav-number">3.1.</span> <span class="nav-text">参考资料：</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">connect方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">还有一个bindActionCreators</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">参数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">3.1.</span> <span class="nav-text">参考资料：</span></a></li></ol></li></ol></div>
             
 
           </div>
